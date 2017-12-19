@@ -1,0 +1,10 @@
+//import t-css-framework modules
+@import "../../node_modules/t-css-framework/src/settings/settings.import";
+@import "../../node_modules/t-css-framework/src/functions/functions.import";
+@import "../../node_modules/t-css-framework/src/helpers/helpers.import";
+
+//import control modules
+@import "controls/control.variables";
+@import "controls/control";
+@import "controls/control__elements";
+ 
