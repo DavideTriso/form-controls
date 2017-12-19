@@ -3,6 +3,8 @@
 //----------------------
 
 .control {
-    display: block; 
-    background-color: red;
+  display: flex;
+  @include flexPositioning((flexWrap: wrap, justifyContent: flex-start, alignItems: stretch));
+  @include padding($control--padding);
+  @include sizes((width: 100%));
 }

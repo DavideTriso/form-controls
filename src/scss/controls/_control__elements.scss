@@ -2,23 +2,44 @@
 // ELEMENTS
 //----------------------
 
-.control__field {
-    background-color: red;
+.control__box {
+  display: flex;
+  @include flexPositioning((flexWrap: nowrap, justifyContent: flex-start, alignItems: stretch));
+  @include sizes((width: 100%));
 }
- 
+
+.control__field {
+  @include border($control__field--border);
+  flex: 0 1 100%;
+  @include font($control__field--font);
+  @include text($control__field--text);
+  @include sizes((width: 100%, minWidth: auto, maxWidth: 100%));
+  @include padding($control__field--padding);
+
+  &:active,
+  &:focus {
+    @include border($control__field_focus--border);
+    @include outline($control__field_focus--outline);
+
+  }
+}
+
 .control__label {
-    //
+  flex: 0 1 100%;
+  @include font($control__label--font);
+  @include text($control__label--text);
+  @include padding($control__label--padding);
 }
 
 .control__addon {
-    //
+  flex: 1 1 auto;
 }
 
 .control__feedback {
-    //
+  //
 }
 
-//Wrapper for addons 
-.control__box { 
-    //
+//Wrapper for addons
+.control__box {
+  //
 }

@@ -1,0 +1,44 @@
+//BLOCK
+$control--padding: ();
+
+//field
+$control__field--font: (
+  fontSize: 1rem
+);
+$control__field--text: ();
+$control__field--padding: (
+  top   : 0.3rem,
+  bottom: 0.35rem,
+  left  : 0.5rem,
+  right : 0.5rem
+);
+$control__field--border: (
+  borderColor : #ccc,
+  borderRadius: 0.25rem,
+  borderWidth : 0.05rem,
+  borderStyle : solid
+);
+
+$control__field_focus--border: (
+  borderColor: #aaa
+);
+
+$control__field_focus--outline: (
+  outline: none
+);
+
+//label
+$control__label--font: (
+  fontFamily: inherit
+);
+$control__label--text: (
+  color: #fff
+);
+$control__label--padding: (
+  bottom: 0.25rem
+);
+
+body {
+  background-color: #444;
+  font-family     : sans-serif;
+}

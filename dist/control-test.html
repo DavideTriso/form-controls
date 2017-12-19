@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Test</title>
+  <link rel="stylesheet" href="form-controls.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+
+  <!-- DEFAULT CONTROL -->
+  <div class="control">
+    <label class="control__label" for="#1">My input field</label>
+    <input type="text" name="#1" id="#1" class="control__field" />
+  </div>
+
+
+  <!-- CONTROL WITH ADDON -->
+  <div class="control">
+    <label class="control__label" for="#1">My input field</label>
+    <div class="control__box">
+      <button type="button" class="control__addon" id="#addon1">Addon</button>
+      <input type="text" name="#1" id="#1" class="control__field" />
+      <button type="button" class="control__addon" id="#addon2">Addon</button>
+    </div>
+  </div>
+
+  <!-- CONTROL WITH FEEDBACK (succsess, error, warning) -->
+  <div class="control">
+    <label class="control__label" for="#1">My input field</label>
+    <input type="text" name="#1" id="#1" class="control__field" />
+    <p class="control__feedback control__feedback_succsess">Succsess message</p>
+    <p class="control__feedback control__feedback_error">Error message</p>
+    <p class="control__feedback control__feedback_warning">Warning message</p>
+
+  </div>
+
+  <!-- CONTROL WITH INFO BOX / TOOLTIP -->
+  <div class="control">
+    <label class="control__label" for="#1">My input field</label>
+    <input type="text" name="#1" id="#1" class="control__field" />
+    <span class="control__info">
+        Info <!--insert icon, text etc. Use a tooltip script to add tooltip functionality. Also trigger tooltip when input filed recieves focus for accessibility-->
+    </span>
+  </div>
+
+  <!-- CHECKBOX -->
+  <div class="control control_checkbox">
+    <input type="checkbox" name="#1" id="#1" class="control__field control__field_hidden" checked />
+    <label class="control__field" for="#1">
+        <span class="control__label">My input field</span>
+    </label>
+  </div>
+
+  <!-- TOGGLE -->
+  <div class="control control_toggle">
+    <input type="checkbox" name="#1" id="#1" class="control__field control__field_hidden" checked />
+    <label class="control__field" for="#1">
+        <span class="control__label">My input field</span>
+    </label>
+  </div>
+
+
+  <!-- RADIO -->
+  <div class="control control_radio">
+    <input type="radio" value="radio1" name="radiogroup#1" id="#1" class="control__field_hidden" checked />
+    <label class="control__field" for="#1">
+        <span class="control__label">My input field</span>
+    </label>
+  </div>
+
+
+  <!-- OPTION (clickable area with, works as a radio) -->
+  <div class="control control_radiooption">
+    <input type="radio" value="radio1" name="radiogroup#1" id="#1" class="control__field_hidden" checked />
+    <label class="control__field" for="#1">
+        <span class="control__label">My input field</span>
+    </label>
+  </div>
+
+  <!--SELECT-->
+  <div class="control control_select">
+    <label class="control__label" for="#1">My select control</label>
+    <select class="control__field" id="#1" name="#1">
+        <option value="" class="control__option">Choose one option</option>
+        <option value="1" class="control__option">Option 1</option>
+        <option value="2" class="control__option">Option 2</option>
+        <option value="3" class="control__option">Option 3</option>
+        <option value="4" class="control__option">Option 4</option>
+    </select>
+  </div>
+
+  <!--MULTISELECT-->
+  <div class="control control_multiselect">
+    <label class="control__label" for="#1">My select control</label>
+    <input type="hidden" name="#1" id="#1" class="control__field control__field_hidden" />
+    <ul class="control__multiselectlist" id="#1" name="#1">
+      <li data-value="" class="control__option">Choose one option</li>
+      <li data-value="1" class="control__option control__option_seleted">Option 1</li>
+      <li data-value="2" class="control__option">Option 2</li>
+      <li data-value="3" class="control__option">Option 3</li>
+      <li data-value="4" class="control__option">Option 4</li>
+    </ul>
+  </div>
+
+  <!--COMBOBOX-->
+  <div class="control control_combo">
+    <label class="control__label" for="#1">My combobox control</label>
+    <div class="control__box">
+      <input type="text" name="#1" id="#1" class="control__field" />
+      <ul class="control__combolist" id="#1" name="#1">
+        <li data-value="" class="control__option">Choose one option</li>
+        <li data-value="1" class="control__option">Option 1</li>
+        <li data-value="2" class="control__option">Option 2</li>
+        <li data-value="3" class="control__option">Option 3</li>
+        <li data-value="4" class="control__option">Option 4</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TEXTAREA -->
+  <div class="control control_textarea">
+    <label class="control__label" for="#1">My input field</label>
+    <textarea name="#1" id="#1" class="control__field" placeholder="placeholder text here">
+        Default text here ...
+    </textarea>
+  </div>
+
+  <!-- NUMBER SPINNER -->
+  <div class="control control_numberspinner">
+    <label class="control__label" for="#1">My input field</label>
+    <div class="control__box">
+      <input type="number" name="#1" id="#1" min="0" max="100" class="control__field" />
+      <button type="button" aria-label="add" class="control__addon control__addon_right control__addon_top">+</button>
+      <button type="button" aria-label="subtract" class="control__addon control__addon_right control__addon_bottom ">-</button>
+    </div>
+  </div>
+
+
+  <!--RANGE-->
+
+
+</body>
+
+</html>
