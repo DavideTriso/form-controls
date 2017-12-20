@@ -1,0 +1,11 @@
+.control__feedback_warning {
+    @include background($control__feedback_warning--background);
+    @include border($control__feedback_warning--border);
+    @include font($control__feedback_warning--font);
+    @include text($control__feedback_warning--text);
+    
+    &:after {
+        @include background($control__feedback_warning--background);
+        @include border(map-merge($control__feedback_warning--border, (borderRadius: 0, borderTopWidth: 0, borderRightWidth: 0, borderTopRightRadius: 100%)));
+    }
+}

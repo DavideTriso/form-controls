@@ -1,0 +1,7 @@
+.control__feedback_bottom {
+    transform: $control__feedback_bottom--transform;
+    &:after {
+        top: 0;
+        transform: translate(-50%, -55%) rotate(135deg); 
+    }
+}

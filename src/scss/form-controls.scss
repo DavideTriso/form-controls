@@ -7,3 +7,17 @@
 @import "controls/control.variables";
 @import "controls/control";
 @import "controls/control__elements";
+//modifiers
+//field
+@import "controls/modifiers/control__field_addonleft";
+@import "controls/modifiers/control__field_addonright";
+@import "controls/modifiers/control__field_disabled";
+@import "controls/modifiers/control__field_valid";
+@import "controls/modifiers/control__field_error";
+@import "controls/modifiers/control__field_warning";
+//feedback
+@import "controls/modifiers/control__feedback_visible";
+@import "controls/modifiers/control__feedback_valid";
+@import "controls/modifiers/control__feedback_error";
+@import "controls/modifiers/control__feedback_warning";
+@import "controls/modifiers/control__feedback_bottom";

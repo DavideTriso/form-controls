@@ -3,43 +3,89 @@
 //----------------------
 
 .control__box {
-  display: flex;
-  @include flexPositioning((flexWrap: nowrap, justifyContent: flex-start, alignItems: stretch));
-  @include sizes((width: 100%));
+    display: flex;
+    @include flexPositioning((flexWrap: nowrap, justifyContent: flex-start, alignItems: stretch));
+    @include sizes((width: 100%));
 }
 
 .control__field {
-  @include border($control__field--border);
-  flex: 0 1 100%;
-  @include font($control__field--font);
-  @include text($control__field--text);
-  @include sizes((width: 100%, minWidth: auto, maxWidth: 100%));
-  @include padding($control__field--padding);
+    @include border($control__field--border);
+    flex: 0 1 100%;
+    @include font($control__field--font);
+    @include text($control__field--text);
+    @include sizes((width: 100%, minWidth: auto, maxWidth: 100%));
+    @include padding($control__field--padding);
 
-  &:active,
-  &:focus {
-    @include border($control__field_focus--border);
-    @include outline($control__field_focus--outline);
+    &:active,
+    &:focus {
+        @include border($control__fieldPfocus--border);
+        @include outline($control__fieldPfocus--outline);
+    }
+}
 
-  }
+.control__checkbox {
+    display: flex;
+    @include flexPositioning((alignItems: flex-start, justifyContent: flex-start, flexWrap: nowrap));
+}
+
+
+.control__check {
+    @include border($control__check--border);
+    @include background($control__check--background);
+    display: block;
+    @include sizes($control__check--sizes);
+
 }
 
 .control__label {
-  flex: 0 1 100%;
-  @include font($control__label--font);
-  @include text($control__label--text);
-  @include padding($control__label--padding);
+    flex: 0 1 100%;
+    @include font($control__label--font);
+    @include text($control__label--text);
+    @include padding($control__label--padding);
 }
 
 .control__addon {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+
+.control__feedbackwrapper {
+    position: relative;
+    @include sizes((width: 100%, height: 0));
 }
 
 .control__feedback {
-  //
+    @include background($control__feedback--background);
+    @include border($control__feedback--border);
+    box-shadow: $control__feedback--box-shadow;
+    @include font($control__feedback--font);
+    display: block;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 50%;
+    transform: $control__feedback--transform;
+    transition: $control__feedback--transition;
+    @include margin($control__feedback--margin);
+    @include padding($control__feedback--padding);
+    @include sizes((width: auto, maxWidth: 100%));
+    @include text($control__feedback--text);
+    visibility: hidden;
+    z-index: zIndex(level1);
+
+    &:after {
+        content: "";
+        display: block;
+        bottom: 0;
+        left: 50%;
+        position: absolute;
+        @include sizes($control__feedbackPafter--sizes);
+        transform: translate(-50%, 55%) rotate(-45deg);
+        @include background($control__feedback--background);
+        @include border(map-merge($control__feedback--border, (borderRadius: 0, borderTopWidth: 0, borderRightWidth: 0, borderTopRightRadius: 100%)));
+    }
 }
 
 //Wrapper for addons
 .control__box {
-  //
+    //
 }

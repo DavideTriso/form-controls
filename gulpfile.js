@@ -8,7 +8,7 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   notify = require('gulp-notify');
 
-
+ 
 //SCSS -> CSS
 //Compile SCSS and save compiled + minified CSS file to 'dist' folder
 gulp.task('scssDist', function () {
@@ -20,7 +20,7 @@ gulp.task('scssDist', function () {
       .pipe(rename({
           suffix: '.min'
       }))
-      .pipe(cssnano())
+      .pipe(cssnano()) 
       .pipe(gulp.dest('dist'))
       .pipe(notify({
           message: 'scssDist task complete'

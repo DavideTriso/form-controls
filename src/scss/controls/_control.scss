@@ -6,5 +6,12 @@
   display: flex;
   @include flexPositioning((flexWrap: wrap, justifyContent: flex-start, alignItems: stretch));
   @include padding($control--padding);
-  @include sizes((width: 100%));
+  position: relative;
+  @include sizes((width: 100%)); 
+
+
+  input[type="checkbox"],
+  input[type="radio"] {
+      @include srOnly;
+  }
 }
