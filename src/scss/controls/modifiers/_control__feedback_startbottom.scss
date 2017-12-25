@@ -1,0 +1,10 @@
+.control__feedback_startbottom {
+  left     : 0;
+  transform: $control__feedback_startbottom--transform;
+
+  &:after {
+    left     : $control__feedback_startbottomPafter--left;
+    top      : 0;
+    transform: translate(-50%, -55%) rotate(135deg);
+  }
+}

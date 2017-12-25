@@ -1,0 +1,4 @@
+.control__box_inline {
+  display: inline-flex;
+  @include sizes((width: auto, minWidth: 0));
+}

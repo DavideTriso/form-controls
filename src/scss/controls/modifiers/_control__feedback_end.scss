@@ -1,0 +1,10 @@
+.control__feedback_end {
+  left     : auto;
+  right    : 0;
+  transform: $control__feedback_start--transform;
+
+  &:after {
+    left : auto;
+    right: $control__feedback_startPafter--right;
+  }
+}

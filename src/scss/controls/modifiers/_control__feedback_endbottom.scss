@@ -1,0 +1,12 @@
+.control__feedback_endbottom {
+  left     : auto;
+  right    : 0;
+  transform: $control__feedback_endbottom--transform;
+
+  &:after {
+    left     : auto;
+    right    : $control__feedback_endbottomPafter--right;
+    top      : 0;
+    transform: translate(-50%, -55%) rotate(135deg);
+  }
+}

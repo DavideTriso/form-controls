@@ -1,3 +1,10 @@
-.control__field_addonright {
-  @include border((borderBottomRightRadius: 0, borderTopRightRadius: 0, borderRight: 0));
+.control__field_error {
+  @include border($control__field_error--border);
+  box-shadow: $control__field_error--box-shadow;
+  @include background($control__field_error--background);
+
+  &:active,
+  &:focus {
+    @include border(map-merge($control__field_error--border, (borderColor: darken($errorColor, 20%))));
+  }
 }

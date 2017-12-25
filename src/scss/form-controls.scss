@@ -1,3 +1,6 @@
+//import settings
+@import "form-controls.settings";
+
 //import t-css-framework modules
 @import "../../node_modules/t-css-framework/src/settings/settings.import";
 @import "../../node_modules/t-css-framework/src/functions/functions.import";
@@ -11,13 +14,21 @@
 //field
 @import "controls/modifiers/control__field_addonleft";
 @import "controls/modifiers/control__field_addonright";
-@import "controls/modifiers/control__field_disabled";
 @import "controls/modifiers/control__field_valid";
 @import "controls/modifiers/control__field_error";
 @import "controls/modifiers/control__field_warning";
+@import "controls/modifiers/control__field_sronly";
 //feedback
 @import "controls/modifiers/control__feedback_visible";
 @import "controls/modifiers/control__feedback_valid";
 @import "controls/modifiers/control__feedback_error";
 @import "controls/modifiers/control__feedback_warning";
 @import "controls/modifiers/control__feedback_bottom";
+@import "controls/modifiers/control__feedback_start";
+@import "controls/modifiers/control__feedback_startbottom";
+@import "controls/modifiers/control__feedback_end";
+@import "controls/modifiers/control__feedback_endbottom";
+//label
+@import "controls/modifiers/control__label_inline";
+//box
+@import "controls/modifiers/control__box_inline";

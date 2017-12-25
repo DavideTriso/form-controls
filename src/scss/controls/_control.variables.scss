@@ -1,61 +1,246 @@
 //BLOCK
 $control--padding: ();
-//modifiers
-//control_checkbox
-$control__check--border: ();
-$control__check--background: ();
-$control__check--sizes: (width: 1rem, height: 1rem);
-$control__check--margin: (all: 0);
 
-
+//ELEMENTS
 //field
-$control__field--font: ( fontSize: 1rem );
+$control__field--font: (
+  fontSize: $fieldFontSize
+);
 $control__field--text: ();
-$control__field--padding: ( top : 0.3rem, bottom: 0.35rem, left : 0.5rem, right : 0.5rem );
-$control__field--border: ( borderColor: #ccc, borderRadius: 0.25rem, borderWidth: 0.05rem, borderStyle: solid );
-$control__fieldPfocus--border: ( borderColor: #aaa );
-$control__fieldPfocus--outline: ( outline: none );
+$control__field--padding: (
+  top   : 0.3rem,
+  bottom: 0.35rem,
+  left  : 0.5rem,
+  right : 0.5rem
+);
+$control__field--border: (
+  borderColor : $borderColor,
+  borderRadius: $borderRadius,
+  borderWidth : $borderWidth,
+  borderStyle : solid
+);
+$control__field--box-shadow: $boxShadow inset;
+
+$control__field--background: (
+  backgroundColor: $backgroundColor
+);
+$control__fieldPfocus--border: (
+  borderColor: darken($borderColor, 20%)
+);
+$control__fieldPfocus--outline: (
+  outline      : Highlight solid 0.15rem,
+  outlineOffset: 0.01rem
+);
+
+$control__fieldPdisabled--border: (
+  borderColor: lighten($borderColor, 10%)
+);
+$control__fieldPdisabled--background: (
+  backgroundColor: lighten($borderColor, 15%)
+);
+//modifiers
+//valid
+$control__field_valid--border: (
+  borderColor: darken($validColor, 10%)
+);
+$control__field_valid--box-shadow: 0 0 0.1rem rgba($validColor, 0.5) inset;
+$control__field_valid--background: ();
+//error
+$control__field_error--border: (
+  borderColor: darken($errorColor, 10%)
+);
+$control__field_error--box-shadow: 0 0 0.1rem rgba($errorColor, 0.5) inset;
+$control__field_error--background: ();
+//warning
+$control__field_warning--border: (
+  borderColor: darken($warningColor, 10%)
+);
+$control__field_warning--box-shadow: 0 0 0.1rem rgba($warningColor, 0.5) inset;
+$control__field_warning--background: ();
+
+//checkbox
+
+//radio
+
+//choice
+$control__choice--padding: (
+  topBottom: 0.75rem,
+  leftRight: 0.5rem
+);
+$control__choice--border: (
+  borderColor : $borderColor,
+  borderRadius: $borderRadius,
+  borderWidth : $borderWidth,
+  borderStyle : solid
+);
+$control__choice--background: (
+  backgroundColor: $backgroundColor
+);
+$control__choice--text: (
+  color: lighten($textColor, 50%)
+);
+$control__choice--font: (
+  fontSize: $labelFontSize
+);
+$control__choice--box-shadow: $boxShadow inset;
+$control__choice--transition: 0.05s all ease-in;
+//hover and focus
+$control__choicePhover--transform: scale(1.02, 1.02);
+$control__choicePhover--padding: ();
+$control__choicePhover--border: (
+  borderColor: darken($borderColor, 20%)
+);
+$control__choicePhover--background: ();
+$control__choicePhover--text: (
+  color: $textColor
+);
+$control__choicePhover--font: ();
+$control__choicePhover--box-shadow: $boxShadow inset;
+
+//focus
+$control__choicePfocus--outline: (
+  outline      : Highlight solid 0.15rem,
+  outlineOffset: 0.01rem
+);
+
+//checked
+$control__choicePchecked--padding: (
+  topBottom: 0.65rem,
+  leftRight: 0.45rem
+);
+$control__choicePchecked--border: (
+  borderColor: $defaultColor,
+  borderWidth: 0.15rem
+);
+$control__choicePchecked--background: ();
+$control__choicePchecked--text: (
+  color: $textColor
+);
+$control__choicePchecked--font: ();
+$control__choicePchecked--box-shadow: 0 0 0.1rem rgba($validColor, 0.5) inset;
+$control__choicePchecked--transform: scale(1.02, 1.02);
+
+//active
 
 //label
-$control__label--font: ( fontFamily: inherit, fontSize: 0.8rem );
-$control__label--text: ( color: #fff );
-$control__label--padding: ( bottom: 0.25rem );
+$control__label--font: (
+  fontFamily: inherit,
+  fontSize  : $labelFontSize
+);
+$control__label--text: (
+  color: #000
+);
+$control__label--padding: (
+  bottom: 0.25rem
+);
 
-body {
-    background-color: #444;
-    font-family: sans-serif;
-    max-width: 300px;
-}
-
-
-
+//labelflag
+$control__abbrflag--text: (
+  textDecoration: none,
+  color         : darken($errorColor, 30%)
+);
+$control__abbrflag--typography: (
+  lineHeight: 0
+);
+$control__abbrflag--font: (
+  fontSize: ($fieldFontSize + 0.2)
+);
+//optionalflag
+$control__optionalflag--font: (
+  fontStyle: italic
+);
+$control__optionalflag--text: (
+  color: #6e6e6e
+);
+//requiredflag
+$control__requiredflag--font: (
+  fontStyle: italic,
+);
+$control__requiredflag--text: (
+  color: darken($errorColor, 30%)
+);
 //feedback
-$control__feedback--text: (color: #073d80, textAlign: center);
-$control__feedback--font: (fontSize: 0.8rem);
-$control__feedback--border: (borderColor: darken(#b7cfe6, 10%), borderStyle: solid, borderWidth: 0.05rem, borderRadius: 0.2rem);
-$control__feedback--background: (backgroundColor: #b7cfe6);
-$control__feedback--margin: ( all: 0 );
-$control__feedback--padding: ( topBottom: 0.2rem, leftRight: 0.6rem);
-$control__feedback--box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2);
+$control__feedback--text: (
+  color    : darken($defaultColor, 40%),
+  textAlign: center
+);
+$control__feedback--font: (
+  fontSize: $labelFontSize
+);
+$control__feedback--border: (
+  borderColor : darken($defaultColor, 3%),
+  borderStyle : solid,
+  borderWidth : $borderWidth,
+  borderRadius: $borderRadius
+);
+$control__feedback--background: (
+  backgroundColor: $defaultColor
+);
+$control__feedback--margin: (
+  all: 0
+);
+$control__feedback--padding: (
+  topBottom: 0.2rem,
+  leftRight: 0.6rem
+);
+$control__feedback--box-shadow: $boxShadow;
 $control__feedback--transform: translate(-50%, -110%);
 $control__feedback--transition: 0.2s visibility ease-in, 0.2s opacity ease-in;
-$control__feedbackPafter--sizes: (width: 0.6rem, height: 0.6rem);
+$control__feedbackPafter--sizes: (
+  width : 0.6rem,
+  height: 0.6rem
+);
 
 //modifiers
 //feedback_bottom
 $control__feedback_bottom--transform: translate(-50%, 10%);
+//feedback_start
+$control__feedback_startPafter--left: 10%;
+$control__feedback_start--transform: translate(0, -110%);
+//feedback_startbottom
+$control__feedback_startbottom--transform: translate(0, 10%);
+$control__feedback_startbottomPafter--left: 10%;
+//feedback_end
+$control__feedback_startPafter--right: 10%;
+$control__feedback_start--transform: translate(0, -110%);
+//feedback_endbottom
+$control__feedback_endbottom--transform: translate(0, 10%);
+$control__feedback_endbottomPafter--right: 10%;
 //feedback_error
-$control__feedback_error--text: (color: #a91515);
+$control__feedback_error--text: (
+  color: darken($errorColor, 40%)
+);
 $control__feedback_error--font: ();
-$control__feedback_error--border: (borderColor: darken(#efb6b6, 10%));
-$control__feedback_error--background: (backgroundColor: #efb6b6);
+$control__feedback_error--border: (
+  borderColor: darken($errorColor, 3%)
+);
+$control__feedback_error--background: (
+  backgroundColor: $errorColor
+);
+$control__feedback_error--box-shadow: 0 0 0.1rem rgba($errorColor, 0.2);
+
 //feedback_valid
-$control__feedback_valid--text: (color: #0f7025);
+$control__feedback_valid--text: (
+  color: darken($validColor, 40%)
+);
 $control__feedback_valid--font: ();
-$control__feedback_valid--border: (borderColor: darken(#cbf4d1, 10%));
-$control__feedback_valid--background: (backgroundColor: #cbf4d1);
+$control__feedback_valid--border: (
+  borderColor: darken($validColor, 3%)
+);
+$control__feedback_valid--background: (
+  backgroundColor: $validColor
+);
+$control__feedback_valid--box-shadow: 0 0 0.1rem rgba($validColor, 0.2);
+
 //feedback_warning
-$control__feedback_warning--text: (color: #a15c20);
+$control__feedback_warning--text: (
+  color: darken($warningColor, 40%)
+);
 $control__feedback_warning--font: ();
-$control__feedback_warning--border: (borderColor: darken(#fbc587, 10%));
-$control__feedback_warning--background: (backgroundColor: #fbc587);
+$control__feedback_warning--border: (
+  borderColor: darken($warningColor, 3%)
+);
+$control__feedback_warning--background: (
+  backgroundColor: $warningColor
+);
+$control__feedback_warning--box-shadow: 0 0 0.1rem rgba($warningColor, 0.2);

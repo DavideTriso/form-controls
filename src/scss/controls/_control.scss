@@ -3,15 +3,10 @@
 //----------------------
 
 .control {
-  display: flex;
+  display : flex;
   @include flexPositioning((flexWrap: wrap, justifyContent: flex-start, alignItems: stretch));
   @include padding($control--padding);
   position: relative;
-  @include sizes((width: 100%)); 
-
-
-  input[type="checkbox"],
-  input[type="radio"] {
-      @include srOnly;
-  }
+  @include sizes((width: 100%));
+  margin  : 2rem 0;
 }

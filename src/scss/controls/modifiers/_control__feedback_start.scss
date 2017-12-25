@@ -1,0 +1,8 @@
+.control__feedback_start {
+  left     : 0;
+  transform: $control__feedback_start--transform;
+
+  &:after {
+    left: $control__feedback_startPafter--left;
+  }
+}

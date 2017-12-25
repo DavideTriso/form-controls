@@ -1,0 +1,18 @@
+$fieldFontSize: 1rem;
+$labelFontSize: 0.8rem;
+$textColor: #000;
+$backgroundColor: #fff;
+$borderColor: #ccc;
+$borderWidth: 0.05rem;
+$borderRadius: 0.2rem;
+$defaultColor: #6aa6f1;
+$errorColor: #ed7171;
+$warningColor: #f49d50;
+$validColor: #33f26e;
+$boxShadow: 0 0 0.1rem rgba(0, 0, 0, 0.2);
+
+body {
+  //background-color: #444;
+  font-family: sans-serif;
+  max-width  : 600px;
+}

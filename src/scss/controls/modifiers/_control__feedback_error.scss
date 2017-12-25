@@ -1,11 +1,12 @@
 .control__feedback_error {
+  @include background($control__feedback_error--background);
+  box-shadow: $control__feedback_error--box-shadow;
+  @include border($control__feedback_error--border);
+  @include font($control__feedback_error--font);
+  @include text($control__feedback_error--text);
+
+  &:after {
     @include background($control__feedback_error--background);
-    @include border($control__feedback_error--border);
-    @include font($control__feedback_error--font);
-    @include text($control__feedback_error--text);
-    
-    &:after {
-        @include background($control__feedback_error--background);
-        @include border(map-merge($control__feedback_error--border, (borderRadius: 0, borderTopWidth: 0, borderRightWidth: 0, borderTopRightRadius: 100%)));
-    }
+    @include border(map-merge($control__feedback_error--border, (borderRadius: 0, borderTopWidth: 0, borderRightWidth: 0, borderTopRightRadius: 100%)));
+  }
 }

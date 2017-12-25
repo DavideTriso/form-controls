@@ -1,11 +1,12 @@
 .control__feedback_valid {
-    @include background($control__feedback_valid--background);
-    @include border($control__feedback_valid--border);
-    @include font($control__feedback_valid--font);
-    @include text($control__feedback_valid--text);
+  @include background($control__feedback_valid--background);
+  box-shadow: $control__feedback_valid--box-shadow;
+  @include border($control__feedback_valid--border);
+  @include font($control__feedback_valid--font);
+  @include text($control__feedback_valid--text);
 
-    &:after {
-        @include background($control__feedback_valid--background);
-        @include border(map-merge($control__feedback_valid--border, (borderRadius: 0, borderTopWidth: 0, borderRightWidth: 0, borderTopRightRadius: 100%)));
-    }
+  &:after {
+    @include background($control__feedback_valid--background);
+    @include border(map-merge($control__feedback_valid--border, (borderRadius: 0, borderTopWidth: 0, borderRightWidth: 0, borderTopRightRadius: 100%)));
+  }
 }
