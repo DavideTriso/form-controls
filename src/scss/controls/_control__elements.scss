@@ -3,9 +3,10 @@
 //----------------------
 
 .control__box {
-  display: flex;
+  display : flex;
   @include flexPositioning((flexWrap: nowrap, justifyContent: flex-start, alignItems: stretch));
   @include sizes((width: 100%));
+  position: relative;
 }
 
 .control__field {
@@ -15,7 +16,7 @@
   flex      : 0 1 100%;
   @include font($control__field--font);
   @include text($control__field--text);
-  @include sizes((width: 100%, minWidth: auto, maxWidth: 100%));
+  @include sizes($control__field--sizes);
   @include padding($control__field--padding);
 
   &:active,
@@ -27,6 +28,72 @@
   &:disabled {
     @include border($control__fieldPdisabled--border);
     @include background($control__fieldPdisabled--background);
+  }
+}
+
+.control__textarea {
+  @include background($control__textarea--background);
+  @include border($control__textarea--border);
+  box-shadow: $control__textarea--box-shadow;
+  flex      : 0 1 100%;
+  @include font($control__textarea--font);
+  @include text($control__textarea--text);
+  @include sizes($control__textarea--sizes);
+  @include padding($control__textarea--padding);
+
+  &:active,
+  &:focus {
+    @include border($control__textareaPfocus--border);
+    @include outline($control__textareaPfocus--outline);
+  }
+
+  &:disabled {
+    @include border($control__textareaPdisabled--border);
+    @include background($control__textareaPdisabled--background);
+  }
+}
+
+.control__select {
+  @include sizes($control__select--sizes);
+  position: relative;
+
+  &:after {
+    position        : absolute;
+    right           : 0.5rem;
+    top             : 50%;
+    transform       : translateY(-50%) rotate(45deg);
+    pointer-events  : none;
+    content         : "";
+    width           : 0.8rem;
+    height          : 0.8rem;
+    background-color: black;
+    display         : block;
+    /* @TODO: implement arrow with external module */
+  }
+
+  > select {
+    -webkit-appearance: none;
+    -moz-appearance   : none;
+    appearance        : none;
+    @include background($control__select--background);
+    @include border($control__select--border);
+    box-shadow        : $control__select--box-shadow;
+    flex              : 0 1 100%;
+    @include font($control__select--font);
+    @include text($control__select--text);
+    @include sizes($control__select--sizes);
+    @include padding($control__select--padding);
+
+    &:active,
+    &:focus {
+      @include border($control__selectPfocus--border);
+      @include outline($control__selectPfocus--outline);
+    }
+
+    &:disabled {
+      @include border($control__selectPdisabled--border);
+      @include background($control__selectPdisabled--background);
+    }
   }
 }
 
@@ -57,6 +124,7 @@
   transition: $control__choice--transition;
 
   .control__field_sronly[type="radio"]:focus + &,
+  .control__field_sronly[type="checkbox"]:focus + &,
   &:hover {
     @include border($control__choicePhover--border);
     box-shadow: $control__choicePhover--box-shadow;
@@ -67,11 +135,13 @@
     transform : $control__choicePhover--transform;
   }
 
-  .control__field_sronly[type="radio"]:focus + & {
+  .control__field_sronly[type="radio"]:focus + &,
+  .control__field_sronly[type="checkbox"]:focus + & {
     @include outline($control__choicePfocus--outline);
   }
 
-  .control__field_sronly[type="radio"]:checked + & {
+  .control__field_sronly[type="radio"]:checked + &,
+  .control__field_sronly[type="checkbox"]:checked + & {
     @include border($control__choicePchecked--border);
     box-shadow: $control__choicePchecked--box-shadow;
     @include background($control__choicePchecked--background);
@@ -80,6 +150,13 @@
     @include padding($control__choicePchecked--padding);
     transform : $control__choicePchecked--transform;
   }
+}
+
+.control__spinnbutton {
+  display : flex;
+  @include flexPositioning((flexWrap: nowrap, justifyContent: flex-start, alignItems: stretch));
+  @include sizes((width: 100%));
+  position: relative;
 }
 
 .control__label {
@@ -146,5 +223,3 @@
     @include border(map-merge($control__feedback--border, (borderRadius: 0, borderTopWidth: 0, borderRightWidth: 0, borderTopRightRadius: 100%)));
   }
 }
-
-//Wrapper for addons

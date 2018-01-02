@@ -18,6 +18,14 @@
 @import "controls/modifiers/control__field_error";
 @import "controls/modifiers/control__field_warning";
 @import "controls/modifiers/control__field_sronly";
+//textarea
+@import "controls/modifiers/control__textarea_error";
+@import "controls/modifiers/control__textarea_valid";
+@import "controls/modifiers/control__textarea_warning";
+//select
+@import "controls/modifiers/control__select_error";
+@import "controls/modifiers/control__select_valid";
+@import "controls/modifiers/control__select_warning";
 //feedback
 @import "controls/modifiers/control__feedback_visible";
 @import "controls/modifiers/control__feedback_valid";
@@ -32,3 +40,8 @@
 @import "controls/modifiers/control__label_inline";
 //box
 @import "controls/modifiers/control__box_inline";
+//addon
+@import "controls/modifiers/control__addon_right";
+@import "controls/modifiers/control__addon_left";
+@import "controls/modifiers/control__addon_top";
+@import "controls/modifiers/control__addon_bottom";

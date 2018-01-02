@@ -8,10 +8,13 @@ $control__field--font: (
 );
 $control__field--text: ();
 $control__field--padding: (
-  top   : 0.3rem,
-  bottom: 0.35rem,
-  left  : 0.5rem,
-  right : 0.5rem
+  topBottom: 0.3rem,
+  leftRight: 0.5rem
+);
+$control__field--sizes: (
+  width   : 100%,
+  minWidth: auto,
+  maxWidth: 100%,
 );
 $control__field--border: (
   borderColor : $borderColor,
@@ -57,6 +60,125 @@ $control__field_warning--border: (
 );
 $control__field_warning--box-shadow: 0 0 0.1rem rgba($warningColor, 0.5) inset;
 $control__field_warning--background: ();
+
+//textarea
+$control__textarea--font: (
+  fontSize: $fieldFontSize
+);
+$control__textarea--text: ();
+$control__textarea--padding: (
+  topBottom: 0.3rem,
+  leftRight: 0.5rem
+);
+$control__textarea--sizes: (
+  width   : 100%,
+  minWidth: auto,
+  maxWidth: 100%,
+);
+$control__textarea--border: (
+  borderColor : $borderColor,
+  borderRadius: $borderRadius,
+  borderWidth : $borderWidth,
+  borderStyle : solid
+);
+$control__textarea--box-shadow: $boxShadow inset;
+
+$control__textarea--background: (
+  backgroundColor: $backgroundColor
+);
+$control__textareaPfocus--border: (
+  borderColor: darken($borderColor, 20%)
+);
+$control__textareaPfocus--outline: (
+  outline      : Highlight solid 0.15rem,
+  outlineOffset: 0.01rem
+);
+
+$control__textareaPdisabled--border: (
+  borderColor: lighten($borderColor, 10%)
+);
+$control__textareaPdisabled--background: (
+  backgroundColor: lighten($borderColor, 15%)
+);
+//modifiers
+//valid
+$control__textarea_valid--border: (
+  borderColor: darken($validColor, 10%)
+);
+$control__textarea_valid--box-shadow: 0 0 0.1rem rgba($validColor, 0.5) inset;
+$control__textarea_valid--background: ();
+//error
+$control__textarea_error--border: (
+  borderColor: darken($errorColor, 10%)
+);
+$control__textarea_error--box-shadow: 0 0 0.1rem rgba($errorColor, 0.5) inset;
+$control__textarea_error--background: ();
+//warning
+$control__textarea_warning--border: (
+  borderColor: darken($warningColor, 10%)
+);
+$control__textarea_warning--box-shadow: 0 0 0.1rem rgba($warningColor, 0.5) inset;
+$control__textarea_warning--background: ();
+
+//select
+$control__select--font: (
+  fontSize: $fieldFontSize
+);
+$control__select--text: ();
+$control__select--padding: (
+  topBottom: 0.3rem,
+  leftRight: 0.5rem
+);
+$control__select--sizes: (
+  width    : 100%,
+  minWidth : auto,
+  maxWidth : 100%,
+  maxHeight: 1.85rem //firefox height bug fix
+);
+$control__select--border: (
+  borderColor : $borderColor,
+  borderRadius: $borderRadius,
+  borderWidth : $borderWidth,
+  borderStyle : solid
+);
+$control__select--box-shadow: $boxShadow inset;
+
+$control__select--background: (
+  backgroundColor: $backgroundColor
+);
+$control__selectPfocus--border: (
+  borderColor: darken($borderColor, 20%)
+);
+$control__selectPfocus--outline: (
+  outline      : Highlight solid 0.15rem,
+  outlineOffset: 0.01rem
+);
+
+$control__selectPdisabled--border: (
+  borderColor: lighten($borderColor, 10%)
+);
+$control__selectPdisabled--background: (
+  backgroundColor: lighten($borderColor, 15%)
+);
+//modifiers
+//valid
+$control__select_valid--border: (
+  borderColor: darken($validColor, 10%)
+);
+$control__select_valid--box-shadow: 0 0 0.1rem rgba($validColor, 0.5) inset;
+$control__select_valid--background: ();
+//error
+$control__select_error--border: (
+  borderColor: darken($errorColor, 10%)
+);
+$control__select_error--box-shadow: 0 0 0.1rem rgba($errorColor, 0.5) inset;
+$control__select_error--background: ();
+//warning
+$control__select_warning--border: (
+  borderColor: darken($warningColor, 10%)
+);
+$control__select_warning--box-shadow: 0 0 0.1rem rgba($warningColor, 0.5) inset;
+$control__select_warning--background: ();
 
 //checkbox
 
@@ -117,7 +239,7 @@ $control__choicePchecked--text: (
   color: $textColor
 );
 $control__choicePchecked--font: ();
-$control__choicePchecked--box-shadow: 0 0 0.1rem rgba($validColor, 0.5) inset;
+$control__choicePchecked--box-shadow: 0 0 0.2rem rgba($defaultColor, 0.5) inset;
 $control__choicePchecked--transform: scale(1.02, 1.02);
 
 //active

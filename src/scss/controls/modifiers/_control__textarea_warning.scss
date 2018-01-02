@@ -1,0 +1,10 @@
+.control__textarea_warning {
+  @include border($control__textarea_warning--border);
+  box-shadow: $control__textarea_warning--box-shadow;
+  @include background($control__textarea_warning--background);
+
+  &:active,
+  &:focus {
+    @include border(map-merge($control__textarea_warning--border, (borderColor: darken($warningColor, 20%))));
+  }
+}
