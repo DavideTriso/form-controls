@@ -1,19 +1,27 @@
-# FORM BLOCK **THIS DOCUMENT IS A WORKING DRAFT**
+# FORM CONTROLS **THIS DOCUMENT IS A WORKING DRAFT**
 
 
 ## About
 
-HTML, CSS and JS UI-components for **user-friendly** and **accessible** form inputs.
+HTML, CSS and JS UI-components for **user-friendly** and **accessible** form controls.
 
-## Demo
+* Features list
 
-Link to demo webpage here
+## Dependencies
 
-## Key features:
+**jQuery**
 
-List of key features here
+Developed and tested with jQuery 3.2.1
 
-## Settings:
+## Plu
+
+
+
+
+
+
+
+
 
 ### Classes
 
@@ -32,6 +40,11 @@ alertboxClass | field-group__alertbox string | The class used by the plugin to r
 successboxClass | field-group__successbox string | The class used by the plugin to retrive the success-box
 alertboxVisibleClass | field-group__alertbox_visible string | The class added by the plugin to the alert-box when an error occurs and an error message must be shown.
 successboxVisibleClass | field-group__successbox_visible string | The class added by the plugin to the success-box when user input is correct and a success message must be shown.
+dirty
+main
+fieldName
+
+
 
 ### Error messages
 

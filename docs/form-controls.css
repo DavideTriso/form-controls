@@ -137,12 +137,12 @@ body {
   box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
   -ms-flex: 0 1 100%;
       flex: 0 1 100%;
-  font-size: 1rem;
+  font-size: 0.8rem;
   max-height: 1.85rem;
   max-width: 100%;
   min-width: auto;
   width: 100%;
-  padding: 0.3rem 0.5rem;
+  padding: 0.4rem 0.5rem;
 }
 .control__select > select:active, .control__select > select:focus {
   border-color: #999999;

@@ -122,11 +122,11 @@ $control__textarea_warning--background: ();
 
 //select
 $control__select--font: (
-  fontSize: $fieldFontSize
+  fontSize: $fieldFontSize - 0.2rem
 );
 $control__select--text: ();
 $control__select--padding: (
-  topBottom: 0.3rem,
+  topBottom: 0.4rem,
   leftRight: 0.5rem
 );
 $control__select--sizes: (

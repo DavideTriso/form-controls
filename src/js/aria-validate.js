@@ -23,13 +23,13 @@ SOFTWARE.
 */
 
 (function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory); //AMD
-    } else if (typeof exports === 'object') {
-        module.exports = factory(require('jquery')); //CommonJS
-    } else {
-        factory(jQuery, window);
-    }
+  if (typeof define === 'function' && define.amd) {
+    define(['jquery'], factory); //AMD
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('jquery')); //CommonJS
+  } else {
+    factory(jQuery, window);
+  }
 }(function ($, window) {
   'use strict';
   var pluginName = 'ariaValidate', // the name of the plugin
@@ -54,6 +54,13 @@ SOFTWARE.
 
   //-----------------------------------------
   //Private functions
+
+  /*
+   * Escape any chars in a string which could break RegExp.
+   */
+  function escapeRegExp(string) {
+    return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  }
 
   /*
    * set id of the element passed along
@@ -154,6 +161,56 @@ SOFTWARE.
     return convertDateToIso(param, regionSettings.dateFormat, regionSettings.dateSeparator);
   }
 
+
+  /*
+   * Convert time to ISO format (with or without seconds)
+   * Only checks if time is well formed, not if time is valid.
+   * @TODO: test
+   */
+  function convertTimeToIso(value, format, separator, pm) {
+    /*
+     * Check if time is already in ISO format or is empty,
+     * and return unchanged value if true.
+     * The regular expressions only work for 24 hour format
+     * if format is 12 hours and not empty, conversion is always needed
+     */
+    if ((/^\d{2}:\d{2}$/.test(value) || /^\d{2}:\d{2}:\d{2}$/.test(value)) && (format === '24' || value === '')) {
+      return value;
+    }
+
+    /*
+     * Time is not in ISO format and is not empty.
+     * We have to try to convert it in ISO format
+     * first of all we need two different implementations for 12 and 24 hours time formats
+     * 1 - Split in array
+     * 2 - Check if array length is 2 or 3 and check the length of each entry (should be: 2,2,2).
+     * 2 - Reconstruct time by repositioning day, month and year based on region settings and change date separator (-)
+     */
+    value = value.split(separator);
+    var valueLength = value.length,
+      newValue = '';
+
+
+    //uk and us format (12 hours)
+    if (valueLength > 1 && valueLength <= 3 && value[0].length === 2 && value[1].length === 2) {
+      //handle us and us 12 hours format
+      if (format === '12' && pm) {
+        value[0] = parseInt(value[0], 10) + 12;
+      }
+
+      //the time without seconds
+      newValue = value[0] + ':' + value[1];
+
+      //add seconds to the string if lenght of array is 3
+      if (valueLength === 3 && value[2].length === 2) {
+        value = newValue + ':' + value[2];
+      } else if (valueLength === 3 && value[2].length !== 2) {
+        return false; // convertion is not possible
+      }
+      return value;
+    }
+  }
+
   /*
    * Calculate minLenght and maxLenght with or without offset starting from object or array
    * (for maxLength and minLength validation functions)
@@ -217,6 +274,7 @@ SOFTWARE.
 
     //VALIDATION
     self.fieldStatus = undefined; //Describes the staus of the field: undefined -> field was never focussed and validated, true -> correct input , 'errorCode' -> incorrect input
+    self.isDirty = false; // a field is considered dirty after first interaction, this means on blur or on change for some other fields
     self.fieldValue = undefined; //The value of the field
     self.errorMsgs = makeSettings($.fn[pluginName].defaultErrorMsgs, self.userSettings.errorMsgs); //computed error messages settings for this field;
     self.successMsg = self.userSettings.successMsg ? self.userSettings.successMsg : $.fn[pluginName].defaultSuccessMsg; //Success message for this field
@@ -228,6 +286,7 @@ SOFTWARE.
     //Initialise field
     self.selectElements();
     self.initMarkup();
+    self.manageDirty();
     self.addBehaviour();
     self.updateFieldValue();
   };
@@ -266,11 +325,13 @@ SOFTWARE.
         self.fieldTag = self.field.prop('tagName');
         self.fieldType = self.fieldTag === 'INPUT' ? self.field.attr('type') : false;
         self.fieldName = self.userSettings.fieldName || self.field.attr('name');
-      } else {
+      } else if (self.field.length > 1 && self.field.first().attr('type') === 'radio') {
         //Set values for radio button
         self.fieldTag = 'INPUT';
         self.fieldType = 'radio';
         self.fieldName = self.userSettings.fieldName || $(self.field[0]).attr('name');
+      } else {
+        throw Erro('There is something wrong with your markup');
       }
     },
     initMarkup: function () {
@@ -284,7 +345,7 @@ SOFTWARE.
        *
        */
       var self = this,
-        elementId = setId(self.element, self.classes.componentIdPrefix, count),
+        elementId = setId(self.element, self.classes.controlIdPrefix, count),
         fieldId = '',
         alertboxId = self.alertbox !== false ? setId(self.alertbox, elementId + '__alertbox') : false,
         successboxId = self.successbox !== false ? setId(self.successbox, elementId + '__successbox') : false;
@@ -345,6 +406,26 @@ SOFTWARE.
       //increment count by one
       count = count + 1;
     },
+    manageDirty: function () {
+      /*
+       * Set field as dirty when after value is changed once.
+       * Different field type need to be treated differently:
+       * color, range, select  - > set as dirty after change event is fired for the first time.
+       * all other fields - > set as dirty after blur event is fired for the first time
+       */
+      var self = this,
+        fieldType = self.fieldType,
+        dirtyEvent = 'blur';
+
+      if (self.fieldTag === 'SELECT' || fieldType === 'color' || fieldType === 'range') {
+        dirtyEvent = 'change';
+      }
+
+      self.field.one(dirtyEvent + '.dirty.' + pluginName, function () {
+        self.isDirty = true;
+        win.trigger(pluginName + '.markedAsDirty', [self]);
+      });
+    },
     addBehaviour: function () {
       var self = this,
         behaviour = self.behaviour,
@@ -359,13 +440,12 @@ SOFTWARE.
       win.trigger(pluginName + '.behaviourAdded', [self]);
     },
     bindEventListeners: function (currentBehaviour) {
-      //@TODO Check if custom behaviours works correctly when triggered from aria-form
       var self = this,
         events = namespaceEventString(currentBehaviour.event, pluginName),
         autoformatRules = currentBehaviour.autoformat || false,
         validateRules = currentBehaviour.validate || false,
-        main = currentBehaviour.main || false; //check if current behaviour is set as 'main behaviour'
-
+        main = currentBehaviour.main || false, //check if current behaviour is set as 'main behaviour'
+        dirty = currentBehaviour.dirty; // check if current behaviour is flaged as dirty dirty (perform validation rules only if field is already marked as dirty, has no effect on autoformat)
 
       //Bind event listeners to field
       self.field.on(events, function () {
@@ -373,7 +453,7 @@ SOFTWARE.
           self.performAutoformat(autoformatRules);
         }
         if (validateRules) {
-          self.performValidation(validateRules, main);
+          self.performValidation(validateRules, main, dirty);
         }
 
         //Keep track of registered event listeners
@@ -422,6 +502,7 @@ SOFTWARE.
       //retrive current field value and update self.fieldValue
       self.updateFieldValue();
 
+
       for (var key in autoformatRules) {
         self.fieldValue = $.fn[pluginName].autoformatFunctions[key](self.fieldValue, autoformatRules[key], self.regionSettings);
       }
@@ -430,7 +511,7 @@ SOFTWARE.
       self.field.val(self.fieldValue);
 
     },
-    performValidation: function (validationRules, main) {
+    performValidation: function (validationRules, main, dirty) {
       /*
        * Perform validation on the field:
        * Call each validation function passed from user for validation.
@@ -441,6 +522,17 @@ SOFTWARE.
 
       //retrive current field value and update self.fieldValue
       self.updateFieldValue();
+
+
+      /*
+       * Check value of dirty
+       * If dirty is set to true, then the validation should be performed only when self.isDirty is true
+       * If dirty is set to false, then the validation should be performed only when self.isDirty is false (only if field is untouched)
+       * If dirty is undefined validate
+       */
+      if (dirty !== undefined && ((dirty && !self.isDirty) || (!dirty && self.isDirty))) {
+        return;
+      }
 
       //loop through all validation functions
       for (var key in validationRules) {
@@ -474,8 +566,8 @@ SOFTWARE.
 
       //add error classes to field group and remove valid classes
       self.element
-        .removeClass(self.classes.componentValidClass)
-        .addClass(self.classes.componentErrorClass);
+        .removeClass(self.classes.controlValidClass)
+        .addClass(self.classes.controlErrorClass);
 
       //add error classes to field and remove valid classes
       self.field
@@ -512,8 +604,8 @@ SOFTWARE.
 
       //remove error classes and add valid classes to field group
       self.element
-        .removeClass(self.classes.componentErrorClass)
-        .addClass(self.classes.componentValidClass);
+        .removeClass(self.classes.controlErrorClass)
+        .addClass(self.classes.controlValidClass);
 
       //remove error classes and add valid classes to field
       self.field
@@ -550,8 +642,8 @@ SOFTWARE.
 
       //remove error and valid classes from element
       self.element
-        .removeClass(self.classes.componentErrorClass)
-        .removeClass(self.classes.componentValidClass);
+        .removeClass(self.classes.controlErrorClass)
+        .removeClass(self.classes.controlValidClass);
 
       //remove error and valid classes from field
       self.field
@@ -609,6 +701,9 @@ SOFTWARE.
       case 'unbindEventListeners':
         self.unbindEventListeners(methodArg);
         break;
+      case 'setDirty':
+        self.isDirty = true;
+        break;
       case 'destroy':
         self.destroy(); //@TODO Test method
         break;
@@ -644,26 +739,27 @@ SOFTWARE.
   };
 
   $.fn[pluginName].defaultClasses = {
-    componentIdPrefix: 'component--',
-    componentValidClass: 'component_success',
-    componentErrorClass: 'component_error',
-    fieldClass: 'component__field',
-    fieldErrorClass: 'component__field_error',
-    fieldValidClass: 'component__field_valid',
-    labelClass: 'component__label',
-    labelErrorClass: 'component__label_error',
-    labelValidClass: 'component__label_valid',
-    alertboxClass: 'component__feedback_valid',
-    successboxClass: 'component__feedback_error',
-    alertboxVisibleClass: 'component__feedback_visible',
-    successboxVisibleClass: 'component__feedback_visible',
+    controlIdPrefix: 'control--',
+    controlValidClass: 'control_success',
+    controlErrorClass: 'control_error',
+    fieldClass: 'control__field',
+    fieldErrorClass: 'control__field_error',
+    fieldValidClass: 'control__field_valid',
+    labelClass: 'control__label',
+    labelErrorClass: 'control__label_error',
+    labelValidClass: 'control__label_valid',
+    alertboxClass: 'control__feedback_error',
+    successboxClass: 'control__feedback_valid',
+    alertboxVisibleClass: 'control__feedback_visible',
+    successboxVisibleClass: 'control__feedback_visible',
   };
 
   $.fn[pluginName].defaultRegionSettings = {
-    dateFormat: 'eu',
-    dateSeparator: '/',
-    //timeSeparator: ':',
-    decimalSeparator: ','
+    dateFormat: 'eu', // eu or us
+    timeFormat: '12', // use 12 or 24 hours format
+    dateSeparator: '/', // / or - or .
+    timeSeparator: ':', // : or . or space
+    decimalSeparator: ',' // , or .
   };
 
   $.fn[pluginName].defaultErrorMsgs = {
@@ -678,6 +774,7 @@ SOFTWARE.
     minDate: 'The date entered is too far in the past',
     maxDate: 'The date entered is too far in the future',
     time: 'Entera valid time (e.g. 10:30)',
+    timeWithSeconds: 'Entera valid time (e.g. 10:30:55)',
     minTime: 'Time is before the minimum time',
     maxTime: 'Time is after the maximum time',
     email: 'Enter a valid email address',
@@ -690,7 +787,7 @@ SOFTWARE.
     minLength: 'The length of the input is too short',
     maxLength: 'Field length exceeds the maximum number of chars allowed',
     required: 'This field is required to sucessfully complete the form',
-    tokens: 'Please choose one value from the list',
+    tokens: 'Please choose a value from the list',
     match: 'No match',
     customRegex: 'Regex match returned "false"',
     ajax: 'server says no!',
@@ -716,15 +813,15 @@ SOFTWARE.
 
     letters: function (fieldValue) {
       //Check if value does not contain any digit (0-9)
-      return /^[\D]*$/.test(fieldValue) ? true : 'letters';
+      return /^[\D]*$/.test(fieldValue) ? true : 'letters'; //@TODO test regex
     },
     onlyLetters: function (fieldValue) {
       //Check if value contains only letters (a-z, A-Z)
-      return /^[\x00-\x7F]*$/.test(fieldValue) ? true : 'onlyLetters'; /*@TODO: test regex*/
+      return /^[a-zA-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏàáâãäåæçèéêëìíîïÐÑÒÓÔÕÖØÙÚÛÜÝÞßðñòóôõöøùúûüýþÿ]*$/.test(fieldValue) ? true : 'onlyLetters'; /*@TODO: test regex*/
     },
     digits: function (fieldValue) {
       //Check if value contains any letters (a-z, A-Z)
-      return /^[^\x00-\x7F]*$/.test(fieldValue) ? true : 'digits';  /*@TODO: test regex*/
+      return /^[^a-zA-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏàáâãäåæçèéêëìíîïÐÑÒÓÔÕÖØÙÚÛÜÝÞßðñòóôõöøùúûüýþÿ]*$/.test(fieldValue) ? true : 'digits';
     },
     onlyDigits: function (fieldValue) {
       //Check if value is digit (0-9)
@@ -816,16 +913,24 @@ SOFTWARE.
 
       return new Date(fieldValue) <= new Date(param) ? true : 'maxDate';
     },
-    /*time: function (fieldValue, param) {
+    time: function (fieldValue, param) {
       //convert time to ISO format
       //check if time is valid ISO time
+      //@TODO
+    },
+    timeWithSeconds: function (fieldValue, param) {
+      //convert time to ISO format
+      //check if time is valid ISO time
+      //@TODO
     },
     minTime: function (fieldValue, param) {
       //check if time is after min time passed
+      //@TODO
     },
     maxTime: function (fieldValue, param) {
       //check if time is before max time passed
-    },*/
+      //@TODO
+    },
     email: function (fieldValue, param) {
       //chekc if email is valid
       return /^([\w-\.]+@([\w\-]+\.)+[\w\-]{2,4})?$/.test(fieldValue) ? true : 'email';
@@ -908,8 +1013,10 @@ SOFTWARE.
       //@TODO Live collections: live and automatically update accepted values.
       /*
        * Check if value entered corresponds to one value from a given list (token)
-       * param is an array of options/possible values
+       * param is an array of options/possible values or a function wich returns an  object of possible options
        */
+      //@TODO check if param is function or array. if function call it and retrive values (?)
+
       var paramLength = param.length;
 
       for (var i = 0; i < paramLength; i = i + 1) {
@@ -968,16 +1075,20 @@ SOFTWARE.
      */
     trim: function (fieldValue) {
       //remove whitespaces from start and end of string
-      return fieldValue.trim();
+      return fieldValue !== '' ? fieldValue.trim() : '';
     },
     uppercase: function (fieldValue) {
       return fieldValue.toUpperCase();
     },
     lowercase: function (fieldValue) {
-      return fieldValue.toLowerCase();
+      return fieldValue !== '' ? fieldValue.toLowerCase() : '';
     },
     capitalize: function (fieldValue) {
       //capitalize each word in the string
+      if (fieldValue === '') {
+        return '';
+      }
+
       var valueArray = fieldValue.split(' '),
         valueArrayLength = valueArray.length,
         value = '';
@@ -991,7 +1102,7 @@ SOFTWARE.
     },
     capitalizeFirst: function (fieldValue) {
       //capitalize first letter of string
-      return fieldValue.slice(0, 1).toUpperCase() + fieldValue.slice(1);
+      return fieldValue !== '' ? (fieldValue.slice(0, 1).toUpperCase() + fieldValue.slice(1)) : '';
     },
     replace: function (fieldValue, param) {
       /*
@@ -1020,6 +1131,10 @@ SOFTWARE.
        *      }
        *     ]
        */
+      if (fieldValue === '') {
+        return '';
+      }
+
       if (Array.isArray(param) && param.length > 0) {
         var paramLenght = param.length;
         for (var i = 0; i < paramLenght; i = i + 1) {
@@ -1031,6 +1146,10 @@ SOFTWARE.
       return fieldValue;
     },
     autocompleteDate: function (fieldValue, param, regionSettings) {
+      if (fieldValue === '') {
+        return '';
+      }
+
       if (param === '' || param === undefined) {
         param = '20'; //21st. century by default, if author does not pass a value
       }
@@ -1065,11 +1184,51 @@ SOFTWARE.
 
       return day + dateSeparator + month + dateSeparator + year;
     },
-    /*insertCharAt: function () {
-        //@TODO
+    insertCharAt: function (fieldValue, param) {
+      //@TODO
+      /*
+      //param: object -> position: (int), -> char -> [string]
+      if (fieldValue === '') {
+        return '';
+      }
+
+      var fieldLength = fieldValue.length;
+      if (Array.isArray(param) && param.length > 0) {
+        //
+      } else {
+        if (fieldLength <= param.position) {
+          return fieldValue;
+
+        }
+      }*/
     },
-    insertCharEvery: function () {
-        //@TODO
-    }*/
+    insertCharEvery: function (fieldValue, param) {
+      //@TODO
+      //param: object -> interval: (int), -> char -> [string]
+      //break out if value is empty or lengh is lower than interval
+
+      var interval = param.interval;
+
+      if (fieldValue === '' || fieldValue.length <= interval) {
+        return fieldValue;
+      }
+
+      var char = param.char,
+        sanitizeRegex = new RegExp('[' + escapeRegExp(char) + ']', 'g'), //buil regex to remove any separation char from string
+        fieldValue = fieldValue.replace(sanitizeRegex, ''), // sanitized string, remove all separation chars
+        chunksRegex = new RegExp('.{1,' + interval + '}', 'g'), // build regex to split string into chunks
+        chunks = fieldValue.match(chunksRegex), // split string into chunks and save in array
+        chunksLength = chunks.length; // number of chunks
+      fieldValue = ''; // empty field value
+
+
+      /*
+       * rebuild string by looping over each entry of array
+       */
+      for (var i = 0; i < (chunksLength - 1); i = i + 1) {
+        fieldValue = fieldValue + chunks[i] + char;
+      }
+      return fieldValue + chunks[chunksLength - 1];
+    }
   };
 }));

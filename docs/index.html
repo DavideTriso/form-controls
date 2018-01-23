@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Form validation example</title>
+  <style>
+    body {
+      max-width: 400px;
+      margin: auto;
+      font-family: sans-serif;
+      box-sizing: border-box;
+    }
+  </style>
+  <link href="form-controls.css" rel="stylesheet" />
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="aria-validate.js"></script>
+  <script>
+    $(window).ready(function() {
+      $('#date').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            autoformat: {
+              trim: true,
+            },
+            validate: {
+              customRegex: /^[\d|/|.|-]*$/ //allow only digits 0-9 and /, - or .
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            autoformat: {
+              replace: [{
+                  searchFor: /[-]/g,
+                  replaceWith: '/',
+                },
+                {
+                  searchFor: /[.]/g,
+                  replaceWith: '/',
+                },
+              ],
+              autocompleteDate: '20'
+            },
+            validate: {
+              required: true,
+              date: true,
+            }
+          }
+        ],
+      });
+      $('#date2').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            autoformat: {
+              trim: true,
+              replace: [{
+                  searchFor: /[-]/g,
+                  replaceWith: '/',
+                },
+                {
+                  searchFor: /[.]/g,
+                  replaceWith: '/',
+                },
+              ],
+            },
+            validate: {
+              digits: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            autoformat: {
+              replace: [{
+                  searchFor: /[-]/g,
+                  replaceWith: '/',
+                },
+                {
+                  searchFor: /[.]/g,
+                  replaceWith: '/',
+                },
+              ],
+              autocompleteDate: '20'
+            },
+            validate: {
+              required: true,
+              date: true,
+              minDate: '2017-09-14'
+            }
+          }
+        ],
+      });
+      $('#date3').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            autoformat: {
+              trim: true,
+              replace: [{
+                  searchFor: /[-]/g,
+                  replaceWith: '/',
+                },
+                {
+                  searchFor: /[.]/g,
+                  replaceWith: '/',
+                },
+              ],
+            },
+            validate: {
+              digits: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            autoformat: {
+              replace: [{
+                  searchFor: /[-]/g,
+                  replaceWith: '/',
+                },
+                {
+                  searchFor: /[.]/g,
+                  replaceWith: '/',
+                },
+              ],
+              autocompleteDate: '20'
+            },
+            validate: {
+              required: true,
+              date: true,
+              minDate: [$('#date2-field'), 2, '2017-10-02'],
+              maxDate: [$('#date2-field'), 90, '2017-12-31']
+            }
+          }
+        ],
+      });
+      $('#text1').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            autoformat: {
+              insertCharEvery: {
+                interval: 4,
+                char: '\\'
+              }
+            },
+            validate: {
+              required: true,
+              letters: true,
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              letters: true,
+              minLength: 10,
+              maxLength: 15
+            }
+          }
+        ],
+        errorMsgs: {
+          maxLength: 'Maximum length is 15.',
+          minLength: 'Minimum length is 10'
+        }
+      });
+      $('#email').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            uppercase: {
+              lowercase: true
+            }
+          },
+          {
+            event: 'blur',
+            autoformat: {
+              lowercase: true
+            },
+            validate: {
+              email: true
+            }
+          }
+        ]
+      });
+      $('#checkbox').ariaValidate({
+        behaviour: [{
+          event: 'change',
+          validate: {
+            bool: true
+          }
+        }]
+      });
+      $('#select').ariaValidate({
+        behaviour: [{
+          event: 'change',
+          validate: {
+            required: true
+          }
+        }]
+      });
+      $('#range').ariaValidate({
+        behaviour: [{
+          event: 'input change',
+          validate: {
+            min: 10,
+            max: 90
+          }
+        }]
+      });
+      $('#phone1').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            validate: {
+              digits: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            autoformat: {
+              replace: {
+                searchFor: /^00/,
+                replaceWith: '+',
+              }
+            },
+            validate: {
+              required: true,
+              telWithPrefix: true
+            }
+          }
+        ]
+      });
+      $('#prefix').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            autoformat: {
+              replace: {
+                searchFor: /^00/,
+                replaceWith: '+',
+              }
+            },
+            validate: {
+              required: true,
+              digits: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              telPrefix: true
+            }
+          }
+        ]
+      });
+      $('#password').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            password: true,
+            matchMain: $('#match-field')
+          }
+        }]
+      });
+      $('#match').ariaValidate({
+        behaviour: [{
+          event: 'input change',
+          main: true,
+          validate: {
+            match: $('#password-field')
+          }
+        }]
+      });
+      $('#int').ariaValidate({
+        behaviour: [{
+          event: 'change input',
+          validate: {
+            required: true,
+            int: true,
+            min: 1,
+            max: 100
+          }
+        }]
+      });
+      $('#float').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            validate: {
+              required: true,
+              digits: true,
+              min: 1,
+              max: 100
+            }
+          },
+          {
+            event: 'change',
+            main: true,
+            validate: {
+              required: true,
+              float: true,
+              min: 1,
+              max: 100
+            }
+          }
+        ]
+      });
+      $('#custom-regex').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            customRegex: /^[abc]{0,10}?$/,
+            minLength: 1,
+            maxLength: 20
+          }
+        }]
+      });
+      $('#tokens').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            autoformat: {
+              capitalizeFirst: true,
+              trim: true
+            },
+            validate: {
+              required: true,
+              onlyLetters: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              tokens: ['Chrome', 'Safari', 'Firefox', 'Opera']
+            }
+          }
+        ]
+      });
+      $('#radios').ariaValidate({
+        behaviour: [{
+          event: 'change',
+          validate: {
+            bool: true
+          }
+        }]
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="control" id="date">
+    <label class="control__label" for="date-field">Date</label>
+    <input type="text" class="control__field" id="date-field" name="date-field" placeholder="dd/mm/yyyy" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="date2">
+    <label class="control__label" for="date2-field">Arrival date</label>
+    <input type="text" class="control__field" id="date2-field" name="date2-field" placeholder="dd/mm/yyyy" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="date3">
+    <label class="control__label" for="date3-field">Departure date</label>
+    <input type="text" class="control__field" id="date3-field" name="date3-field" placeholder="dd/mm/yyyy" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="text1">
+    <label class="control__label" for="text1-field">Text</label>
+    <input type="text" class="control__field" id="text1-field" name="text1-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="email">
+    <label class="control__label" for="email-field">Email</label>
+    <input type="email" class="control__field" id="email-field" name="email-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="checkbox">
+    <label class="control__label" for="checkbox-field">Checkbox</label>
+    <input type="checkbox" class="control__field" id="checkbox-field" name="checkbox-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+
+  <div class="control" id="radios">
+    <label class="control__label">Radio 1</label>
+    <input type="radio" class="control__field" name="radio" value="1" />
+    <label class="control__label">Radio 2</label>
+    <input type="radio" class="control__field" name="radio" value="2" />
+    <label class="control__label">Radio 3</label>
+    <input type="radio" class="control__field" name="radio" value="3" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+
+  <div class="control" id="select">
+    <label class="control__label" for="select-field">Select</label>
+    <select class="control__field" required id="select-field" name="select-field">
+            <option value="">Choose one option</option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+            <option value="4">Option 4</option>
+        </select>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="range">
+    <label class="control__label" for="range-field">Range</label>
+    <input type="range" class="control__field" min="0 " max="100 " id="range-field" name="range-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+
+  <div class="control" id="phone1">
+    <label class="control__label" for="phone1-field">Phone</label>
+    <input type="text " class="control__field" id="phone1-field" name="phone1-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="prefix">
+    <label class="control__label" for="prefix-field">Prefix</label>
+    <input type="text " class="control__field" id="prefix-field" name="prefix-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="password">
+    <label class="control__label" for="password-field">Password</label>
+    <input type="text " class="control__field" id="password-field" name="password-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+
+  <div class="control" id="match">
+    <label class="control__label" for="match-field">Match</label>
+    <input type="text " class="control__field" id="match-field" name="match-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="int">
+    <label class="control__label" for="int-field">Int</label>
+    <input type="number " class="control__field" id="int-field" name="int-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+
+  <div class="control" id="float">
+    <label class="control__label" for="float-field">Float</label>
+    <input type="text " class="control__field" id="float-field" name="float-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="custom-regex">
+    <label class="control__label" for="custom-regex-field">Custom regex (/^[abc]{0,10}?$/)</label>
+    <input type="text " class="control__field" id="custom-regex-field" name="custom-regex-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+
+  <div class="control" id="tokens">
+    <label class="control__label" for="tokens-field">Tokens (Choose between: Chrome, Firefox, Safari, Opera)</label>
+    <input type="text " class="control__field" id="tokens-field" name="tokens-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+  <div class="control" id="ajax">
+    <label class="control__label" for="ajax-field">Ajax</label>
+    <input type="text " class="control__field" id="ajax-field" name="ajax-field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_valid "></p>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
