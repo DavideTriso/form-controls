@@ -63,6 +63,16 @@ SOFTWARE.
   }
 
   /*
+   * Remove a characher from string
+   * using dynamically generated regular expressions
+   * and the replace method
+   */
+  function sanitizeString(string, char) {
+    var sanitzeRegex = new RegExp('[' + escapeRegExp(char) + ']', 'g');
+    return string.replace(sanitzeRegex, '');
+  }
+
+  /*
    * set id of the element passed along
    * if the element does not have one
    * and return the id of the element
@@ -104,7 +114,7 @@ SOFTWARE.
   }
 
   /*
-   * Convert date from US format (MM/DD/YYYY) or from EU format(DD/MM/YYYY) to ISO format
+   * Convert date from mdy format (MM/DD/YYYY), dmy format(DD/MM/YYYY) or ymd format (YYYY/MM/DD) to ISO format
    */
   function convertDateToIso(value, format, separator) {
     /*
@@ -119,18 +129,23 @@ SOFTWARE.
      * Date is not in ISO format and is not empty.
      * We have to try to convert it in ISO format
      * 1 - Split in array
-     * 2 - Check if array length is 3 and check the length of each entry (should be: 2,2,4).
+     * 2 - Check if array length is 3 and check the length of each entry (should be: 2,2,4 or 4,2,2).
      * 2 - Reconstruct date by repositioning day, month and year based on regioin settings and change date separator (-)
      */
     value = value.split(separator);
-
-    if (value.length === 3 && value[0].length === 2 && value[1].length === 2 && value[2].length === 4) {
-      if (format === 'eu') {
-        value = value[2] + '-' + value[1] + '-' + value[0];
-      } else if (format === 'us') {
-        value = value[2] + '-' + value[0] + '-' + value[1];
+    if (value.length === 3) {
+      console.log(value[2].length);
+      if (value[0].length === 2 && value[1].length === 2 && value[2].length === 4) {
+        if (format === 'dmy') {
+          value = value[2] + '-' + value[1] + '-' + value[0];
+        } else if (format === 'mdy') {
+          value = value[2] + '-' + value[0] + '-' + value[1];
+        }
+        return value;
+      } else if (value[0].length === 4 && value[1].length === 2 && value[2].length === 2 && format === 'ymd') {
+        value = value[0] + '-' + value[1] + '-' + value[2];
+        return value;
       }
-      return value;
     }
 
     // if it is not possible to convert the date, then return false.
@@ -273,9 +288,14 @@ SOFTWARE.
     self.regionSettings = makeSettings($.fn[pluginName].defaultRegionSettings, self.userSettings.regionSettings);
 
     //VALIDATION
-    self.fieldStatus = undefined; //Describes the staus of the field: undefined -> field was never focussed and validated, true -> correct input , 'errorCode' -> incorrect input
+    //self.fieldStatus = undefined; //Describes the staus of the field: undefined -> field was never focussed and validated, true -> correct input , 'errorCode' -> incorrect input
     self.isDirty = false; // a field is considered dirty after first interaction, this means on blur or on change for some other fields
-    self.fieldValue = undefined; //The value of the field
+    //self.fieldValue = undefined; //The value of the field
+    //self.adding = undefined; //On each field value update, check if user is adding or removing text from field (last value length is greater or smaller than new value length?) - true -> adding, false -> removing, undefined -> not changed or field value has no length (is radio, checkbox etc...)
+    self.selection = {};
+    //  start: undefined,
+    //  end: undefined
+    //}; // the caret position and selected text in the field (selectionStart, selctionEnd)
     self.errorMsgs = makeSettings($.fn[pluginName].defaultErrorMsgs, self.userSettings.errorMsgs); //computed error messages settings for this field;
     self.successMsg = self.userSettings.successMsg ? self.userSettings.successMsg : $.fn[pluginName].defaultSuccessMsg; //Success message for this field
 
@@ -448,9 +468,9 @@ SOFTWARE.
         dirty = currentBehaviour.dirty; // check if current behaviour is flaged as dirty dirty (perform validation rules only if field is already marked as dirty, has no effect on autoformat)
 
       //Bind event listeners to field
-      self.field.on(events, function () {
+      self.field.on(events, function (events) {
         if (autoformatRules) {
-          self.performAutoformat(autoformatRules);
+          self.performAutoformat(autoformatRules, events);
         }
         if (validateRules) {
           self.performValidation(validateRules, main, dirty);
@@ -467,7 +487,6 @@ SOFTWARE.
       self.field.off(namespaceEventString(events, pluginName));
       self.eventListeners = self.eventListeners.replace(events, ''); //@TODO Testen ob string wird korrekterwei�e entfernt
 
-
       //trigger custom event on window for user to listen for
       win.trigger(pluginName + '.eventListenersRemoved', [self]);
     },
@@ -481,7 +500,22 @@ SOFTWARE.
         //radio
         self.fieldValue = self.field.filter(':checked').length === 1 ? self.field.filter(':checked').val() : false;
       } else {
-        self.fieldValue = self.field.val() || '';
+
+        var oldLength = self.fieldValue !== undefined ? self.fieldLength : undefined; // current length of field value
+
+        self.fieldValue = self.field.val() || ''; //new value
+        self.fieldLength = self.fieldValue.length; //value length
+
+        //determin if user is adding or removing text
+        if (oldLength < self.fieldValue.length) {
+          self.adding = true;
+        } else {
+          self.adding = false;
+        }
+
+        //get selection start and end
+        self.selection.start = self.field[0].selectionStart || undefined;
+        self.selection.end = self.field[0].selectionEnd || undefined;
       }
       /*
        * Save the user input in attribute data-value.
@@ -489,7 +523,7 @@ SOFTWARE.
        */
       self.field.attr(a.dV, self.fieldValue);
     },
-    performAutoformat: function (autoformatRules) {
+    performAutoformat: function (autoformatRules, events) {
       /*
        * Perform autoformatting on the field:
        * Call each autoformatting function passed from user.
@@ -497,19 +531,33 @@ SOFTWARE.
        * When all functions have been performed, we have the formatted value.
        * Replace the old user input with the new formatted value.
        */
-      var self = this;
+      var self = this,
+        selectionStartBefore = 0,
+        lengthBefore = 0,
+        selectionStartAfter = 0,
+        lengthAfter = 0,
+        newCaretPosition = 0;
+
+
 
       //retrive current field value and update self.fieldValue
       self.updateFieldValue();
 
+      console.log(selectionStartBefore + ' ' + lengthBefore);
 
       for (var key in autoformatRules) {
-        self.fieldValue = $.fn[pluginName].autoformatFunctions[key](self.fieldValue, autoformatRules[key], self.regionSettings);
+        self.fieldValue = $.fn[pluginName].autoformatFunctions[key](self.fieldValue, autoformatRules[key], {
+          element: self.field,
+          regionSettings: self.regionSettings,
+          adding: self.adding,
+          selection: self.selection,
+          events: events
+        });
       }
 
       //update the field value
       self.field.val(self.fieldValue);
-
+      self.updateFieldValue();
     },
     performValidation: function (validationRules, main, dirty) {
       /*
@@ -718,8 +766,6 @@ SOFTWARE.
   });
 
 
-
-
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
   $.fn[pluginName] = function (userSettings, methodArg) {
@@ -755,7 +801,7 @@ SOFTWARE.
   };
 
   $.fn[pluginName].defaultRegionSettings = {
-    dateFormat: 'eu', // eu or us
+    dateFormat: 'dmy', // dmy = dd/mm/yyyy, mdy = mm/dd/yyyy, ymd = yyyy/mm/dd
     timeFormat: '12', // use 12 or 24 hours format
     dateSeparator: '/', // / or - or .
     timeSeparator: ':', // : or . or space
@@ -778,9 +824,6 @@ SOFTWARE.
     minTime: 'Time is before the minimum time',
     maxTime: 'Time is after the maximum time',
     email: 'Enter a valid email address',
-    telWithPrefix: 'Enter a valid phone number with the county prefix (e.g. +49 373837638)',
-    telNoPrefix: 'Enter a valid phone number',
-    telPrefix: 'Not a valid prefix',
     password: 'Password is not secure',
     min: 'The entered number is too small',
     max: 'The entered number is too big',
@@ -935,18 +978,6 @@ SOFTWARE.
       //chekc if email is valid
       return /^([\w-\.]+@([\w\-]+\.)+[\w\-]{2,4})?$/.test(fieldValue) ? true : 'email';
     },
-    telWithPrefix: function (fieldValue) {
-      //check if phone number is valid phone number with prefix
-      return /^(\+(?:[0-9] ?){6,14}[0-9])?$/.test(fieldValue) ? true : 'telWithPrefix';
-    },
-    telNoPrefix: function (fieldValue) {
-      //check if phone number is valid phone number without prefix
-      return /^((?:[0-9] ?){6,14}[0-9])?$/.test(fieldValue) ? true : 'telNoPrefix';
-    },
-    telPrefix: function (fieldValue) {
-      //check if prefix is a valid prefix
-      return /^(\+(?:[0-9] ?){1,4}[0-9])?$/.test(fieldValue) ? true : 'telPrefix';
-    },
     password: function (fieldValue) {
       //check if password is secure
       return /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,50})/.test(fieldValue) ? true : 'password';
@@ -1075,6 +1106,7 @@ SOFTWARE.
      */
     trim: function (fieldValue) {
       //remove whitespaces from start and end of string
+      //use on blur
       return fieldValue !== '' ? fieldValue.trim() : '';
     },
     uppercase: function (fieldValue) {
@@ -1145,21 +1177,18 @@ SOFTWARE.
       }
       return fieldValue;
     },
-    autocompleteDate: function (fieldValue, param, regionSettings) {
+    autocompleteDate: function (fieldValue, param, settings) {
       if (fieldValue === '') {
-        return '';
+        return fieldValue;
       }
 
       if (param === '' || param === undefined) {
         param = '20'; //21st. century by default, if author does not pass a value
       }
 
-      if (fieldValue === '') {
-        return fieldValue;
-      }
-
-      var dateSeparator = regionSettings.dateSeparator,
-        value = fieldValue.split(regionSettings.dateSeparator),
+      var dateSeparator = settings.regionSettings.dateSeparator,
+        dateFormat = settings.regionSettings.dateFormat,
+        value = fieldValue.split(settings.regionSettings.dateSeparator),
         day = '',
         month = '',
         year = '';
@@ -1172,63 +1201,121 @@ SOFTWARE.
       month = value[1];
       year = value[2];
 
-      if (day.length === 1) {
-        day = '0' + day;
-      }
-      if (month.length === 1) {
-        month = '0' + month;
-      }
-      if (year.length === 2) {
-        year = param + year;
-      }
+      if (dateFormat !== 'ymd') {
 
+        if (day.length === 1) {
+          day = '0' + day;
+        }
+        if (month.length === 1) {
+          month = '0' + month;
+        }
+        if (year.length === 2) {
+          year = param + year;
+        }
+      } else {
+
+        if (day.length === 2) {
+          day = param + day;
+        }
+        if (month.length === 1) {
+          month = '0' + month;
+        }
+        if (year.length === 1) {
+          year = '0' + year;
+        }
+      }
       return day + dateSeparator + month + dateSeparator + year;
     },
-    insertCharAt: function (fieldValue, param) {
-      //@TODO
-      /*
+    insertCharAt: function (fieldValue, param, settings) {
       //param: object -> position: (int), -> char -> [string]
-      if (fieldValue === '') {
-        return '';
-      }
-
-      var fieldLength = fieldValue.length;
-      if (Array.isArray(param) && param.length > 0) {
-        //
-      } else {
-        if (fieldLength <= param.position) {
-          return fieldValue;
-
-        }
-      }*/
-    },
-    insertCharEvery: function (fieldValue, param) {
-      //@TODO
-      //param: object -> interval: (int), -> char -> [string]
-      //break out if value is empty or lengh is lower than interval
-
-      var interval = param.interval;
-
-      if (fieldValue === '' || fieldValue.length <= interval) {
+      if (fieldValue === '' || (!settings.adding && settings.events.type === 'input')) {
         return fieldValue;
       }
 
+      //param is an array, multiple replaces: loop throug all entries
+      if (Array.isArray(param) && param.length > 0) {
+        var numberOfReplaces = param.length,
+          fieldLength = 0;
+
+        for (var i = 0; i < numberOfReplaces; i = i + 1) {
+          fieldValue = sanitizeString(fieldValue, param[i].char);
+        }
+
+        fieldLength = fieldValue.length;
+
+        for (var i = 0; i < numberOfReplaces; i = i + 1) {
+          if (fieldLength >= param[i].position) {
+            fieldValue = [fieldValue.slice(0, param[i].position), param[i].char, fieldValue.slice(param[i].position)].join('');
+          } else {
+            fieldValue = fieldValue;
+          }
+          fieldLength = fieldLength + param[i].char.length;
+        }
+
+        return fieldValue;
+      } else {
+        //param is object, just one replace
+        fieldValue = sanitizeString(fieldValue, param.char);
+        fieldLength = fieldValue.length;
+
+
+        if (fieldLength >= param.position) {
+          return [fieldValue.slice(0, param.position), param.char, fieldValue.slice(param.position)].join('');
+        } else {
+          return fieldValue;
+        }
+      }
+    },
+    insertCharEvery: function (fieldValue, param, settings) {
+      //param: object -> interval: (int), -> char -> [string]
+      var interval = param.interval;
+
+      if (fieldValue.length < interval || (!settings.adding && settings.events.type === 'input')) {
+        return fieldValue;
+      }
+
+      /*
+       * 1- remove any occurence of char from the value
+       * 2- split value into chunks of lenght === interval
+       * 3- rebuild string, adding the separation char(s)
+       */
       var char = param.char,
-        sanitizeRegex = new RegExp('[' + escapeRegExp(char) + ']', 'g'), //buil regex to remove any separation char from string
-        fieldValue = fieldValue.replace(sanitizeRegex, ''), // sanitized string, remove all separation chars
+        maxChars = param.maxChars || 9999, // if maxChars is not set, set it to 9999
+        newValue = sanitizeString(fieldValue, char), // sanitized string, remove all separation chars
         chunksRegex = new RegExp('.{1,' + interval + '}', 'g'), // build regex to split string into chunks
-        chunks = fieldValue.match(chunksRegex), // split string into chunks and save in array
+        chunks = newValue.match(chunksRegex), // split string into chunks and save in array
         chunksLength = chunks.length; // number of chunks
-      fieldValue = ''; // empty field value
+      fieldValue = ''; // reset field value
 
 
       /*
-       * rebuild string by looping over each entry of array
+       * loop over each entry of array and append separation char(s)
+       * add separation chars only:
+       * if the maximum number of chars is not reached and
+       * if the lenght of the chunk is equal to the lengh of the interval set by user
+       * Skip last chunk.
+       * rebuild string
        */
       for (var i = 0; i < (chunksLength - 1); i = i + 1) {
-        fieldValue = fieldValue + chunks[i] + char;
+        if (i < param.maxChars && chunks[i].length === interval) {
+          fieldValue = fieldValue + chunks[i] + char;
+        } else {
+          fieldValue = fieldValue + chunks[i];
+        }
       }
-      return fieldValue + chunks[chunksLength - 1];
+
+
+      /*
+       * Deal with last chunk:
+       * on last chunk we have to check if user is adding or deleting text from fields
+       * in order to perform the correct action
+       */
+      if (i < param.maxChars && chunks[chunksLength - 1].length === interval) {
+        fieldValue = fieldValue + chunks[chunksLength - 1] + char;
+      } else {
+        fieldValue = fieldValue + chunks[i];
+      }
+      return fieldValue;
     }
   };
 }));

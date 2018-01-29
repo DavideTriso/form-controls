@@ -19,35 +19,29 @@
     $(window).ready(function() {
       $('#date').ariaValidate({
         behaviour: [{
-            event: 'input',
-            autoformat: {
-              trim: true,
+          event: 'input',
+          main: true,
+          autoformat: {
+            insertCharAt: {
+              position: 2,
+              char: '/'
             },
-            validate: {
-              customRegex: /^[\d|/|.|-]*$/ //allow only digits 0-9 and /, - or .
-            }
+            replace: [{
+                searchFor: /[-]/g,
+                replaceWith: '/',
+              },
+              {
+                searchFor: /[.]/g,
+                replaceWith: '/',
+              },
+            ],
+            autocompleteDate: '20'
           },
-          {
-            event: 'blur',
-            main: true,
-            autoformat: {
-              replace: [{
-                  searchFor: /[-]/g,
-                  replaceWith: '/',
-                },
-                {
-                  searchFor: /[.]/g,
-                  replaceWith: '/',
-                },
-              ],
-              autocompleteDate: '20'
-            },
-            validate: {
-              required: true,
-              date: true,
-            }
+          validate: {
+            required: true,
+            date: true,
           }
-        ],
+        }],
       });
       $('#date2').ariaValidate({
         behaviour: [{
@@ -140,7 +134,8 @@
             autoformat: {
               insertCharEvery: {
                 interval: 4,
-                char: '\\'
+                char: '-',
+                maxChars: 3
               }
             },
             validate: {
@@ -210,6 +205,25 @@
       $('#phone1').ariaValidate({
         behaviour: [{
             event: 'input',
+            autoformat: {
+              insertCharAt: [{
+                  position: 0,
+                  char: '('
+                },
+                {
+                  position: 4,
+                  char: ')'
+                },
+                {
+                  position: 5,
+                  char: ' '
+                },
+                {
+                  position: 9,
+                  char: '-'
+                }
+              ]
+            },
             validate: {
               digits: true
             }

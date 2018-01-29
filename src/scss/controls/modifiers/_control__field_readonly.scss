@@ -1,0 +1,4 @@
+.control__field_readonly {
+  @include border($control__field_readonly--border);
+  box-shadow: $control__field_readonly--box-shadow;
+}

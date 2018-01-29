@@ -60,6 +60,11 @@ $control__field_warning--border: (
 );
 $control__field_warning--box-shadow: 0 0 0.1rem rgba($warningColor, 0.5) inset;
 $control__field_warning--background: ();
+//readonly
+$control__field_readonly--border: (
+  borderWidth: 0
+);
+$control__field_readonly--box-shadow: none;
 
 //textarea
 $control__textarea--font: (
