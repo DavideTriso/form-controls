@@ -1,7 +1,7 @@
 {
   "name": "t-form-controls",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HTML, CSS and JS form controls components for BEM projects.",
   "repository": {
     "type": "git",
