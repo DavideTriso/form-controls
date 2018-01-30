@@ -532,32 +532,51 @@ SOFTWARE.
        * Replace the old user input with the new formatted value.
        */
       var self = this,
-        selectionStartBefore = 0,
-        lengthBefore = 0,
-        selectionStartAfter = 0,
-        lengthAfter = 0,
-        newCaretPosition = 0;
-
-
+        fieldValue = '';
 
       //retrive current field value and update self.fieldValue
       self.updateFieldValue();
 
-      console.log(selectionStartBefore + ' ' + lengthBefore);
+      //save current field value to var
+      fieldValue = self.fieldValue;
 
+      //call every autoformat rule in for in loop
       for (var key in autoformatRules) {
-        self.fieldValue = $.fn[pluginName].autoformatFunctions[key](self.fieldValue, autoformatRules[key], {
-          element: self.field,
+
+        /*
+         * Manage caret position:
+         * If autoformat function returns array, then the second entry in array is the new caret position
+         * In this case it is necessary to save the new caret position in order to keep track of changes
+         */
+        if (Array.isArray(fieldValue)) {
+          self.selection.start = fieldValue[1];
+          self.selection.end = fieldValue[1];
+          fieldValue = fieldValue[0];
+        }
+
+        fieldValue = $.fn[pluginName].autoformatFunctions[key](fieldValue, autoformatRules[key], {
           regionSettings: self.regionSettings,
           adding: self.adding,
-          selection: self.selection,
-          events: events
+          events: events,
+          selection: self.selection
         });
       }
 
+      /*
+       * Update field value and manage caret position:
+       * If autoformat function returns array, then the second entry in array is the caret position
+       * In this case we also set the caret in the field, othrewise just update the field value
+       */
+      if (Array.isArray(fieldValue)) {
+        self.field.val(fieldValue[0]);
+        self.field[0].setSelectionRange(fieldValue[1], fieldValue[1]);
+      } else {
+        self.field.val(fieldValue);
+      }
+
       //update the field value
-      self.field.val(self.fieldValue);
       self.updateFieldValue();
+
     },
     performValidation: function (validationRules, main, dirty) {
       /*
@@ -1257,7 +1276,6 @@ SOFTWARE.
         //param is object, just one replace
         fieldValue = sanitizeString(fieldValue, param.char);
         fieldLength = fieldValue.length;
-
 
         if (fieldLength >= param.position) {
           return [fieldValue.slice(0, param.position), param.char, fieldValue.slice(param.position)].join('');
