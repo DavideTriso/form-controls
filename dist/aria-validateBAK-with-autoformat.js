@@ -43,7 +43,7 @@ SOFTWARE.
       aInv: 'aria-invalid',
       aOw: 'aria-owns',
       req: 'required',
-      dV: 'data-ariavalidate-value',
+      dV: 'data-value',
       t: 'true',
       f: 'false'
     },
@@ -54,6 +54,23 @@ SOFTWARE.
 
   //-----------------------------------------
   //Private functions
+
+  /*
+   * Escape any chars in a string which could break RegExp.
+   */
+  function escapeRegExp(string) {
+    return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  }
+
+  /*
+   * Remove a characher from string
+   * using dynamically generated regular expressions
+   * and the replace method
+   */
+  function sanitizeString(string, char) {
+    var sanitzeRegex = new RegExp('[' + escapeRegExp(char) + ']', 'g');
+    return string.replace(sanitzeRegex, '');
+  }
 
   /*
    * set id of the element passed along
@@ -89,7 +106,7 @@ SOFTWARE.
       eventsLenght = events.length,
       namespacedEvents = '';
 
-    for (var i = 0; i < eventsLenght; i++) {
+    for (var i = 0; i < eventsLenght; i = i + 1) {
       namespacedEvents = namespacedEvents + ' ' + events[i] + '.' + namesapce;
     }
 
@@ -117,6 +134,7 @@ SOFTWARE.
      */
     value = value.split(separator);
     if (value.length === 3) {
+      console.log(value[2].length);
       if (value[0].length === 2 && value[1].length === 2 && value[2].length === 4) {
         if (format === 'dmy') {
           value = value[2] + '-' + value[1] + '-' + value[0];
@@ -135,39 +153,95 @@ SOFTWARE.
   }
 
   /*
-   * Calculate date with or without offset starting from an ISO-formatted date
+   * Calculate date with or without offset starting from an ISO-formatted date and an offset (optional)
    * (for maxDate and minDate validation functions)
+   * @TODO: TEST!!
    */
   function calculateDate(param, dateFormat, dateSeparator) {
-    if (param.bindToElement) {
-      var offset = param.offset,
-        date = param.bindToElement.attr(a.dV) || param.bindToElement.val();
+    if (Array.isArray(param)) {
+      var offset = param[1];
+      param = param[0].attr(a.dV) || param[0].val();
 
-      date = date !== '' ? date : param.fallbackDate; // check if element is empty and if empty use fallback date as starting point to calculate offset
+      if (param.length === 3 && !param) {
+        param = param[2];
+      }
 
-      date = convertDateToIso(date, dateFormat, dateSeparator);
-      date = new Date(date);
-      date = date.setDate(date.getDate() + offset);
-
-      return date;
+      param = convertDateToIso(param, dateFormat, dateSeparator);
+      param = new Date(param);
+      param = param.setDate(param.getDate() + offset);
+      return param;
     }
 
-    //No offset was passed, just a jquery element
-    //Retrive date from element and convert to ISO
-    var date = param.attr(a.dV) || param.val();
-    return convertDateToIso(param, dateFormat, dateSeparator);
+    param = param.attr(a.dV) || param.val();
+    return convertDateToIso(param, regionSettings.dateFormat, regionSettings.dateSeparator);
   }
 
 
   /*
+   * Convert time to ISO format (with or without seconds)
+   * Only checks if time is well formed, not if time is valid.
+   * @TODO: test
+   */
+  function convertTimeToIso(value, format, separator, pm) {
+    /*
+     * Check if time is already in ISO format or is empty,
+     * and return unchanged value if true.
+     * The regular expressions only work for 24 hour format
+     * if format is 12 hours and not empty, conversion is always needed
+     */
+    if ((/^\d{2}:\d{2}$/.test(value) || /^\d{2}:\d{2}:\d{2}$/.test(value)) && (format === '24' || value === '')) {
+      return value;
+    }
+
+    /*
+     * Time is not in ISO format and is not empty.
+     * We have to try to convert it in ISO format
+     * first of all we need two different implementations for 12 and 24 hours time formats
+     * 1 - Split in array
+     * 2 - Check if array length is 2 or 3 and check the length of each entry (should be: 2,2,2).
+     * 2 - Reconstruct time by repositioning day, month and year based on region settings and change date separator (-)
+     */
+    value = value.split(separator);
+    var valueLength = value.length,
+      newValue = '';
+
+
+    //uk and us format (12 hours)
+    if (valueLength > 1 && valueLength <= 3 && value[0].length === 2 && value[1].length === 2) {
+      //handle us and us 12 hours format
+      if (format === '12' && pm) {
+        value[0] = parseInt(value[0], 10) + 12;
+      }
+
+      //the time without seconds
+      newValue = value[0] + ':' + value[1];
+
+      //add seconds to the string if lenght of array is 3
+      if (valueLength === 3 && value[2].length === 2) {
+        value = newValue + ':' + value[2];
+      } else if (valueLength === 3 && value[2].length !== 2) {
+        return false; // convertion is not possible
+      }
+      return value;
+    }
+  }
+
+  /*
    * Calculate minLenght and maxLenght with or without offset starting from object or array
    * (for maxLength and minLength validation functions)
+   * @TODO: TEST!!
    */
   function calculateLength(param) {
-    if (param.element) {
-      var offset = param.offset;
-      param = param.element.attr(a.dV) !== '' ? param.element.attr(a.dV).length : param.element.val().length;
-      return param + offset;
+    if (Array.isArray(param)) {
+      var offset = param[1];
+      param = param[0].attr(a.dV) !== '' ? param[0].attr(a.dV).length : param[0].val().length;
+
+      if (param.length === 3 && !param) {
+        param = param[2];
+      }
+
+      param = param + offset;
+      return param > 0 ? param : offset;
     }
     param = param.attr(a.dV).length || param.val().length
     return param;
@@ -176,11 +250,16 @@ SOFTWARE.
   /*
    * Calculate min and max with or without offset starting from object or array
    * (for max and min validation functions)
+   * @TODO: TEST!!
    */
-  function calculateNumber(param) {
-    if (param.element) {
-      var offset = param.offset;
-      param = param.element.attr(a.dV) || param.element.val();
+  function calculateInt(param) {
+    if (Array.isArray(param)) {
+      var offset = param[1];
+      param = param[0].attr(a.dV) || param[0].val();
+
+      if (param.length === 3 && !param) {
+        param = param[2];
+      }
 
       return parseFloat(param, 10) + offset;
     }
@@ -200,6 +279,7 @@ SOFTWARE.
     //DEFAULT SETTINGS
     self.userSettings = userSettings; //the unchanged settings object passed from user
     self.behaviour = self.userSettings.behaviour;
+    self.behaviourLength = self.behaviour.length;
 
     //CLASSES
     self.classes = makeSettings($.fn[pluginName].defaultClasses, self.userSettings.classes); //computed html classes used to retrive elements
@@ -212,23 +292,23 @@ SOFTWARE.
     self.isDirty = false; // a field is considered dirty after first interaction, this means on blur or on change for some other fields
     //self.fieldValue = undefined; //The value of the field
     //self.adding = undefined; //On each field value update, check if user is adding or removing text from field (last value length is greater or smaller than new value length?) - true -> adding, false -> removing, undefined -> not changed or field value has no length (is radio, checkbox etc...)
-    self.selection = {}; // the caret position and selected text in the field (selectionStart, selctionEnd)
-
-    //MESSAGES
+    self.selection = {};
+    //  start: undefined,
+    //  end: undefined
+    //}; // the caret position and selected text in the field (selectionStart, selctionEnd)
     self.errorMsgs = makeSettings($.fn[pluginName].defaultErrorMsgs, self.userSettings.errorMsgs); //computed error messages settings for this field;
     self.successMsg = self.userSettings.successMsg ? self.userSettings.successMsg : $.fn[pluginName].defaultSuccessMsg; //Success message for this field
 
     //REGISTERED EVENTS
-    //keep track of event listeners added to field
-    self.eventListeners = [];
+    self.eventListeners = null;
 
     //-----------------------------------
     //Initialise field
-    self.selectElements(); //get all the needed elements to interact with from dom
-    self.initMarkup(); //add needed attributes and check markup
-    self.manageDirty(); //check for first interaction with field and mark as dirty after
-    self.addBehaviour(); //bind validation functions to the event listeners
-    self.updateFieldValue(); // get the current field value
+    self.selectElements();
+    self.initMarkup();
+    self.manageDirty();
+    self.addBehaviour();
+    self.updateFieldValue();
   };
 
 
@@ -256,7 +336,6 @@ SOFTWARE.
       self.label = element.find('.' + classes.labelClass); //length could be > 1 in case of radio
       self.alertbox = element.find('.' + classes.alertboxClass).length === 1 ? element.find('.' + classes.alertboxClass) : false;
       self.successbox = element.find('.' + classes.successboxClass).length === 1 ? element.find('.' + classes.successboxClass) : false;
-      self.fakeField = classes.fieldClassElement !== false ? element.find(classes.fieldClassElement) : false;
 
       /*
        * If only one field is present inside of the field group,
@@ -272,7 +351,7 @@ SOFTWARE.
         self.fieldType = 'radio';
         self.fieldName = self.userSettings.fieldName || $(self.field[0]).attr('name');
       } else {
-        throw new Error('There is something wrong with your markup');
+        throw Erro('There is something wrong with your markup');
       }
     },
     initMarkup: function () {
@@ -370,9 +449,10 @@ SOFTWARE.
     addBehaviour: function () {
       var self = this,
         behaviour = self.behaviour,
-        behaviourLength = behaviour.length;
+        behaviourLength = self.behaviourLength;
 
-      for (var i = 0; i < behaviourLength; i++) {
+
+      for (var i = 0; i < behaviourLength; i = i + 1) {
         self.bindEventListeners(behaviour[i]);
       }
 
@@ -382,32 +462,30 @@ SOFTWARE.
     bindEventListeners: function (currentBehaviour) {
       var self = this,
         events = namespaceEventString(currentBehaviour.event, pluginName),
+        autoformatRules = currentBehaviour.autoformat || false,
         validateRules = currentBehaviour.validate || false,
         main = currentBehaviour.main || false, //check if current behaviour is set as 'main behaviour'
-        dirty = currentBehaviour.dirty; // check if current behaviour is flaged as dirty (perform validation rules only if field is already marked as dirty)
+        dirty = currentBehaviour.dirty; // check if current behaviour is flaged as dirty dirty (perform validation rules only if field is already marked as dirty, has no effect on autoformat)
 
       //Bind event listeners to field
       self.field.on(events, function (events) {
+        if (autoformatRules) {
+          self.performAutoformat(autoformatRules, events);
+        }
         if (validateRules) {
           self.performValidation(validateRules, main, dirty);
         }
 
         //Keep track of registered event listeners
-        self.eventListeners.push(currentBehaviour.event);
+        self.eventListeners = self.eventListeners + ' ' + currentBehaviour.event; //@TODO Check what happens if one event is used in multiple behaviours
       });
     },
     unbindEventListeners: function (events) {
       var self = this,
-        eventsArray = events.split(' '),
-        eventsLength = eventsArray.length,
         events = namespaceEventString(events, pluginName);
 
       self.field.off(namespaceEventString(events, pluginName));
-
-      //remove event entry from events array
-      for (var i = 0; i < eventsLenght; i++) {
-        self.eventListeners.splice(self.eventListeners.indexOf(eventsArray[i]), 1);
-      }
+      self.eventListeners = self.eventListeners.replace(events, ''); //@TODO Testen ob string wird korrekterwei�e entfernt
 
       //trigger custom event on window for user to listen for
       win.trigger(pluginName + '.eventListenersRemoved', [self]);
@@ -440,17 +518,50 @@ SOFTWARE.
         self.selection.end = self.field[0].selectionEnd || undefined;
       }
       /*
-       * Save the user input in attribute data-ariavalidate-valueue.
+       * Save the user input in attribute data-value.
        * Maybe useful for some external plugin
        */
       self.field.attr(a.dV, self.fieldValue);
+    },
+    performAutoformat: function (autoformatRules, events) {
+      /*
+       * Perform autoformatting on the field:
+       * Call each autoformatting function passed from user.
+       * Each autoformatting functions updates the value of the input.
+       * When all functions have been performed, we have the formatted value.
+       * Replace the old user input with the new formatted value.
+       */
+      var self = this,
+        fieldValue = '';
+
+      //retrive current field value and update self.fieldValue
+      self.updateFieldValue();
+
+      //save current field value to var
+      fieldValue = self.fieldValue;
+
+      //call every autoformat rule in for in loop
+      for (var key in autoformatRules) {
+        fieldValue = $.fn[pluginName].autoformatFunctions[key](fieldValue, autoformatRules[key], {
+          regionSettings: self.regionSettings,
+          adding: self.adding,
+          selection: self.selection,
+          events: events
+        });
+      }
+
+      //update the field value
+      self.field.val(fieldValue);
+      //self.field[0].setSelectionRange(fieldValue[1], fieldValue[1]);
+      self.updateFieldValue();
+
     },
     performValidation: function (validationRules, main, dirty) {
       /*
        * Perform validation on the field:
        * Call each validation function passed from user for validation.
        * If function returns true, proceed, else throw error and exit execution.
-       * If no function returns errors, then validate the field by calling self.validateControl().
+       * If no function returns errors, then validate the field by calling self.validateFieldGroup().
        */
       var self = this;
 
@@ -475,11 +586,11 @@ SOFTWARE.
         /*
          * If field status is false, invalidate the field group
          * and show the error message relative to the error encountered while validationg
-         * by calling invalidateControl
+         * by calling invalidateFieldGroup
          */
         if (fieldStatus !== true) {
           self.fieldStatus = fieldStatus;
-          self.invalidateControl();
+          self.invalidateFieldGroup();
           return;
         }
       }
@@ -490,44 +601,36 @@ SOFTWARE.
        * otherwise reset field group
        */
       if (main) {
-        self.validateControl();
+        self.validateFieldGroup(main);
       } else {
-        self.resetControl();
+        self.resetFieldGroup();
       }
     },
-    invalidateControl: function () {
-      var self = this,
-        classes = self.classes;
+    invalidateFieldGroup: function () {
+      var self = this;
 
       //add error classes to field group and remove valid classes
       self.element
-        .removeClass(classes.controlValidClass)
-        .addClass(classes.controlErrorClass);
+        .removeClass(self.classes.controlValidClass)
+        .addClass(self.classes.controlErrorClass);
 
       //add error classes to field and remove valid classes
       self.field
         .attr(a.aInv, a.t)
-        .removeClass(classes.fieldValidClass)
-        .addClass(classes.fieldErrorClass);
-
-      //fake field
-      if (self.fakeField) {
-        self.fakeField
-          .removeClass(classes.fieldValidClass)
-          .addClass(classes.fieldErrorClass);
-      }
+        .removeClass(self.classes.fieldValidClass)
+        .addClass(self.classes.fieldErrorClass);
 
       //add error classes to label and remove valid classes
       self.label
-        .removeClass(classes.labelValidClass)
-        .addClass(classes.labelErrorClass);
+        .removeClass(self.classes.labelValidClass)
+        .addClass(self.classes.labelErrorClass);
 
       //hide successbox and remove the success message
       if (self.successbox) {
         self.successbox
           .html('')
           .attr(a.aHi, a.t)
-          .removeClass(classes.successboxVisibleClass);
+          .removeClass(self.classes.successboxVisibleClass);
       }
 
       //append error message to alertbox and show alert
@@ -535,45 +638,37 @@ SOFTWARE.
         self.alertbox
           .html(self.errorMsgs[self.fieldStatus])
           .attr(a.aHi, a.f)
-          .addClass(classes.alertboxVisibleClass);
+          .addClass(self.classes.alertboxVisibleClass);
       }
 
       //trigger custom event on window for user to listen for
       win.trigger(pluginName + '.isInvalid', [self]);
     },
-    validateControl: function () {
-      var self = this,
-        classes = self.classes;
+    validateFieldGroup: function () {
+      var self = this;
 
       //remove error classes and add valid classes to field group
       self.element
-        .removeClass(classes.controlErrorClass)
-        .addClass(classes.controlValidClass);
+        .removeClass(self.classes.controlErrorClass)
+        .addClass(self.classes.controlValidClass);
 
       //remove error classes and add valid classes to field
       self.field
         .attr(a.aInv, a.f)
-        .removeClass(classes.fieldErrorClass)
-        .addClass(classes.fieldValidClass);
-
-      //fake field
-      if (self.fakeField) {
-        self.fakeField
-          .removeClass(classes.fieldErrorClass)
-          .addClass(classes.fieldValidClass);
-      }
+        .removeClass(self.classes.fieldErrorClass)
+        .addClass(self.classes.fieldValidClass);
 
       //remove error classes and add valid classes to label
       self.label
-        .removeClass(classes.labelErrorClass)
-        .addClass(classes.labelValidClass);
+        .removeClass(self.classes.labelErrorClass)
+        .addClass(self.classes.labelValidClass);
 
       //remove error message from alertbox and hide alertbox
       if (self.alertbox) {
         self.alertbox
           .html('')
           .attr(a.aHi, a.t)
-          .removeClass(classes.alertboxVisibleClass);
+          .removeClass(self.classes.alertboxVisibleClass);
       }
 
       //Append success message to succesbox and show message
@@ -581,45 +676,37 @@ SOFTWARE.
         self.successbox
           .html(self.successMsg)
           .attr(a.aHi, a.f)
-          .addClass(classes.successboxVisibleClass);
+          .addClass(self.classes.successboxVisibleClass);
       }
 
       //trigger custom event on window for user to listen for
       win.trigger(pluginName + '.isValid', [self]);
     },
-    resetControl: function () {
-      var self = this,
-        classes = self.classes;
+    resetFieldGroup: function () {
+      var self = this;
 
       //remove error and valid classes from element
       self.element
-        .removeClass(classes.controlErrorClass)
-        .removeClass(classes.controlValidClass);
+        .removeClass(self.classes.controlErrorClass)
+        .removeClass(self.classes.controlValidClass);
 
       //remove error and valid classes from field
       self.field
         .removeAttr(a.aInv)
-        .removeClass(classes.fieldErrorClass)
-        .removeClass(classes.fieldValidClass);
-
-      //fake field
-      if (self.fakeField) {
-        self.fakeField
-          .removeClass(classes.fieldErrorClass)
-          .removeClass(classes.fieldValidClass);
-      }
+        .removeClass(self.classes.fieldErrorClass)
+        .removeClass(self.classes.fieldValidClass);
 
       //remove error and valid classes from label
       self.label
-        .removeClass(classes.labelErrorClass)
-        .removeClass(classes.labelValidClass);
+        .removeClass(self.classes.labelErrorClass)
+        .removeClass(self.classes.labelValidClass);
 
       //remove error message from alertbox and hide alertbox
       if (self.alertbox) {
         self.alertbox
           .html('')
           .attr(a.aHi, a.t)
-          .removeClass(classes.alertboxVisibleClass);
+          .removeClass(self.classes.alertboxVisibleClass);
       }
 
       //remove success message from alertbox and hide alertbox
@@ -627,17 +714,21 @@ SOFTWARE.
         self.successbox
           .html('')
           .attr(a.aHi, a.t)
-          .removeClass(classes.successboxVisibleClass);
+          .removeClass(self.classes.successboxVisibleClass);
       }
 
       //trigger custom event on window for user to listen for
       win.trigger(pluginName + '.resetted', [self]);
     },
     destroy: function () {
+      /*
+       * @TODO Test: self.eventListeners,  removeData
+       */
       var self = this;
 
       //Unbind event listeners
-      self.unbindEventListeners(self.eventListeners.join(' '));
+      self.unbindEventListeners(self.eventListeners);
+      self.eventListeners = null;
 
       //Remove jQuery.data
       $.removeData(self, 'plugin_' + pluginName);
@@ -659,16 +750,13 @@ SOFTWARE.
         self.isDirty = true;
         break;
       case 'destroy':
-        self.destroy();
+        self.destroy(); //@TODO Test method
         break;
-      case 'invalidateControl':
-        self.invalidateControl();
+      case 'invalidateField':
+        self.invalidateFieldGroup(); //@TODO Test method
         break;
-      case 'validateControl':
-        self.validateControl();
-        break;
-      case 'resetControl':
-        self.resetControl();
+      case 'resetField':
+        self.resetFieldGroup(); //@TODO Test method
         break;
       }
     }
@@ -700,7 +788,6 @@ SOFTWARE.
     fieldClass: 'control__field',
     fieldErrorClass: 'control__field_error',
     fieldValidClass: 'control__field_valid',
-    fieldClassElement: false,
     labelClass: 'control__label',
     labelErrorClass: 'control__label_error',
     labelValidClass: 'control__label_valid',
@@ -712,28 +799,34 @@ SOFTWARE.
 
   $.fn[pluginName].defaultRegionSettings = {
     dateFormat: 'dmy', // dmy = dd/mm/yyyy, mdy = mm/dd/yyyy, ymd = yyyy/mm/dd
+    timeFormat: '12', // use 12 or 24 hours format
     dateSeparator: '/', // / or - or .
+    timeSeparator: ':', // : or . or space
     decimalSeparator: ',' // , or .
   };
 
   $.fn[pluginName].defaultErrorMsgs = {
     letters: 'Digits are not allowed in this field',
-    onlyLetters: 'Only letters are allowed',
+    onlyLetters: 'Only letters are accepted',
     digits: 'Letters are not allowed in this field',
-    onlyDigits: 'Only digits are allowed',
+    onlyDigits: 'Only digits are accepted',
     int: 'Enter a whole number (e.g. 12)',
     float: 'Enter a number (e.g. 12.168 or 16)',
-    bool: 'You must check this checkbox',
+    bool: 'You have to check this checkbox in order to continue',
     date: 'Not a valid date',
     minDate: 'The date entered is too far in the past',
     maxDate: 'The date entered is too far in the future',
+    time: 'Entera valid time (e.g. 10:30)',
+    timeWithSeconds: 'Entera valid time (e.g. 10:30:55)',
+    minTime: 'Time is before the minimum time',
+    maxTime: 'Time is after the maximum time',
     email: 'Enter a valid email address',
     password: 'Password is not secure',
     min: 'The entered number is too small',
     max: 'The entered number is too big',
     minLength: 'The length of the input is too short',
     maxLength: 'Field length exceeds the maximum number of chars allowed',
-    required: 'This field is required to successfully complete the form',
+    required: 'This field is required to sucessfully complete the form',
     tokens: 'Please choose a value from the list',
     match: 'No match',
     customRegex: 'Regex match returned "false"',
@@ -776,38 +869,24 @@ SOFTWARE.
     },
     int: function (fieldValue) {
       //check if value is number and int
-      if (fieldValue === '') {
-        return true;
-      }
-
-      fieldValue = parseInt(fieldValue, 10);
-
-      return Number.isInteger(fieldValue) ? true : 'int';
+      var value = parseInt(fieldValue, 10);
+      return Number.isInteger(value) ? true : value === '' ? true : 'int';
     },
     float: function (fieldValue, param, regionSettings) {
-
-      if (fieldValue === '') {
-        return true;
-      }
-
-
       /*
-       * Chek format: comma or dot as separator?
+       * Chech if decimal separator occurs 0 or 1 time in the string
+       * and check wich separator was used
        */
-      var separator = regionSettings,
-        dotTest = fieldValue.split('.'),
-        commaTest = fieldValue.split(',');
+      var testComma = fieldValue.split(','),
+        testDot = fieldValue.split('.');
 
-      if ((dotTest.length > 2 && separator === '.') || (commaTest.length > 2 && separator === ',')) {
+      if ((testComma.length >= 2 && regionSettings.decimalSeparator === '.') ||
+        (testDot.length >= 2 && regionSettings.decimalSeparator === ',')) {
         return 'float';
       }
 
-      /*
-       * If decimal separator is comma,
-       * replace comma with dot in the string before validation,
-       * otherwise the value will not parse as float
-       */
-      if (separator === ',') {
+      //Replace comma with dot for validation, otherwise value will not parse as float
+      if (regionSettings.decimalSeparator === ',') {
         fieldValue = fieldValue.replace(/,/, '.');
       }
 
@@ -837,23 +916,18 @@ SOFTWARE.
       return true;
     },
     minDate: function (fieldValue, param, regionSettings) {
-
       if (fieldValue === '') {
         return true;
       }
 
-      //if param is a function execute function and retrive date
-      if (typeof param == 'function') {
-        param = param()
-      } else if (typeof param === 'object') {
-        /*
-         * Bind value of param to other object:
-         * If param is an object, we must deduce the value from the passed field
-         * by retriving the data-ariavalidate-value attribute or the value of the field
-         */
+      /*
+       * Bind value of param to other object:
+       * If param is an object, we must deduce the value from the passed field
+       * by retriving the data-val attribute or the value of the field
+       */
+      if (typeof param === 'object') {
         param = calculateDate(param, regionSettings.dateFormat, regionSettings.dateSeparator);
       }
-
 
       //check if date is after the min date passed (ISO format)
       fieldValue = convertDateToIso(fieldValue, regionSettings.dateFormat, regionSettings.dateSeparator);
@@ -864,15 +938,13 @@ SOFTWARE.
       if (fieldValue === '') {
         return true;
       }
-      //if param is a function execute function and retrive date
-      if (typeof param === 'function') {
-        param = param()
-      } else if (typeof param === 'object') {
-        /*
-         * Bind value of param to other object:
-         * If param is an object, we must deduce the value from the passed field
-         * by retriving the data-ariavalidate-value attribute or the value of the field
-         */
+
+      /*
+       * Bind value of param to other object:
+       * If param is an object, we must deduce the value from the passed field
+       * by retriving the data-val attribute or the value of the field
+       */
+      if (typeof param === 'object') {
         param = calculateDate(param, regionSettings.dateFormat, regionSettings.dateSeparator);
       }
 
@@ -881,67 +953,65 @@ SOFTWARE.
 
       return new Date(fieldValue) <= new Date(param) ? true : 'maxDate';
     },
+    time: function (fieldValue, param) {
+      //convert time to ISO format
+      //check if time is valid ISO time
+      //@TODO
+    },
+    timeWithSeconds: function (fieldValue, param) {
+      //convert time to ISO format
+      //check if time is valid ISO time
+      //@TODO
+    },
+    minTime: function (fieldValue, param) {
+      //check if time is after min time passed
+      //@TODO
+    },
+    maxTime: function (fieldValue, param) {
+      //check if time is before max time passed
+      //@TODO
+    },
     email: function (fieldValue, param) {
       //chekc if email is valid
       return /^([\w-\.]+@([\w\-]+\.)+[\w\-]{2,4})?$/.test(fieldValue) ? true : 'email';
     },
     password: function (fieldValue) {
       //check if password is secure
-      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\.\,\;\:\\\-\|\-\/\(\)\{\}\[\]])(?=.{8,100})/.test(fieldValue) ? true : 'password';
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,50})/.test(fieldValue) ? true : 'password';
     },
     min: function (fieldValue, param) {
-      if (fieldValue === '') {
-        return true;
-      }
-
       /*
-       * Retrive value from function, if param is a function
+       * Bind value of param to other object:
+       * If param is an object, we must deduce the value from the passed field
+       * by retriving the data-val attribute or the value of the field
        */
-      if (typeof param === 'function') {
-        param = param();
-      } else if (typeof param === 'object') {
-        /*
-         * Bind value of param to other object:
-         * If param is an object, we must deduce the value from the passed field
-         * by retriving the data-ariavalidate-value attribute or the value of the field
-         */
-        param = calculateNumber(param);
+      if (typeof param === 'object') {
+        param = calculateInt(param);
       }
 
       var value = parseFloat(fieldValue, 10);
       return value >= param ? true : value === '' ? true : 'min';
     },
     max: function (fieldValue, param) {
-      if (fieldValue === '') {
-        return true;
-      }
       /*
-       * Retrive value from function, if param is a function
+       * Bind value of param to other object:
+       * If param is an object, we must deduce the value from the passed field
+       * by retriving the data-val attribute or the value of the field
        */
-      if (typeof param === 'function') {
-        param = param();
-      } else if (typeof param === 'object') {
-        /*
-         * Bind value of param to other object:
-         * If param is an object, we must deduce the value from the passed field
-         * by retriving the data-ariavalidate-value attribute or the value of the field
-         */
-        param = calculateNumber(param);
+      if (typeof param === 'object') {
+        param = calculateInt(param);
       }
 
       var value = parseFloat(fieldValue, 10);
       return value <= param ? true : value === '' ? true : 'max';
     },
     minLength: function (fieldValue, param) {
-      //if param is a function, then retrive minLenght value by calling the function
-      if (typeof param === 'function') {
-        param = param()
-      } else if (typeof param === 'object') {
-        /*
-         * Bind value of param to other object:
-         * If param is an object, we must deduce the value from the passed field
-         * by retriving the data-ariavalidate-value attribute or the value of the field
-         */
+      /*
+       * Bind value of param to other object:
+       * If param is an object, we must deduce the value from the passed field
+       * by retriving the data-val attribute or the value of the field
+       */
+      if (typeof param === 'object') {
         param = calculateLength(param);
       }
 
@@ -950,15 +1020,12 @@ SOFTWARE.
       return valueLength >= param ? true : valueLength === 0 ? true : 'minLength';
     },
     maxLength: function (fieldValue, param) {
-      //if param is a function, then retrive maxLenght value by calling the function
-      if (typeof param === 'function') {
-        param = param()
-      } else if (typeof param === 'object') {
-        /*
-         * Bind value of param to other object:
-         * If param is an object, we must deduce the value from the passed field
-         * by retriving the data-ariavalidate-value attribute or the value of the field
-         */
+      /*
+       * Bind value of param to other object:
+       * If param is an object, we must deduce the value from the passed field
+       * by retriving the data-val attribute or the value of the field
+       */
+      if (typeof param === 'object') {
         param = calculateLength(param);
       }
 
@@ -966,37 +1033,21 @@ SOFTWARE.
       var valueLength = fieldValue.length;
       return valueLength <= param ? true : valueLength === 0 ? true : 'maxLength';
     },
-    required: function (fieldValue, param) {
-
-      if (typeof param === 'function') {
-        /*
-         * Required if: if param is not undefined and is a function,
-         * the field is required only if a specific condition is matched.
-         * Param: a function which evaluates to true or false.
-         * true: field is required, false: not required
-         */
-        if (param()) {
-          return fieldValue.length > 0 ? true : 'required';
-        }
-        return true;
-
-      }
-      //param is not a function (is undefined)
+    required: function (fieldValue) {
       return fieldValue.length > 0 ? true : 'required';
     },
     tokens: function (fieldValue, param) {
 
+      //@TODO Live collections: live and automatically update accepted values.
       /*
        * Check if value entered corresponds to one value from a given list (token)
        * param is an array of options/possible values or a function wich returns an  object of possible options
        */
-      if (typeof param === "function") {
-        param = param();
-      }
+      //@TODO check if param is function or array. if function call it and retrive values (?)
 
       var paramLength = param.length;
 
-      for (var i = 0; i < paramLength; i++) {
+      for (var i = 0; i < paramLength; i = i + 1) {
         if (param[i] === fieldValue) {
           return true;
         }
@@ -1005,34 +1056,18 @@ SOFTWARE.
     },
     matchMain: function (fieldValue, param) {
       //check if value matches other field value
-      //param is the input with the value to match, or a function which returns the value to match
-      // if value to match is empty, return true
-      var matchValue = '';
+      //param is the input to match
+      var matchVal = param.val();
 
-      if (typeof param === 'function') {
-        matchValue = param();
-      } else {
-        matchValue = param.attr(a.dV) || param.val();
-      }
-
-      if (matchValue !== '') {
-        return fieldValue === matchValue ? true : 'match';
+      if (matchVal !== '') {
+        return fieldValue === matchVal ? true : 'match';
       }
       return true;
     },
     match: function (fieldValue, param) {
       //check if value matches other field value
-      //param is the input with the value to match, or a function which returns the value to match
-
-      var matchValue = '';
-
-      if (typeof param === 'function') {
-        matchValue = param();
-      } else {
-        matchValue = param.attr(a.dV) || param.val();
-      }
-
-      return fieldValue === matchValue ? true : 'match';
+      //param is the input to match
+      return fieldValue === param.val() ? true : 'match';
     },
     customRegex: function (fieldValue, param) {
       return param.test(fieldValue) ? true : 'customRegex';
@@ -1051,6 +1086,240 @@ SOFTWARE.
 
         return 'ajaxError';
       });
+    }
+  };
+
+  //-----------------------------------------------------
+  //AUTOFORMATTING
+  $.fn[pluginName].autoformatFunctions = {
+    /*
+     * Autoformatting functions:
+     * Arguments:
+     * fieldValue: value of the field
+     * param (not every functions needs param) -> value for autoformatting passed from author
+     *
+     * Output:
+     * Formatted value.
+     */
+    trim: function (fieldValue) {
+      //remove whitespaces from start and end of string
+      //use on blur
+      return fieldValue !== '' ? fieldValue.trim() : '';
+    },
+    uppercase: function (fieldValue) {
+      return fieldValue.toUpperCase();
+    },
+    lowercase: function (fieldValue) {
+      return fieldValue !== '' ? fieldValue.toLowerCase() : '';
+    },
+    capitalize: function (fieldValue) {
+      //capitalize each word in the string
+      if (fieldValue === '') {
+        return '';
+      }
+
+      var valueArray = fieldValue.split(' '),
+        valueArrayLength = valueArray.length,
+        value = '';
+
+      for (var i = 0; i < valueArrayLength; i = i + 1) {
+        valueArray[i] = valueArray[i].slice(0, 1).toUpperCase() + valueArray[i].slice(1);
+        value = value + ' ' + valueArray[i];
+      }
+
+      return value;
+    },
+    capitalizeFirst: function (fieldValue) {
+      //capitalize first letter of string
+      return fieldValue !== '' ? (fieldValue.slice(0, 1).toUpperCase() + fieldValue.slice(1)) : '';
+    },
+    replace: function (fieldValue, param) {
+      /*
+       * replace one or more chars in a string
+       * param can be object or arrays of objects to allow muliple replacements within one function call
+       * e.g.:
+       * var param = {
+       *       searchFor: /[-]/g, //regex to replace each instance of -
+       *       replaceWith: '/',
+       *     }
+       *
+       * or
+       *
+       * var param = [
+       *      {
+       *        searchFor: /[-]/g,
+       *        replaceWith: '/',
+       *      },
+       *      {
+       *        searchFor: /[:]/g,
+       *        replaceWith: '/',
+       *      },
+       *      {
+       *        searchFor: /[.]/g,
+       *        replaceWith: '/',
+       *      }
+       *     ]
+       */
+      if (fieldValue === '') {
+        return '';
+      }
+
+      if (Array.isArray(param) && param.length > 0) {
+        var paramLenght = param.length;
+        for (var i = 0; i < paramLenght; i = i + 1) {
+          fieldValue = fieldValue.replace(param[i].searchFor, param[i].replaceWith);
+        }
+      } else {
+        fieldValue = fieldValue.replace(param.searchFor, param.replaceWith);
+      }
+      return fieldValue;
+    },
+    autocompleteDate: function (fieldValue, param, settings) {
+      if (fieldValue === '') {
+        return fieldValue;
+      }
+
+      if (param === '' || param === undefined) {
+        param = '20'; //21st. century by default, if author does not pass a value
+      }
+
+      var dateSeparator = settings.regionSettings.dateSeparator,
+        dateFormat = settings.regionSettings.dateFormat,
+        value = fieldValue.split(settings.regionSettings.dateSeparator),
+        day = '',
+        month = '',
+        year = '';
+
+      if (value.length !== 3) {
+        return fieldValue;
+      }
+
+      day = value[0];
+      month = value[1];
+      year = value[2];
+
+      if (dateFormat !== 'ymd') {
+
+        if (day.length === 1) {
+          day = '0' + day;
+        }
+        if (month.length === 1) {
+          month = '0' + month;
+        }
+        if (year.length === 2) {
+          year = param + year;
+        }
+      } else {
+
+        if (day.length === 2) {
+          day = param + day;
+        }
+        if (month.length === 1) {
+          month = '0' + month;
+        }
+        if (year.length === 1) {
+          year = '0' + year;
+        }
+      }
+      return day + dateSeparator + month + dateSeparator + year;
+    },
+    insertCharAt: function (fieldValue, param, settings) {
+      //param: object -> position: (int), -> char -> [string]
+      if (fieldValue === '' || (!settings.adding && settings.events.type === 'input')) {
+        return fieldValue;
+      }
+
+      //param is an array, multiple replaces: loop throug all entries
+      if (Array.isArray(param) && param.length > 0) {
+        var numberOfReplaces = param.length,
+          fieldLength = 0;
+
+        for (var i = 0; i < numberOfReplaces; i = i + 1) {
+          fieldValue = sanitizeString(fieldValue, param[i].char);
+        }
+
+        fieldLength = fieldValue.length;
+
+        for (var i = 0; i < numberOfReplaces; i = i + 1) {
+          if (fieldLength >= param[i].position) {
+            fieldValue = [fieldValue.slice(0, param[i].position), param[i].char, fieldValue.slice(param[i].position)].join('');
+          } else {
+            fieldValue = fieldValue;
+          }
+          fieldLength = fieldLength + param[i].char.length;
+        }
+
+        return fieldValue;
+      } else {
+
+        //param is object, just one replace
+        fieldValue = sanitizeString(fieldValue, param.char);
+        var fieldLength = fieldValue.length,
+          caretPosition = 0;
+
+        if (fieldLength >= param.position) {
+          caretPosition = param.position === settings.selection.start ? settings.selection.start + 1 + param.char.length : settings.selection.start;
+
+          console.log(caretPosition);
+          return [
+            [fieldValue.slice(0, param.position), param.char, fieldValue.slice(param.position)].join(''),
+            caretPosition
+          ];
+        } else {
+          return fieldValue;
+        }
+      }
+    },
+    insertCharEvery: function (fieldValue, param, settings) {
+      //param: object -> interval: (int), -> char -> [string]
+      var interval = param.interval;
+
+      if (fieldValue.length < interval || (!settings.adding && settings.events.type === 'input')) {
+        return fieldValue;
+      }
+
+      /*
+       * 1- remove any occurence of char from the value
+       * 2- split value into chunks of lenght === interval
+       * 3- rebuild string, adding the separation char(s)
+       */
+      var char = param.char,
+        maxChars = param.maxChars || 9999, // if maxChars is not set, set it to 9999
+        newValue = sanitizeString(fieldValue, char), // sanitized string, remove all separation chars
+        chunksRegex = new RegExp('.{1,' + interval + '}', 'g'), // build regex to split string into chunks
+        chunks = newValue.match(chunksRegex), // split string into chunks and save in array
+        chunksLength = chunks.length; // number of chunks
+      fieldValue = ''; // reset field value
+
+
+      /*
+       * loop over each entry of array and append separation char(s)
+       * add separation chars only:
+       * if the maximum number of chars is not reached and
+       * if the lenght of the chunk is equal to the lengh of the interval set by user
+       * Skip last chunk.
+       * rebuild string
+       */
+      for (var i = 0; i < (chunksLength - 1); i = i + 1) {
+        if (i < param.maxChars && chunks[i].length === interval) {
+          fieldValue = fieldValue + chunks[i] + char;
+        } else {
+          fieldValue = fieldValue + chunks[i];
+        }
+      }
+
+
+      /*
+       * Deal with last chunk:
+       * on last chunk we have to check if user is adding or deleting text from fields
+       * in order to perform the correct action
+       */
+      if (i < param.maxChars && chunks[chunksLength - 1].length === interval) {
+        fieldValue = fieldValue + chunks[chunksLength - 1] + char;
+      } else {
+        fieldValue = fieldValue + chunks[i];
+      }
+      return fieldValue;
     }
   };
 }));

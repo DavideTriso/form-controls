@@ -1,0 +1,1361 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Form validation example</title>
+  <style>
+    body {
+      max-width: 400px;
+      margin: auto;
+      font-family: sans-serif;
+      box-sizing: border-box;
+    }
+
+    .control {
+      margin-top: 3rem;
+    }
+
+    .radio-group>div {
+      display: flex;
+    }
+
+    .radio-group>div>.control {
+      flex: 0 1 33.33%;
+    }
+
+    .code {
+      font-size: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .code>button {
+      border: 0.05rem solid black;
+      border-radius: 0.2rem;
+      padding: 0.2rem;
+    }
+
+    .code>button:hover,
+    .code>button:focus {
+      background-color: black;
+      color: #fff;
+    }
+
+    pre {
+      display: none;
+      font-size: 1rem;
+      background-color: #ececec;
+      border-radius: 0.3rem;
+      overflow-x: auto;
+      padding: 1rem 0.2rem;
+    }
+
+    .show {
+      display: block;
+    }
+  </style>
+  <link href="form-controls.css" rel="stylesheet" />
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="aria-validate.js"></script>
+  <script>
+    $(document).ready(function() {
+      //DROPDOWN
+      $('.code > button').on('click', function() {
+        $(this).closest('.code').find('pre').toggleClass('show');
+      });
+      //DROPDOWN
+
+      $('#requiredField').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            dirty: true,
+            validate: {
+              required: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true
+            }
+          }
+        ],
+      });
+
+      $('#requiredIfField').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            dirty: true,
+            validate: {
+              required: function() {
+                return $('#requiredField').find('.control__field').first().val().length > 0 ? false : true; // when function returns false, the field is not required
+              }
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: function() {
+                return $('#requiredField').find('.control__field').first().val().length > 0 ? false : true; // when function returns false, the field is not required
+              }
+            }
+          }
+        ],
+      });
+
+
+      $('#lettersField').ariaValidate({
+        behaviour: [{
+            event: 'input change',
+            dirty: false,
+            validate: {
+              required: true,
+              letters: true,
+              maxLength: 15
+            }
+          },
+          {
+            event: 'input',
+            dirty: true,
+            validate: {
+              required: true,
+              letters: true,
+              maxLength: 15,
+              minLength: 5
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              letters: true,
+              maxLength: 15,
+              minLength: 5
+            }
+          }
+        ],
+      });
+
+      $('#digitsField').ariaValidate({
+        behaviour: [{
+            event: 'input change',
+            dirty: false,
+            validate: {
+              required: true,
+              digits: true,
+              maxLength: function() {
+                return 20
+              }
+            }
+          },
+          {
+            event: 'input change',
+            dirty: true,
+            validate: {
+              required: true,
+              digits: true,
+              minLength: 5,
+              maxLength: function() {
+                return 20
+              }
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              digits: true,
+              minLength: 5,
+              maxLength: function() {
+                return 20
+              }
+            }
+          }
+        ],
+      });
+
+
+      $('#intField').ariaValidate({
+        behaviour: [{
+            event: 'input change',
+            dirty: false,
+            validate: {
+              int: true,
+              max: 100
+            }
+          },
+          {
+            event: 'input change',
+            dirty: true,
+            validate: {
+              int: true,
+              min: 10,
+              max: 100
+
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              int: true,
+              min: 10,
+              max: 100
+            }
+          }
+        ],
+      });
+
+
+      $('#intOffsetField').ariaValidate({
+        behaviour: [{
+            event: 'input change',
+            dirty: false,
+            validate: {
+              int: true,
+              max: function() {
+                return 100 + 100;
+              }
+            }
+          },
+          {
+            event: 'input change',
+            dirty: true,
+            validate: {
+              int: true,
+              min: {
+                element: $('#intField').find('.control__field').first(),
+                offset: 2
+              },
+              max: function() {
+                return 100 + 100;
+              }
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              int: true,
+              min: {
+                element: $('#intField').find('.control__field').first(),
+                offset: 2
+              },
+              max: function() {
+                return 100 + 100;
+              }
+            }
+          }
+        ],
+      });
+
+      $('#floatField').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            validate: {
+              digits: true,
+              float: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              float: true,
+              min: 10.5,
+              max: 99.5
+            }
+          }
+        ],
+      });
+
+
+      $('#boolField').ariaValidate({
+        behaviour: [{
+          event: 'change',
+          validate: {
+            bool: true
+          }
+        }],
+      });
+
+
+      $('.js--radio-group').ariaValidate({
+        behaviour: [{
+          event: 'change input blur',
+          validate: {
+            required: true,
+            tokens: ['option1', 'option2']
+          }
+        }],
+      });
+
+
+      $('#date1Field').ariaValidate({
+        regionSettings: {
+          dateFormat: 'dmy'
+        },
+        behaviour: [{
+          event: 'change input',
+          validate: {
+            required: true,
+            date: true
+          }
+        }],
+      });
+
+      $('#date2Field').ariaValidate({
+        regionSettings: {
+          dateFormat: 'mdy'
+        },
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: '2016-11-22',
+            maxDate: '2040-10-01'
+          }
+        }],
+      });
+
+      $('#date3Field').ariaValidate({
+        regionSettings: {
+          dateFormat: 'ymd',
+          dateSeparator: '.'
+        },
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+          }
+        }],
+      });
+
+      $('#date4Field').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: '2018-01-14',
+            maxDate: '2019-01-14'
+          }
+        }],
+      });
+
+
+      $('#date5Field').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: {
+              bindToElement: $('#date4Field').find('.control__field').first(),
+              fallbackDate: '2018-01-14', // if $('#date4Field') value is empty use this date as starting date to calculate offset
+              offset: 2, // valid dates starts two days after $('#date4Field') value
+            },
+            maxDate: {
+              bindToElement: $('#date4Field').find('.control__field').first(),
+              fallbackDate: '2018-01-14', // if $('#date4Field') value is empty use this date as starting date to calculate offset
+              offset: 365, // maximum day offset accepted is one year starting from $('#date4Field') value
+            }
+          }
+        }],
+      });
+
+      $('#date6Field').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: function() {
+              return new Date().setDate(new Date().getDate() + 3);
+            },
+            maxDate: function() {
+              return new Date().setDate(new Date().getDate() + 10);
+            }
+          }
+        }],
+      });
+
+
+      $('#emailField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            email: true
+          }
+        }],
+      });
+
+
+
+      $('#passwordField').ariaValidate({
+        behaviour: [{
+            event: 'blur ',
+            main: true,
+            validate: {
+              required: true,
+              password: true,
+              matchMain: $('#passwordRepeatField').find('.control__field').first()
+            }
+          },
+          {
+            event: 'passwordChange', //use custom event
+            dirty: true,
+            main: true,
+            validate: {
+              required: true,
+              password: true,
+              matchMain: $('#passwordRepeatField').find('.control__field').first()
+            }
+          }
+        ],
+      });
+
+      $('#passwordRepeatField').ariaValidate({
+        behaviour: [{
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              match: $('#passwordField').find('.control__field').first()
+            }
+          },
+          {
+            event: 'passwordChange', //use custom event
+            main: true,
+            dirty: true,
+            validate: {
+              required: true,
+              match: $('#passwordField').find('.control__field').first()
+            }
+          }
+        ],
+      });
+
+      var passwd = $('#passwordField').find('.control__field').first(),
+        match = $('#passwordRepeatField').find('.control__field').first();
+
+      //Trigger custom events
+      match.on('blur', function() {
+        passwd.trigger('passwordChange');
+      });
+
+      passwd.on('blur', function() {
+        match.trigger('passwordChange');
+      });
+
+
+
+
+
+      $('#matchField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            match: function() {
+              return 'hello';
+            }
+          }
+        }],
+      });
+
+      $('#tokensField').ariaValidate({
+        behaviour: [{
+          event: 'change blur',
+          validate: {
+            required: true,
+            tokens: ['one', 'two', 'three', 'four', 'five', 'six']
+          }
+        }],
+      });
+
+
+      $('#tokensSelect').ariaValidate({
+        classes: {
+          fieldClass: 'js--control__select',
+          fieldErrorClass: 'control__select_error',
+          fieldValidClass: 'control__select_valid',
+          fieldClassElement: '.control__select'
+        },
+        behaviour: [{
+          event: 'change',
+          main: true,
+          validate: {
+            required: true,
+            tokens: function() {
+              return ['1', '2', '3', '4', '5', '6'];
+            }
+          }
+        }],
+      });
+
+
+      $('#customRegexField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            customRegex: /ariaValidate/i
+          }
+        }],
+      });
+
+    });
+  </script>
+</head>
+
+<body>
+
+  <h1>Aria-validate demo</h1>
+
+  <!--REQUIRED-->
+  <div class="control" id="requiredField">
+    <label class="control__label" for="#1">Required field <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#1" id="#1" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#requiredField').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            dirty: true,
+            validate: {
+              required: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true
+            }
+          }
+        ],
+      });
+    </pre>
+  </div>
+
+
+  <!--REQUIRED IF FIELD-->
+  <div class="control" id="requiredIfField">
+    <label class="control__label" for="#2">RequiredIf field</label>
+    <input type="text" name="#2" id="#2" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#requiredIfField').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            dirty: true,
+            validate: {
+              required: function() {
+                return $('#requiredField').find('.control__field').first().val().length > 0 ? false : true; // when function returns false, the field is not required
+              }
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: function() {
+                return $('#requiredField').find('.control__field').first().val().length > 0 ? false : true; // when function returns false, the field is not required
+              }
+            }
+          }
+        ],
+      });
+    </pre>
+  </div>
+
+
+  <!--LETTERS-->
+  <div class="control" id="lettersField">
+    <label class="control__label" for="#3">Letters field <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#3" id="#3" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#lettersField').ariaValidate({
+        behaviour: [{
+            event: 'input change',
+            dirty: false,
+            validate: {
+              required: true,
+              letters: true,
+              maxLength: 15
+            }
+          },
+          {
+            event: 'input',
+            dirty: true,
+            validate: {
+              required: true,
+              letters: true,
+              maxLength: 15,
+              minLength: 5
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              letters: true,
+              maxLength: 15,
+              minLength: 5
+            }
+          }
+        ],
+      });
+    </pre>
+  </div>
+
+
+  <!-- DIGITS-->
+  <div class="control" id="digitsField">
+    <label class="control__label" for="#4">Only digits field <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#4" id="#4" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#digitsField').ariaValidate({
+        behaviour: [{
+            event: 'input change',
+            dirty: false,
+            validate: {
+              required: true,
+              digits: true,
+              maxLength: function() {
+                return 20
+              }
+            }
+          },
+          {
+            event: 'input change',
+            dirty: true,
+            validate: {
+              required: true,
+              digits: true,
+              minLength: 5,
+              maxLength: function() {
+                return 20
+              }
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              digits: true,
+              minLength: 5,
+              maxLength: function() {
+                return 20
+              }
+            }
+          }
+        ],
+      });
+    </pre>
+  </div>
+
+
+  <!--INTEGER-->
+  <div class="control" id="intField">
+    <label class="control__label" for="#5">Integer field</label>
+    <input type="number" name="#5" id="#5" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#intField').ariaValidate({
+        behaviour: [{
+            event: 'input change',
+            dirty: false,
+            validate: {
+              int: true,
+              max: 100
+            }
+          },
+          {
+            event: 'input change',
+            dirty: true,
+            validate: {
+              int: true,
+              min: 10,
+              max: 100
+
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              int: true,
+              min: 10,
+              max: 100
+            }
+          }
+        ],
+      });
+    </pre>
+  </div>
+
+
+
+  <!--INTEGER WITH OFFSET MIN / MAX AND FUNCTIONS-->
+  <div class="control" id="intOffsetField">
+    <label class="control__label" for="#5-1">Integer field | min and max with offset and functions</label>
+    <input type="number" name="#5-1" id="#5-1" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+
+            $('#intOffsetField').ariaValidate({
+              behaviour: [{
+                  event: 'input change',
+                  dirty: false,
+                  validate: {
+                    int: true,
+                    max: function() {
+                      return 100 + 100;
+                    }
+                  }
+                },
+                {
+                  event: 'input change',
+                  dirty: true,
+                  validate: {
+                    int: true,
+                    min: {
+                      element: $('#intField').find('.control__field').first(),
+                      offset: 2
+                    },
+                    max: function() {
+                      return 100 + 100;
+                    }
+                  }
+                },
+                {
+                  event: 'blur',
+                  main: true,
+                  validate: {
+                    int: true,
+                    min: {
+                      element: $('#intField').find('.control__field').first(),
+                      offset: 2
+                    },
+                    max: function() {
+                      return 100 + 100;
+                    }
+                  }
+                }
+              ],
+            });
+    </pre>
+  </div>
+
+
+
+  <!--FLOAT-->
+  <div class="control" id="floatField">
+    <label class="control__label" for="#6">Float field</label>
+    <input type="text" name="#6" id="#6" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#floatField').ariaValidate({
+        behaviour: [{
+            event: 'input',
+            validate: {
+              digits: true,
+              float: true
+            }
+          },
+          {
+            event: 'blur',
+            main: true,
+            validate: {
+              float: true,
+              min: 10.5,
+              max: 99.5
+            }
+          }
+        ],
+      });
+    </pre>
+  </div>
+
+
+  <!--CHECKBOX / BOOL-->
+  <div class="control" id="boolField">
+    <label class="control__box control__box_inline">
+      <input type="checkbox" name="#7" id="#7" class="control__field control__field_sronly" />
+      <span class="control__checkbox"></span>
+      <span class="control__label control__label_inline">Checkbox / bool field</span>
+    </label>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_startbottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_startbottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#boolField').ariaValidate({
+        behaviour: [{
+          event: 'change',
+          validate: {
+            bool: true
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+
+  <!-- RADIO -->
+  <div class="js--radio-group radio-group">
+    <div>
+      <div class="control">
+        <label class="control__box control__box_inline">
+        <input type="radio" name="#22" id="#22-1" class="control__field control__field_sronly" value="option1"/>
+        <span class="control__radio"></span>
+        <span class="control__label control__label_inline">Radio 1</span>
+      </label>
+      </div>
+      <div class="control">
+        <label class="control__box control__box_inline">
+        <input type="radio" name="#22" id="#22-2" class="control__field control__field_sronly" value="option2"/>
+        <span class="control__radio"></span>
+        <span class="control__label control__label_inline">Radio 2</span>
+      </label>
+      </div>
+      <div class="control">
+        <label class="control__box control__box_inline">
+        <input type="radio" name="#22" id="#22-3" class="control__field control__field_sronly" value="option3"/>
+        <span class="control__radio"></span>
+        <span class="control__label control__label_inline">Radio 3</span>
+      </label>
+      </div>
+    </div>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_startbottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_startbottom control__feedback_error"></p>
+    </div>
+  </div>
+
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('.js--radio-group').ariaValidate({
+        behaviour: [{
+          event: 'change input blur',
+          validate: {
+            required: true,
+            tokens: ['option1', 'option2']
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+  <!-- DATE WITH TYPE=DATE-->
+  <div class="control" id="date1Field">
+    <label class="control__label" for="#8">Date [type="date"] | 'dmy' format <span class="control__requiredflag">(required)</span></label>
+    <input type="date" name="#8" id="#8" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#date1Field').ariaValidate({
+        regionSettings: {
+          dateFormat: 'dmy'
+        },
+        behaviour: [{
+          event: 'change input',
+          main: true,
+          validate: {
+            required: true,
+            date: true
+          }
+        }],
+      });4
+    </pre>
+  </div>
+
+  <!-- DATE WITH TYPE=TEXT-->
+  <div class="control" id="date2Field">
+    <label class="control__label" for="#9">Date [type="text"] | 'mdy' format <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#9" id="#9" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#date2Field').ariaValidate({
+        regionSettings: {
+          dateFormat: 'mdy'
+        },
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: '2016-11-22',
+            maxDate: '2040-10-01'
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+  <!-- DATE WITH TYPE=TEXT AND YMD-->
+  <div class="control" id="date3Field">
+    <label class="control__label" for="#10">Date [type="text"] | 'ymd' format | '.' separator <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#10" id="#10" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#date3Field').ariaValidate({
+        regionSettings: {
+          dateFormat: 'ymd',
+          dateSeparator: '.'
+        },
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+
+
+  <!-- DATE WITH OFFSET-->
+  <div class="control" id="date4Field">
+    <label class="control__label" for="#11">Date [type="text"] | 'dmy' format <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#11" id="#11" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+
+  <div class="control" id="date5Field">
+    <label class="control__label" for="#12">Date [type="text"] | 'dmy' format | dynamic minDate and maxDate with offset <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#12" id="#12" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#date4Field').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: '2018-01-14',
+            maxDate: '2019-01-14'
+          }
+        }],
+      });
+
+      $('#date5Field').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: {
+              bindToElement: $('#date4Field').find('.control__field').first(),
+              fallbackDate: '2018-01-14', // if $('#date4Field') value is empty use this date as starting date to calculate offset
+              offset: 2, // valid dates starts two days after $('#date4Field') value
+            },
+            maxDate: {
+              bindToElement: $('#date4Field').find('.control__field').first(),
+              fallbackDate: '2018-01-14', // if $('#date4Field') value is empty use this date as starting date to calculate offset
+              offset: 365, // maximum day offset accepted is one year starting from $('#date4Field') value
+            }
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+
+
+  <!-- DATE WITH OFFSET FUNCTION -->
+  <div class="control" id="date6Field">
+    <label class="control__label" for="#13">Date [type="text"] | 'dmy' format | minDate and maxDate with function <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#13" id="#13" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#date6Field').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            date: true,
+            minDate: function() {
+              return new Date().setDate(new Date().getDate() + 3);
+            },
+            maxDate: function() {
+              return new Date().setDate(new Date().getDate() + 10);
+            }
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+  <!-- EMAIL ADDRESS -->
+  <div class="control" id="emailField">
+    <label class="control__label" for="#14">Email address <span class="control__requiredflag">(required)</span></label>
+    <input type="email" name="#14" id="#14" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#emailField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            email: true
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+
+  <!-- EMAIL ADDRESS -->
+  <div class="control" id="emailField">
+    <label class="control__label" for="#14">Email address <span class="control__requiredflag">(required)</span></label>
+    <input type="email" name="#14" id="#14" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#emailField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            required: true,
+            email: true
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+  <!-- PASSWORD -->
+  <div class="control" id="passwordField">
+    <label class="control__label" for="#15">Password field (min. 8 chars., one uppercase and one lowercase letter, one digit, one special char.) <span class="control__requiredflag">(required)</span></label>
+    <input type="email" name="#15" id="#15" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+
+  <div class="control" id="passwordRepeatField">
+    <label class="control__label" for="#16">Confirm password <span class="control__requiredflag">(required)</span></label>
+    <input type="email" name="#16" id="#16" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#passwordField').ariaValidate({
+        behaviour: [{
+            event: 'blur ',
+            main: true,
+            validate: {
+              required: true,
+              password: true,
+              matchMain: $('#passwordRepeatField').find('.control__field').first()
+            }
+          },
+          {
+            event: 'passwordChange', //use custom event
+            dirty: true,
+            main: true,
+            validate: {
+              required: true,
+              password: true,
+              matchMain: $('#passwordRepeatField').find('.control__field').first()
+            }
+          }
+        ],
+      });
+
+      $('#passwordRepeatField').ariaValidate({
+        behaviour: [{
+            event: 'blur',
+            main: true,
+            validate: {
+              required: true,
+              match: $('#passwordField').find('.control__field').first()
+            }
+          },
+          {
+            event: 'passwordChange', //use custom event
+            main: true,
+            dirty: true,
+            validate: {
+              required: true,
+              match: $('#passwordField').find('.control__field').first()
+            }
+          }
+        ],
+      });
+
+      var passwd = $('#passwordField').find('.control__field').first(),
+        match = $('#passwordRepeatField').find('.control__field').first();
+
+      //Trigger custom events
+      match.on('blur', function() {
+        passwd.trigger('passwordChange');
+      });
+
+      passwd.on('blur', function() {
+        match.trigger('passwordChange');
+      });
+    </pre>
+  </div>
+
+
+
+  <!-- MATCH WITH FUNCTION -->
+  <div class="control" id="matchField">
+    <label class="control__label" for="#17">Match field</label>
+    <input type="email" name="#17" id="#17" class="control__field" />
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#matchField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            match: function() {
+              return 'hello';
+            }
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+
+  <!-- TOKENS ARRAY -->
+  <div class="control" id="tokensField">
+    <label class="control__label" for="#18">Tokens (array) <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#18" id="#18" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#tokensField').ariaValidate({
+        behaviour: [{
+          event: 'change blur',
+          validate: {
+            required: true,
+            tokens: ['one', 'two', 'three', 'four', 'five', 'six']
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+  <div class="control control_select" id="tokensSelect">
+    <label class="control__label" for="#19">Tokens (function)</label>
+    <div class="control__select">
+      <select id="#19" name="#19" class="js--control__select">
+          <option value="" class="control__option">Choose one option</option>
+          <option value="1" class="control__option">Option 1</option>
+          <option value="2" class="control__option">Option 2</option>
+          <option value="3" class="control__option">Option 3</option>
+          <option value="4" class="control__option">Option 4</option>
+          <option value="5" class="control__option">Option 5</option>
+          <option value="6" class="control__option">Option 6</option>
+          <option value="7" class="control__option">Option 7</option>
+          <option value="8" class="control__option">Option 8</option>
+          <option value="9" class="control__option">Option 9</option>
+          <option value="10" class="control__option">Option 10</option>
+      </select>
+    </div>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#tokensSelect').ariaValidate({
+        classes: {
+          fieldClass: 'js--control__select',
+          fieldErrorClass: 'control__select_error',
+          fieldValidClass: 'control__select_valid',
+          fieldClassElement: '.control__select'
+        },
+        behaviour: [{
+          event: 'change',
+          main: true,
+          validate: {
+            required: true,
+            tokens: function() {
+              return ['1', '2', '3', '4', '5', '6'];
+            }
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+  <!-- CUSTOM REGEX -->
+  <div class="control" id="customRegexField">
+    <label class="control__label" for="#20">Custom RegEx <span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#20" id="#20" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#customRegexField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            customRegex: /ariaValidate/i
+          }
+        }],
+      });
+    </pre>
+  </div>
+</body>
+
+</html>

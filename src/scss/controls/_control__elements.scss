@@ -2,6 +2,9 @@
 // ELEMENTS
 //----------------------
 
+// BOX
+//----------------------
+
 .control__box {
   display : flex;
   @include flexPositioning((flexWrap: nowrap, justifyContent: flex-start, alignItems: stretch));
@@ -9,6 +12,8 @@
   position: relative;
 }
 
+// FEILD
+//----------------------
 .control__field {
   @include background($control__field--background);
   @include border($control__field--border);
@@ -29,8 +34,16 @@
     @include border($control__fieldPdisabled--border);
     @include background($control__fieldPdisabled--background);
   }
+
+  &:read-only {
+    @include border($control__fieldPreadonly--border);
+    @include background($control__fieldPreadonly--background);
+    box-shadow: $control__fieldPreadonly--box-shadow;
+  }
 }
 
+// TEXTAREA
+//----------------------
 .control__textarea {
   @include background($control__textarea--background);
   @include border($control__textarea--border);
@@ -51,24 +64,32 @@
     @include border($control__textareaPdisabled--border);
     @include background($control__textareaPdisabled--background);
   }
+
+  &:read-only {
+    @include border($control__textareaPreadonly--border);
+    @include background($control__textareaPreadonly--background);
+    box-shadow: $control__textareaPreadonly--box-shadow;
+
+  }
 }
 
+// SELECT
+//----------------------
 .control__select {
   @include sizes($control__select--sizes);
   position: relative;
 
   &:after {
-    position        : absolute;
-    right           : 0.5rem;
-    top             : 50%;
-    transform       : translateY(-50%) rotate(45deg);
-    pointer-events  : none;
-    content         : "";
-    width           : 0.8rem;
-    height          : 0.8rem;
-    background-color: black;
-    display         : block;
-    /* @TODO: implement arrow with external module */
+    content       : "";
+    display       : block;
+    @include border($control__selectPafter--border);
+    @include sizes($control__selectPafter--sizes);
+    position      : absolute;
+    right         : 0;
+    top           : 0;
+    pointer-events: none;
+    transform     : $control__selectPafter--transform;
+
   }
 
   > select {
@@ -97,21 +118,107 @@
   }
 }
 
+// CHECKBOX
+//----------------------
 .control__checkbox {
   display   : block;
-  width     : 1rem;
-  height    : 1rem;
-  background: black;
+  @include border($control__checkbox--border);
+  @include background($control__checkbox--background);
+  box-shadow: $control__checkbox--box-shadow;
+  flex      : 0 0 auto;
+  box-sizing: border-box;
+  @include margin($control__checkbox--margin);
+  @include sizes($control__checkbox--sizes);
+  position  : relative;
+
+  .control__field_sronly[type="checkbox"]:checked + & {
+    @include border($control__checkboxPchecked--border);
+    @include background($control__checkboxPchecked--background);
+    box-shadow: $control__checkboxPchecked--box-shadow;
+
+    &:after {
+      content  : "";
+      display  : block;
+      position : absolute;
+      @include border($control__checkboxPcheckedPafter--border);
+      @include sizes($control__checkboxPcheckedPafter--sizes);
+      transform: $control__checkboxPcheckedPafter--transform;
+    }
+  }
+
+  &:hover,
+  .control__field_sronly[type="checkbox"]:focus + & {
+    @include border($control__checkboxPfocus--border);
+    @include background($control__checkboxPfocus--background);
+    box-shadow: $control__checkboxPfocus--box-shadow;
+  }
+
+  .control__field_sronly[type="checkbox"]:checked:focus + &,
+  .control__field_sronly[type="checkbox"]:checked + &:hover {
+    @include border($control__checkboxPcheckedPfocus--border);
+    @include background($control__checkboxPcheckedPfocus--background);
+    box-shadow: $control__checkboxPcheckedPfocus--box-shadow;
+  }
+
+  .control__field_sronly[type="checkbox"]:disabled + & {
+    @include border($control__checkboxPdisabled--border);
+    @include background($control__checkboxPdisabled--background);
+    box-shadow: $control__checkboxPdisabled--box-shadow;
+  }
 }
 
+// RADIO
+//----------------------
 .control__radio {
-  display      : block;
-  width        : 1rem;
-  height       : 1rem;
-  background   : black;
-  border-radius: 50%;
+  display   : block;
+  @include border($control__radio--border);
+  @include background($control__radio--background);
+  box-shadow: $control__radio--box-shadow;
+  flex      : 0 0 auto;
+  box-sizing: border-box;
+  @include margin($control__radio--margin);
+  @include sizes($control__radio--sizes);
+  position  : relative;
+
+  .control__field_sronly[type="radio"]:checked + & {
+    @include border($control__radioPchecked--border);
+    @include background($control__radioPchecked--background);
+    box-shadow: $control__radioPchecked--box-shadow;
+
+    &:after {
+      content  : "";
+      display  : block;
+      position : absolute;
+      @include border($control__radioPcheckedPafter--border);
+      @include background($control__radioPcheckedPafter--background);
+      @include sizes($control__radioPcheckedPafter--sizes);
+      transform: $control__radioPcheckedPafter--transform;
+    }
+  }
+
+  &:hover,
+  .control__field_sronly[type="radio"]:focus + & {
+    @include border($control__radioPfocus--border);
+    @include background($control__radioPfocus--background);
+    box-shadow: $control__radioPfocus--box-shadow;
+  }
+
+  .control__field_sronly[type="radio"]:checked:focus + &,
+  .control__field_sronly[type="radio"]:checked + &:hover {
+    @include border($control__radioPcheckedPfocus--border);
+    @include background($control__radioPcheckedPfocus--background);
+    box-shadow: $control__radioPcheckedPfocus--box-shadow;
+  }
+
+  .control__field_sronly[type="radio"]:disabled + & {
+    @include border($control__radioPdisabled--border);
+    @include background($control__radioPdisabled--background);
+    box-shadow: $control__radioPdisabled--box-shadow;
+  }
 }
 
+// CHOICE
+//----------------------
 .control__choice {
   @include border($control__choice--border);
   box-shadow: $control__choice--box-shadow;
@@ -150,15 +257,30 @@
     @include padding($control__choicePchecked--padding);
     transform : $control__choicePchecked--transform;
   }
+
+  .control__field_sronly[type="radio"]:disabled + &,
+  .control__field_sronly[type="checkbox"]:disabled + &,
+  .control__field_sronly[type="radio"]:disabled + &:hover,
+  .control__field_sronly[type="checkbox"]:disabled + &:hover {
+    @include border($control__choicePdisabled--border);
+    box-shadow: $control__choicePdisabled--box-shadow;
+    @include background($control__choicePdisabled--background);
+    @include text($control__choicePdisabled--text);
+    @include font($control__choicePdisabled--font);
+    transform : none;
+  }
 }
 
-.control__spinnbutton {
-  display : flex;
-  @include flexPositioning((flexWrap: nowrap, justifyContent: flex-start, alignItems: stretch));
-  @include sizes((width: 100%));
-  position: relative;
-}
+// TOGGLE
+//----------------------
+//@TODO
 
+// RATING (STARS etc.)
+//----------------------
+//@TODO
+
+// LABEL
+//----------------------
 .control__label {
   flex: 0 1 100%;
   @include font($control__label--font);
@@ -166,6 +288,8 @@
   @include padding($control__label--padding);
 }
 
+// LABEL FLAGS
+//----------------------
 .control__abbrflag {
   @include font($control__abbrflag--font);
   @include text($control__abbrflag--text);
@@ -182,10 +306,14 @@
   @include text($control__requiredflag--text);
 }
 
+// ADDON
+//----------------------
 .control__addon {
   flex: 0 0 auto;
 }
 
+// FEEDBACK AND FEEDBACK WRAPPER
+//----------------------
 .control__feedbackwrapper {
   position: relative;
   @include sizes((width: 100%, height: 0));
