@@ -63,7 +63,8 @@
       $('.code > button').on('click', function() {
         $(this).closest('.code').find('pre').toggleClass('show');
       });
-      //DROPDOWN
+      //END DROPDOWN
+
 
       $('#requiredField').ariaValidate({
         behaviour: [{
@@ -517,6 +518,19 @@
           }
         }],
       });
+
+
+      $('#timeField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            time: true
+          }
+        }],
+      });
+
+
 
     });
   </script>
@@ -1356,6 +1370,40 @@
       });
     </pre>
   </div>
+
+
+  <!-- TIME  TYPE TIME-->
+  <div class="control" id="timeField">
+    <label class="control__label" for="#21">Time (type="time")<span class="control__requiredflag">(required)</span></label>
+    <input type="time" name="#21" id="#21" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+
+      </pre>
+  </div>
+
+  <!-- TIME TYPE TEXT-->
+  <div class="control" id="timeTextField">
+    <label class="control__label" for="#22">Time (type="text")<span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#22" id="#22" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+
+      </pre>
+  </div>
+
 </body>
 
 </html>

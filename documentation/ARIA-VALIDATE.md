@@ -13,15 +13,15 @@ Developed and tested with jQuery 3.2.1
 
 ## Jargon
 
-* Control: an HTML element which accepts user input (`<input/>`, `<select>`, `<textarea>`);
-* Control block: the whole HTML markup used to implement a full functioning control. It consists of an HTML wrapper (normally a  `<div>`),which has following child elements: a control, a label associated to the control, an HTML element to display error messages (normally a  `<p>`) and optionally an HTML element to display success messages.
+* **Control**: an HTML element which accepts user input (`<input/>`, `<select>`, `<textarea>`);
+* **Control block**: the whole HTML markup used to implement a full functioning control: an HTML wrapper (normally a  `<div>`),which has following child elements: a **control**, a **label** associated to the control, an **HTML element to display error messages** (normally a  `<p>`) and, optionally, an **HTML element to display success messages**.
 
 
 ## Settings
 
 ### HTML / CSS Classes
 
-The plugin supports the possibility to customise the classes (and the ID) used to implement a control block.
+It is possible to customise the classes, IDs and selectors used to implement a control block.
 
 Name | Default | Type | Description
 -----|---------|------|-------------
@@ -40,8 +40,23 @@ successboxClass | control__feedback_valid | string | The class used by the plugi
 alertboxVisibleClass | control__feedback_visible | string | The class added by the plugin to the alert-box when an error occurs and an error message is displayed.
 successboxVisibleClass | control__feedback_visible | string | The class added by the plugin to the success-box when user input is correct and a success message is displayed.
 
+The default classes can be overridden in the init statement of a control block:
+
+```javascript
+$('#my-control').ariaValidate({
+  classes: {
+    fieldClass: 'js--control__select',
+    fieldErrorClass: 'control__select_error',
+    fieldValidClass: 'control__select_valid',
+    fieldClassElement: '.control__select'
+  },
+  //[Other settings]
+});
+```
 
 ### Region settings / localisation
+
+The plugin supports the possibility to localise and customise the date format and the format of float numbers.
 
 Name | Default | Type | Description
 -----|---------|------|-------------
@@ -49,13 +64,22 @@ dateFormat | dmy | string | Set the date format to validate dates against. Suppo
 dateSeparator |  / | string | Set the character used to separate day, month and year in a date
 decimalSeparator | , | string | Set the character used to separate the integer part from the fractional part of a number (float). Commonly `.` or `,`.
 
+The default region settings can be overridden in the init statement of a control block:
+
+```javascript
+$('#my-control').ariaValidate({
+  regionSettings: {
+    dateFormat: 'ymd'
+  },
+  //[Other settings]
+});
+```
 
 ### Error messages and success message
 
-Each validation function available with the plugin is associated to an error message, which is displayed when validation fails.
-Error messages can be customised for each single control block.
+Each validation function available with the plugin is associated to an error message, which is displayed when validation fails. It is possible to customise error messages for each control block.
 
-List of default messages:
+A list of the validation rules and the associated default error messages follows.
 
 * letters: 'Digits are not allowed in this field',
 * onlyLetters: 'Only letters are allowed',
@@ -82,10 +106,235 @@ List of default messages:
 
 (More about validation functions in the section 'Validation').
 
-To each control block can also be associated a success message. The default success message is: 'Perfect! You told us exactly what we wanted to know!';
+The default error messages can be overridden in the init statement of a control block:
+
+```javascript
+$('#my-control').ariaValidate({
+  errorMsgs: {
+    int: 'Please enter a number.',
+    required: 'This field cannot be empty!'
+  },
+  //[Other settings]
+});
+```
+
+Also a success message is associated to each control block. The default success message is: 'Perfect! You told us exactly what we wanted to know!';
+
+Override the default success message in the init statement of a control block like this:
+
+```javascript
+$('#my-control').ariaValidate({
+  successMsg: 'Your answer is correct!'
+  //[Other settings]
+});
+```
 
 ### Globally overriding default settings
 
+Customising settings for each single control block can be time consuming and error prone. For this reason the plugin offers a way to globally override default settings.
+
+Use following code to override default settings (add before any init statement) .
+
+```javascript
+//change default classes
+$.fn.ariaValidate.defaultClasses = {
+  fieldClass: 'js--control__select',
+  fieldErrorClass: 'control__select_error',
+  fieldValidClass: 'control__select_valid',
+  fieldClassElement: '.control__select'
+};
+
+//change default region settings
+$.fn.ariaValidate.defaultRegionSettings = {
+  dateFormat: 'mdy'
+};
+
+//change default error messages
+$.fn.ariaValidate.defaultErrorMsgs = {
+  int: 'Please enter a number.',
+  required: 'This field cannot be empty!'
+};
+
+//change default success message
+$.fn.ariaValidate.defaultSuccessMsg = 'Correct answer!';
+```
 
 
 ## Validation functions
+
+### ajax
+
+### bool (only for checkbox and radio)
+
+Validate checkbox or radio (checked or unchecked status).
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+      event: 'input',
+      validate: {
+        bool: true
+      }
+    }],
+});
+```
+
+### customRegex
+
+Validate text input against a custom regex.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    validate: {
+      customRegex: /ariaValidate/i
+    }
+  }],
+});
+```
+
+### date
+
+Check if date has valid format and is valid.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    validate: {
+      date: true
+    }
+  }],
+});
+```
+
+### digits
+
+Check if text input contains any letter. This validation rules validates any character, except letters.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    validate: {
+      digits: true
+    }
+  }],
+});
+```
+
+### email
+
+Validate email addresses.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    validate: {
+      email: true
+    }
+  }],
+});
+```
+
+### float
+
+Validate float numbers
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    validate: {
+      float: true
+    }
+  }],
+});
+```
+
+### int
+
+Validate integers.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    validate: {
+      float: true
+    }
+  }],
+});
+```
+
+### letters
+
+Check if text input contains any digit. This validation rules validates any character, except digits.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    validate: {
+      digits: true
+    }
+  }],
+});
+```
+
+### match
+
+Check if field value is equal to a user defined value (string).
+
+
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    match: $('#field-to-match')
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    match: function () {
+      //[...]
+      return value;
+    }
+  }],
+});
+```
+
+### matchMain
+
+### max
+
+### maxDate
+
+### maxLength
+
+### min
+
+### minDate
+
+### minLength
+
+### onlyDigits
+
+### onlyLetters
+
+### password
+
+### required
+
+### token
+
+###

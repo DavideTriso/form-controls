@@ -160,6 +160,31 @@ SOFTWARE.
 
 
   /*
+   * Convert time to ISO format
+   */
+  function convertTimeToIso(value, timeFormat, timeSeparator, ampm) {
+    var valueLength = value.length,
+      value = value.split(timeSeparator);
+
+    if (value.length !== 2) {
+      return false;
+    }
+
+    value[1] = value[1].slice(0, 2);
+
+    if (!/^[\d]{2}$/.test(value[0]) || !/^[\d]{2}$/.test(value[1])) {
+      return false;
+    }
+
+    if (timeFormat === '12' && ampm.toLowerCase() === 'pm') {
+      value[0] = parseInt(value[0], 10) + 12;
+      value[0] = value[0] === 24 ? 0 : value[0];
+    }
+
+    return value[0] + ':' + value[1];
+  }
+
+  /*
    * Calculate minLenght and maxLenght with or without offset starting from object or array
    * (for maxLength and minLength validation functions)
    */
@@ -713,6 +738,8 @@ SOFTWARE.
   $.fn[pluginName].defaultRegionSettings = {
     dateFormat: 'dmy', // dmy = dd/mm/yyyy, mdy = mm/dd/yyyy, ymd = yyyy/mm/dd
     dateSeparator: '/', // / or - or .
+    timeFormat: '24', //'24' or '12'
+    timeSeparator: ':',
     decimalSeparator: ',' // , or .
   };
 
@@ -725,6 +752,7 @@ SOFTWARE.
     float: 'Enter a number (e.g. 12.168 or 16)',
     bool: 'You must check this checkbox',
     date: 'Not a valid date',
+    time: 'Not a valid time',
     minDate: 'The date entered is too far in the past',
     maxDate: 'The date entered is too far in the future',
     email: 'Enter a valid email address',
@@ -835,6 +863,31 @@ SOFTWARE.
 
       //if fieldValue is empty return true
       return true;
+    },
+    time: function (fieldValue, param, regionSettings) {
+      if (fieldValue === '') {
+        return true;
+      }
+
+      var ampm;
+
+      if (regionSettings.timeFormat === '12') {
+        if (typeof param === 'function') {
+          ampm = param();
+        } else if (typeof param === 'object') {
+          ampm = param.attr(a.dV) || param.val();
+        } else {
+          ampm = fieldValue.slice(-2);
+        }
+      }
+
+      fieldValue = convertTimeToIso(fieldValue, regionSettings.timeFormat, regionSettings.timeSeparator, ampm);
+      if (!fieldValue) {
+        return 'time';
+      }
+      fieldValue = fieldValue.split(':');
+
+      return parseInt(fieldValue[0], 10) < 24 && parseInt(fieldValue[1], 10) < 60 ? true : 'time';
     },
     minDate: function (fieldValue, param, regionSettings) {
 
@@ -1044,11 +1097,10 @@ SOFTWARE.
         url: param,
         data: fieldValue
       }).done(function (data) {
-        return data === 'true' ? true : 'ajax';
+        return data == true ? true : 'ajax';
       }).fail(function () {
         //trigger ajaxError on window and pass param (url of the failed request)
         win.trigger(pluginName + '.ajaxError', param);
-
         return 'ajaxError';
       });
     }
