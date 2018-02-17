@@ -93,13 +93,10 @@
   }
 
   > select {
-    -webkit-appearance: none;
-    -moz-appearance   : none;
-    appearance        : none;
     @include background($control__select--background);
     @include border($control__select--border);
-    box-shadow        : $control__select--box-shadow;
-    flex              : 0 1 100%;
+    box-shadow: $control__select--box-shadow;
+    flex      : 0 1 100%;
     @include font($control__select--font);
     @include text($control__select--text);
     @include sizes($control__select--sizes);

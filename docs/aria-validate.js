@@ -550,7 +550,6 @@ SOFTWARE.
       //hide successbox and remove the success message
       if (self.successbox) {
         self.successbox
-          .html('')
           .attr(a.aHi, a.t)
           .removeClass(classes.successboxVisibleClass);
       }
@@ -596,7 +595,6 @@ SOFTWARE.
       //remove error message from alertbox and hide alertbox
       if (self.alertbox) {
         self.alertbox
-          .html('')
           .attr(a.aHi, a.t)
           .removeClass(classes.alertboxVisibleClass);
       }
@@ -642,7 +640,6 @@ SOFTWARE.
       //remove error message from alertbox and hide alertbox
       if (self.alertbox) {
         self.alertbox
-          .html('')
           .attr(a.aHi, a.t)
           .removeClass(classes.alertboxVisibleClass);
       }
@@ -650,7 +647,6 @@ SOFTWARE.
       //remove success message from alertbox and hide alertbox
       if (self.successbox && self.successMsg !== false) {
         self.successbox
-          .html('')
           .attr(a.aHi, a.t)
           .removeClass(classes.successboxVisibleClass);
       }

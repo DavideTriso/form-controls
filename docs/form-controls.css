@@ -31,8 +31,8 @@ textarea {
   background-color: transparent;
   font-family: inherit;
   font-size: 1rem;
+  line-height: 1;
   vertical-align: middle;
-  font-size: 16px;
   margin: 0;
   padding: 0;
 }
@@ -49,6 +49,25 @@ input[type=search] {
 
 ::-webkit-search-decoration {
   display: none;
+}
+
+input[type=date]::-webkit-clear-button,
+input[type=datetime-local]::-webkit-clear-button,
+input[type=month]::-webkit-clear-button,
+input[type=time]::-webkit-clear-button {
+  display: none;
+}
+input[type=date]::-webkit-inner-spin-button,
+input[type=datetime-local]::-webkit-inner-spin-button,
+input[type=month]::-webkit-inner-spin-button,
+input[type=time]::-webkit-inner-spin-button {
+  display: none;
+}
+input[type=date]::-webkit-calendar-picker-indicator:hover,
+input[type=datetime-local]::-webkit-calendar-picker-indicator:hover,
+input[type=month]::-webkit-calendar-picker-indicator:hover,
+input[type=time]::-webkit-calendar-picker-indicator:hover {
+  cursor: pointer;
 }
 
 fieldset {
@@ -88,6 +107,11 @@ select {
   -moz-appearance: none;
   appearance: none;
   -moz-box-sizing: border-box;
+  line-height: 1.15;
+}
+
+textarea {
+  overflow: auto;
 }
 
 .control {
@@ -183,7 +207,6 @@ select {
 }
 
 .control__select {
-  max-height: 1.85rem;
   max-width: 100%;
   min-width: auto;
   width: 100%;
@@ -205,9 +228,6 @@ select {
       transform: translate(-0.8rem, 60%) rotate(45deg);
 }
 .control__select > select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   background-color: #fff;
   border-color: #ccc;
   border-radius: 0.2rem;
@@ -216,12 +236,11 @@ select {
   box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
   -ms-flex: 0 1 100%;
       flex: 0 1 100%;
-  font-size: 0.8rem;
-  max-height: 1.85rem;
+  font-size: 1rem;
   max-width: 100%;
   min-width: auto;
   width: 100%;
-  padding: 0.4rem 0.5rem;
+  padding: 0.3rem 0.5rem;
 }
 .control__select > select:active, .control__select > select:focus {
   border-color: #999999;

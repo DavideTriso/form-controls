@@ -1,7 +1,6 @@
 //-----------------------
 // BLOCK
 //----------------------
-
 .control {
   display : flex;
   @include flexPositioning((flexWrap: wrap, justifyContent: flex-start, alignItems: stretch));
