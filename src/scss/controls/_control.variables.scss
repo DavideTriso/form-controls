@@ -28,7 +28,7 @@ $control__field--border: (
   borderStyle : solid
 )
 !default;
-$control__field--box-shadow: none; //$boxShadow inset!default;
+$control__field--box-shadow: $boxShadow inset!default;
 
 $control__field--background: (
   backgroundColor: $backgroundColor
