@@ -54,27 +54,32 @@ input[type=search] {
 input[type=date],
 input[type=datetime-local],
 input[type=month],
-input[type=time] {
+input[type=time],
+input[type=week] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  min-height: 1rem;
 }
 input[type=date]::-webkit-clear-button,
 input[type=datetime-local]::-webkit-clear-button,
 input[type=month]::-webkit-clear-button,
-input[type=time]::-webkit-clear-button {
+input[type=time]::-webkit-clear-button,
+input[type=week]::-webkit-clear-button {
   display: none;
 }
 input[type=date]::-webkit-inner-spin-button,
 input[type=datetime-local]::-webkit-inner-spin-button,
 input[type=month]::-webkit-inner-spin-button,
-input[type=time]::-webkit-inner-spin-button {
+input[type=time]::-webkit-inner-spin-button,
+input[type=week]::-webkit-inner-spin-button {
   display: none;
 }
 input[type=date]::-webkit-calendar-picker-indicator:hover,
 input[type=datetime-local]::-webkit-calendar-picker-indicator:hover,
 input[type=month]::-webkit-calendar-picker-indicator:hover,
-input[type=time]::-webkit-calendar-picker-indicator:hover {
+input[type=time]::-webkit-calendar-picker-indicator:hover,
+input[type=week]::-webkit-calendar-picker-indicator:hover {
   cursor: pointer;
 }
 
