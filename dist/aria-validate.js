@@ -865,6 +865,7 @@ SOFTWARE.
       return true;
     },
     time: function (fieldValue, param, regionSettings) {
+      console.log(fieldValue);
       if (fieldValue === '') {
         return true;
       }
@@ -933,6 +934,12 @@ SOFTWARE.
       fieldValue = convertDateToIso(fieldValue, regionSettings.dateFormat, regionSettings.dateSeparator);
 
       return new Date(fieldValue) <= new Date(param) ? true : 'maxDate';
+    },
+    minTime: function (fieldValue, param, regionSettings) {
+      //
+    },
+    maxTime: function (fieldValue, param, regionSettings) {
+      //
     },
     email: function (fieldValue, param) {
       //chekc if email is valid

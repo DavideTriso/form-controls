@@ -22,6 +22,74 @@
 	}
 }
 */
+button,
+input,
+select,
+textarea {
+  border-radius: 0;
+  border-width: 0;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: 1rem;
+  vertical-align: middle;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+input[type=search] {
+  -webkit-appearance: textfield;
+}
+
+::-webkit-search-decoration {
+  display: none;
+}
+
+fieldset {
+  border-radius: 0;
+  border-width: 0;
+  margin: 0;
+  padding: 0.01rem 0 0 0;
+  min-width: 0;
+}
+
+body:not(:-moz-handler-blocked) fieldset {
+  display: table-cell;
+}
+
+label,
+legend {
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  display: table;
+  float: left;
+  width: 0;
+}
+legend + * {
+  clear: both;
+}
+
+output {
+  font-size: 1rem;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -moz-box-sizing: border-box;
+}
+
 .control {
   display: -ms-flexbox;
   display: flex;
