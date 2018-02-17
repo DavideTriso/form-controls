@@ -159,7 +159,7 @@ textarea {
   border-radius: 0.2rem;
   border-style: solid;
   border-width: 0.05rem;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  box-shadow: none;
   -ms-flex: 0 1 100%;
       flex: 0 1 100%;
   font-size: 1rem;
