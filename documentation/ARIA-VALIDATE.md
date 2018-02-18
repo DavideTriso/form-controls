@@ -61,8 +61,10 @@ The plugin supports the possibility to localise and customise the date format an
 Name | Default | Type | Description
 -----|---------|------|-------------
 dateFormat | dmy | string | Set the date format to validate dates against. Supported values: dmy -> dd/mm/yyyy, mdy -> mm/dd/yyyy, ymd -> yyyy/mm/dd
-dateSeparator |  / | string | Set the character used to separate day, month and year in a date
-decimalSeparator | , | string | Set the character used to separate the integer part from the fractional part of a number (float). Commonly `.` or `,`.
+dateSeparator |  '/' | string | Set the character used to separate day, month and year in a date
+decimalSeparator | ',' | string | Set the character used to separate the integer part from the fractional part of a number (float). Commonly `.` or `,`.
+timeFormat | '24' | tokens (`'12'` or `'24'`) | Set the time format; 12-hours clock with am/pm period, or 24-hour clock.
+timeSeparator | ':'  | string | Set the character used to separation hours from minutes in time.
 
 The default region settings can be overridden in the init statement of a control block:
 

@@ -26,6 +26,11 @@
       flex: 0 1 33.33%;
     }
 
+    .control__addon_select {
+      padding: 0 0.5rem;
+      background-color: #ccc;
+    }
+
     .code {
       font-size: 0.8rem;
       margin-top: 1rem;
@@ -542,7 +547,39 @@
         }],
       });
 
+      $('#timeTextAMPMField').ariaValidate({
+        regionSettings: {
+          timeFormat: '12',
+        },
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            time: true
+          }
+        }],
+      });
 
+      var timeControl = $('#timeTextAMPMSelectField'),
+        timeField = timeControl.find('.control__field').first(),
+        ampm = $('#ampmSelect');
+
+      timeControl.ariaValidate({
+        regionSettings: {
+          timeFormat: '12',
+        },
+        behaviour: [{
+          event: 'blur ampmChange',
+          main: true,
+          validate: {
+            time: ampm
+          }
+        }],
+      });
+
+      ampm.on('change', function() {
+        timeField.trigger('ampmChange');
+      });
 
     });
   </script>
@@ -1150,33 +1187,6 @@
   </div>
 
 
-
-  <!-- EMAIL ADDRESS -->
-  <div class="control" id="emailField">
-    <label class="control__label" for="#14">Email address <span class="control__requiredflag">(required)</span></label>
-    <input type="email" name="#14" id="#14" class="control__field" required/>
-    <div class="control__feedbackwrapper">
-      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
-      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
-    </div>
-  </div>
-  <div class="code">
-    <button type="button">Show code</button>
-    <pre>
-      $('#emailField').ariaValidate({
-        behaviour: [{
-          event: 'blur',
-          main: true,
-          validate: {
-            required: true,
-            email: true
-          }
-        }],
-      });
-    </pre>
-  </div>
-
-
   <!-- PASSWORD -->
   <div class="control" id="passwordField">
     <label class="control__label" for="#15">Password field (min. 8 chars., one uppercase and one lowercase letter, one digit, one special char.) <span class="control__requiredflag">(required)</span></label>
@@ -1396,7 +1406,15 @@
   <div class="code">
     <button type="button">Show code</button>
     <pre>
-
+      $('#timeField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            time: true
+          }
+        }],
+      });
       </pre>
   </div>
 
@@ -1412,8 +1430,85 @@
   <div class="code">
     <button type="button">Show code</button>
     <pre>
+      $('#timeTextField').ariaValidate({
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            time: true
+          }
+        }],
+      });
+    </pre>
+  </div>
 
-      </pre>
+  <!-- TIME TYPE TEXT AMPM-->
+  <div class="control" id="timeTextAMPMField">
+    <label class="control__label" for="#23">Time (type="text" | 12h am/pm format)<span class="control__requiredflag">(required)</span></label>
+    <input type="text" name="#23" id="#23" class="control__field" required/>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      $('#timeTextAMPMField').ariaValidate({
+        regionSettings: {
+          timeFormat: '12',
+        },
+        behaviour: [{
+          event: 'blur',
+          main: true,
+          validate: {
+            time: true
+          }
+        }],
+      });
+    </pre>
+  </div>
+
+
+  <!-- TIME TYPE TEXT AMPM-->
+  <div class="control" id="timeTextAMPMSelectField">
+    <label class="control__label" for="#24">Time (type="text" | 12h am/pm format)<span class="control__requiredflag">(required)</span></label>
+    <div class="control__box">
+      <input type="text" name="#24" id="#24" class="control__field control__field_addonright" required/>
+      <select id="ampmSelect" class="control__addon control__addon_select">
+        <option value="am">AM</option>
+        <option value="pm">PM</option>
+      </select>
+    </div>
+    <div class="control__feedbackwrapper">
+      <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>
+      <p class="control__feedback control__feedback_bottom control__feedback_error"></p>
+    </div>
+  </div>
+  <div class="code">
+    <button type="button">Show code</button>
+    <pre>
+      var timeControl = $('#timeTextAMPMSelectField'),
+        timeField = timeControl.find('.control__field').first(),
+        ampm = $('#ampmSelect');
+
+      timeControl.ariaValidate({
+        regionSettings: {
+          timeFormat: '12',
+        },
+        behaviour: [{
+          event: 'blur ampmChange',
+          main: true,
+          validate: {
+            time: ampm
+          }
+        }],
+      });
+
+      ampm.on('change', function() {
+        timeField.trigger('ampmChange');
+      });
+    </pre>
   </div>
 
 </body>

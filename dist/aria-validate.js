@@ -163,24 +163,41 @@ SOFTWARE.
    * Convert time to ISO format
    */
   function convertTimeToIso(value, timeFormat, timeSeparator, ampm) {
-    var valueLength = value.length,
-      value = value.split(timeSeparator);
+    value = value.split(timeSeparator);
 
     if (value.length !== 2) {
       return false;
     }
 
-    value[1] = value[1].slice(0, 2);
+    if (timeFormat === '12') {
+      if (typeof ampm === 'function') {
+        ampm = ampm();
+      } else if (typeof ampm === 'object') {
+        ampm = ampm.attr(a.dV) || ampm.val();
+      } else {
+        if (value[1].length <= 5 || value[1].length >= 4) {
+          ampm = value[1].slice(-2).toLowerCase();
+          ampm = ampm === 'am' || ampm === 'pm' ? ampm : false;
+          value[1] = value[1].slice(0, 2);
+        } else {
+          return false;
+        }
+      }
+    }
 
-    if (!/^[\d]{2}$/.test(value[0]) || !/^[\d]{2}$/.test(value[1])) {
+    if (/^\d{2}$/.test(value[0]) === false || /^\d{2}$/.test(value[1]) === false) {
       return false;
     }
 
-    if (timeFormat === '12' && ampm.toLowerCase() === 'pm') {
-      value[0] = parseInt(value[0], 10) + 12;
-      value[0] = value[0] === 24 ? 0 : value[0];
-    }
+    value[0] = parseInt(value[0], 10);
 
+    if (timeFormat === '12') {
+      if (!ampm || (ampm === 'am' && value[0] === 12) || (ampm === 'pm' && value[0] === 0) || value[0] > 12) {
+        return false;
+      } else if (ampm === 'pm' && value[0] < 12) {
+        value[0] = value[0] + 12;
+      }
+    }
     return value[0] + ':' + value[1];
   }
 
@@ -861,30 +878,18 @@ SOFTWARE.
       return true;
     },
     time: function (fieldValue, param, regionSettings) {
-      console.log(fieldValue);
       if (fieldValue === '') {
         return true;
       }
 
-      var ampm;
-
-      if (regionSettings.timeFormat === '12') {
-        if (typeof param === 'function') {
-          ampm = param();
-        } else if (typeof param === 'object') {
-          ampm = param.attr(a.dV) || param.val();
-        } else {
-          ampm = fieldValue.slice(-2);
-        }
-      }
-
-      fieldValue = convertTimeToIso(fieldValue, regionSettings.timeFormat, regionSettings.timeSeparator, ampm);
+      fieldValue = convertTimeToIso(fieldValue, regionSettings.timeFormat, regionSettings.timeSeparator, param);
       if (!fieldValue) {
         return 'time';
       }
+
       fieldValue = fieldValue.split(':');
 
-      return parseInt(fieldValue[0], 10) < 24 && parseInt(fieldValue[1], 10) < 60 ? true : 'time';
+      return fieldValue.length === 2 && parseInt(fieldValue[0], 10) < 24 && parseInt(fieldValue[1], 10) < 60 ? true : 'time';
     },
     minDate: function (fieldValue, param, regionSettings) {
 
