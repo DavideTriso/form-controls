@@ -140,7 +140,7 @@ SOFTWARE.
    */
   function calculateDate(param, dateFormat, dateSeparator) {
     if (param.bindToElement) {
-      var offset = param.offset,
+      var offset = param.offset || 0,
         date = param.bindToElement.attr(a.dV) || param.bindToElement.val();
 
       date = date !== '' ? date : param.fallbackDate; // check if element is empty and if empty use fallback date as starting point to calculate offset
@@ -207,7 +207,7 @@ SOFTWARE.
    */
   function calculateLength(param) {
     if (param.element) {
-      var offset = param.offset;
+      var offset = param.offset || 0;
       param = param.element.attr(a.dV) !== '' ? param.element.attr(a.dV).length : param.element.val().length;
       return param + offset;
     }
@@ -221,7 +221,7 @@ SOFTWARE.
    */
   function calculateNumber(param) {
     if (param.element) {
-      var offset = param.offset;
+      var offset = param.offset || 0;
       param = param.element.attr(a.dV) || param.element.val();
 
       return parseFloat(param, 10) + offset;
@@ -250,11 +250,10 @@ SOFTWARE.
     self.regionSettings = makeSettings($.fn[pluginName].defaultRegionSettings, self.userSettings.regionSettings);
 
     //VALIDATION
-    //self.fieldStatus = undefined; //Describes the staus of the field: undefined -> field was never focussed and validated, true -> correct input , 'errorCode' -> incorrect input
+    self.fieldStatus = undefined; //Describes the staus of the field: undefined -> field was never focussed and validated, true -> correct input , 'errorCode' -> incorrect input
     self.isDirty = false; // a field is considered dirty after first interaction, this means on blur or on change for some other fields
     //self.fieldValue = undefined; //The value of the field
     //self.adding = undefined; //On each field value update, check if user is adding or removing text from field (last value length is greater or smaller than new value length?) - true -> adding, false -> removing, undefined -> not changed or field value has no length (is radio, checkbox etc...)
-    self.selection = {}; // the caret position and selected text in the field (selectionStart, selctionEnd)
 
     //MESSAGES
     self.errorMsgs = makeSettings($.fn[pluginName].defaultErrorMsgs, self.userSettings.errorMsgs); //computed error messages settings for this field;
@@ -426,31 +425,34 @@ SOFTWARE.
         events = namespaceEventString(currentBehaviour.event, pluginName),
         validateRules = currentBehaviour.validate || false,
         main = currentBehaviour.main || false, //check if current behaviour is set as 'main behaviour'
-        dirty = currentBehaviour.dirty; // check if current behaviour is flaged as dirty (perform validation rules only if field is already marked as dirty)
+        dirty = currentBehaviour.dirty, // check if current behaviour is flaged as dirty (perform validation rules only if field is already marked as dirty)
+        eventsArray = events.trim().split(' '),
+        eventsArrayLength = eventsArray.length;
+
+      //Keep track of registered event listeners
+      for (var i = 0; i < eventsArrayLength; i++) {
+        self.eventListeners.push(eventsArray[i]);
+      }
 
       //Bind event listeners to field
       self.field.on(events, function (events) {
         if (validateRules) {
           self.performValidation(validateRules, main, dirty);
         }
-
-        //Keep track of registered event listeners
-        self.eventListeners.push(currentBehaviour.event);
       });
     },
     unbindEventListeners: function (events) {
       var self = this,
-        eventsArray = events.split(' '),
-        eventsLength = eventsArray.length,
-        events = namespaceEventString(events, pluginName);
+        events = namespaceEventString(events, pluginName),
+        eventsArray = events.trim().split(' '),
+        eventsLength = eventsArray.length;
 
-      self.field.off(namespaceEventString(events, pluginName));
+      self.field.off(events);
 
       //remove event entry from events array
-      for (var i = 0; i < eventsLenght; i++) {
+      for (var i = 0; i < eventsLength; i++) {
         self.eventListeners.splice(self.eventListeners.indexOf(eventsArray[i]), 1);
       }
-
       //trigger custom event on window for user to listen for
       win.trigger(pluginName + '.eventListenersRemoved', [self]);
     },
@@ -476,10 +478,6 @@ SOFTWARE.
         } else {
           self.adding = false;
         }
-
-        //get selection start and end
-        self.selection.start = self.field[0].selectionStart || undefined;
-        self.selection.end = self.field[0].selectionEnd || undefined;
       }
       /*
        * Save the user input in attribute data-ariavalidate-valueue.
@@ -675,10 +673,34 @@ SOFTWARE.
       var self = this;
 
       //Unbind event listeners
-      self.unbindEventListeners(self.eventListeners.join(' '));
+      self.field.off(self.eventListeners.join(' '));
+
+      //reset control
+      self.resetControl();
+
+      //remove attributes
+      self.field
+        .removeAttr(a.aErM)
+        .removeAttr(a.aOw)
+        .removeAttr(a.dV);
+
+      self.alertbox
+        .removeAttr(a.r)
+        .removeAttr(a.aLi)
+        .removeAttr(a.aRe)
+        .removeAttr(a.aAt)
+        .removeAttr(a.aHi);
+
+      if (self.successbox) {
+        self.successbox
+          .removeAttr(a.aLi)
+          .removeAttr(a.aRe)
+          .removeAttr(a.aAt)
+          .removeAttr(a.aHi);
+      }
 
       //Remove jQuery.data
-      $.removeData(self, 'plugin_' + pluginName);
+      self.element.removeData('plugin_' + pluginName);
     },
     //-------------------------------------------------------------
     //Method caller
@@ -883,6 +905,7 @@ SOFTWARE.
       }
 
       fieldValue = convertTimeToIso(fieldValue, regionSettings.timeFormat, regionSettings.timeSeparator, param);
+
       if (!fieldValue) {
         return 'time';
       }

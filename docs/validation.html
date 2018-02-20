@@ -71,9 +71,9 @@
         $(this).closest('.code').find('pre').toggleClass('show');
       });
       //END DROPDOWN
+      var a = $('#requiredField');
 
-
-      $('#requiredField').ariaValidate({
+      a.ariaValidate({
         behaviour: [{
             event: 'input',
             dirty: true,
@@ -90,6 +90,8 @@
           }
         ],
       });
+
+      a.ariaValidate('unbindEventListeners', 'input');
 
       $('#requiredIfField').ariaValidate({
         behaviour: [{

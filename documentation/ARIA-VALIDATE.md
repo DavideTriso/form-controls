@@ -83,28 +83,29 @@ Each validation function available with the plugin is associated to an error mes
 
 A list of the validation rules and the associated default error messages follows.
 
-* letters: 'Digits are not allowed in this field',
-* onlyLetters: 'Only letters are allowed',
-* digits: 'Letters are not allowed in this field',
-* onlyDigits: 'Only digits are allowed',
-* int: 'Enter a whole number (e.g. 12)',
-* float: 'Enter a number (e.g. 12.168 or 16)',
-* bool: 'You must check this checkbox',
-* date: 'Not a valid date',
-* minDate: 'The date entered is too far in the past',
-* maxDate: 'The date entered is too far in the future',
-* email: 'Enter a valid email address',
-* password: 'Password is not secure',
-* min: 'The entered number is too small',
-* max: 'The entered number is too big',
-* minLength: 'The length of the input is too short',
-* maxLength: 'Field length exceeds the maximum number of chars allowed',
-* required: 'This field is required to successfully complete the form',
-* tokens: 'Please choose a value from the list',
-* match: 'No match',
-* customRegex: 'Regex match returned "false"',
-* ajax: 'server says no!',
-* ajaxError: 'Server error.'
+* letters: 'Digits are not allowed in this field'
+* onlyLetters: 'Only letters are allowed'
+* digits: 'Letters are not allowed in this field'
+* onlyDigits: 'Only digits are allowed'
+* int: 'Enter a whole number (e.g. 12)'
+* float: 'Enter a number (e.g. 12.168 or 16)'
+* bool: 'You must check this checkbox'
+* date: 'Not a valid date'
+* minDate: 'The date entered is too far in the past'
+* maxDate: 'The date entered is too far in the future'
+* time: 'Not a valid time'
+* email: 'Enter a valid email address'
+* password: 'Password is not secure'
+* min: 'The entered number is too small'
+* max: 'The entered number is too big'
+* minLength: 'The length of the input is too short'
+* maxLength: 'Field length exceeds the maximum number of chars allowed'
+* required: 'This field is required to successfully complete the form'
+* tokens: 'Please choose a value from the list'
+* match: 'No match'
+* customRegex: 'Regex match returned "false"'
+* ajax: 'server says no!'
+* ajaxError: 'Server error.' (This message is displayed it the xhr request was not successfull)
 
 (More about validation functions in the section 'Validation').
 
@@ -162,11 +163,12 @@ $.fn.ariaValidate.defaultSuccessMsg = 'Correct answer!';
 ```
 
 
+
 ## Validation functions
 
-### ajax
+### ajax (not tested)
 
-### bool (only for checkbox and radio)
+### bool (only for checkbox and radio buttons)
 
 Validate checkbox or radio (checked or unchecked status).
 
@@ -290,13 +292,11 @@ $('#my-control').ariaValidate({
 
 Check if field value is equal to a user defined value (string).
 
-
-
 ```javascript
 $('#my-control').ariaValidate({
   behaviour: [{
     event: 'blur',
-    match: $('#field-to-match')
+    match: $('#field-to-match') // match the value of this element
   }],
 });
 ```
@@ -309,7 +309,7 @@ $('#my-control').ariaValidate({
     event: 'blur',
     match: function () {
       //[...]
-      return value;
+      return value; // match the value returned by this function
     }
   }],
 });
@@ -317,26 +317,374 @@ $('#my-control').ariaValidate({
 
 ### matchMain
 
+Same as match, except for empty values: if the  field is empty `matchMain` returns true.
+
 ### max
+
+Check if field value is lower than a given value
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    max: 10
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    max: function () {
+      //[...]
+      return value;
+    }
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    max: {
+      element: $('#someField'), //bind value to other field value
+      offset: 3 // set the offset (optional)
+    }
+  }],
+});
+```
 
 ### maxDate
 
+Check if a date is not after a given date
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    maxDate: '2018-02-22'
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    maxDate: function () {
+      //[...]
+      return date;
+    }
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    maxDate: {
+      element: $('#someDateField'), //bind value to other field value
+      offset: 3 //set an offset (optional)
+    }
+  }],
+});
+
+```
 ### maxLength
+
+Check if the number of characters of a field value is lower than a given length.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    maxLength: '100'
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    maxLength: function () {
+      //[...]
+      return value;
+    }
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    maxLength: {
+      element: $('#someField'), //bind value to other field value
+      offset: 30 //set an offset (optional)
+    }
+  }],
+});
+```
 
 ### min
 
+Check if field value is greater than a given value
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    min: 10
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    min: function () {
+      //[...]
+      return value;
+    }
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    min: {
+      element: $('#someField'), //bind value to other field value
+      offset: 3 // set the offset (optional)
+    }
+  }],
+});
+```
+
 ### minDate
+
+Check if a date is after a given date
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    minDate: '2018-02-22'
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    minDate: function () {
+      //[...]
+      return date;
+    }
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    maxDate: {
+      element: $('#someDateField'), //bind value to other field value
+      offset: 3 //set an offset (optional)
+    }
+  }],
+});
+```
 
 ### minLength
 
+Check if the number of characters of a field value is greater than a given length.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    minLength: '100'
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    minLength: function () {
+      //[...]
+      return value;
+    }
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    minLength: {
+      element: $('#someField'), //bind value to other field value
+      offset: 30 //set an offset (optional)
+    }
+  }],
+});
+```
+
 ### onlyDigits
+
+Check if field value is made only by digits.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    onlyDigits: true
+  }],
+});
+```
 
 ### onlyLetters
 
+Check if field value is made only by letters.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    onlyLetters: true
+  }],
+});
+```
+
 ### password
 
+Make sure that field value is a secure password string.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    password: true
+  }],
+});
+```
 ### required
+
+Make sure that field is not left empty by user.
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    required: true
+  }],
+});
+```
+
+It is also possible to make a field required only if a condition matches :
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    required: function () {
+      //[..] some code
+
+      if (x.length === 0) {
+        return true; //field is required
+      }
+      return false; // field is not required
+    }
+  }],
+});
+```
+
+### time
+
+Check if input value is a valid time (e.g. 14:55 or 02:55pm or 02:55 pm)
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    time: true
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    time: function() {
+      //[...]
+      return amOrPm; //for 12 hours format, it is possible to separate the time from the period declaration (AM / PM). In this case the period declaration must be passed by a function
+    }
+  }],
+});
+```
 
 ### token
 
-###
+Validate input field agains a list of tokens (the field is valid if the values matches one of the tokens).
+
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    tokens: ['one', 'two', 'three']
+  }],
+});
+```
+
+or
+
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    tokens: function () {
+      //[...]
+      return tokensArray;
+    }
+  }],
+});
+```
