@@ -13,7 +13,7 @@ HTML, CSS and JS UI-components for **user-friendly** and **accessible** form con
 
 
 ## Documentation
-* [Validation (JS)](https://davidetriso.github.io/documentation/ARIA-VALIDATE.md)
+* [Validation (JS)](https://github.com/DavideTriso/form-controls/blob/master/documentation/ARIA-VALIDATE.md)
 
 
 
