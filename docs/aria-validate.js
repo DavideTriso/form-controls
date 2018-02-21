@@ -529,6 +529,8 @@ SOFTWARE.
        * validate field group if this is main behaviour,
        * otherwise reset field group
        */
+      self.fieldStatus = true;
+
       if (main) {
         self.validateControl();
       } else {
