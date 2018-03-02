@@ -71,9 +71,8 @@
         $(this).closest('.code').find('pre').toggleClass('show');
       });
       //END DROPDOWN
-      var a = $('#requiredField');
 
-      a.ariaValidate({
+      $('#requiredField').ariaValidate({
         behaviour: [{
             event: 'input',
             dirty: true,
@@ -711,7 +710,7 @@
 
   <!-- DIGITS-->
   <div class="control" id="digitsField">
-    <label class="control__label" for="#4">Only digits field <span class="control__requiredflag">(required)</span></label>
+    <label class="control__label" for="#4">Digits field <span class="control__requiredflag">(required)</span></label>
     <input type="text" name="#4" id="#4" class="control__field" required/>
     <div class="control__feedbackwrapper">
       <p class="control__feedback control__feedback_bottom control__feedback_valid"></p>

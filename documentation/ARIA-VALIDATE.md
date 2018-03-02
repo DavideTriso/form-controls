@@ -2,7 +2,7 @@
 
 ## About
 
-Smart and flexible jQuery input validation plugin.
+**User-friendly** and **flexible** jQuery input validation plugin. Check the [demo](https://davidetriso.github.io/form-controls/validation.html).
 
 ## Dependencies
 
@@ -21,7 +21,7 @@ Developed and tested with jQuery 3.2.1
 
 ### HTML / CSS Classes
 
-It is possible to customise the classes, IDs and selectors used to implement a control block.
+Customise the classes, IDs and selectors used to implement a control block.
 
 Name | Default | Type | Description
 -----|---------|------|-------------
@@ -56,7 +56,7 @@ $('#my-control').ariaValidate({
 
 ### Region settings / localisation
 
-The plugin supports the possibility to localise and customise the date format and the format of float numbers.
+Localise and customise date, time and float numbers formats.
 
 Name | Default | Type | Description
 -----|---------|------|-------------
@@ -105,9 +105,9 @@ A list of the validation rules and the associated default error messages follows
 * match: 'No match'
 * customRegex: 'Regex match returned "false"'
 * ajax: 'server says no!'
-* ajaxError: 'Server error.' (This message is displayed it the xhr request was not successfull)
+* ajaxError: 'Server error.' (This message is displayed it the xhr request was not successful)
 
-(More about validation functions in the section 'Validation').
+(More about validation functions in the section **'Validation'**).
 
 The default error messages can be overridden in the init statement of a control block:
 
@@ -121,7 +121,7 @@ $('#my-control').ariaValidate({
 });
 ```
 
-Also a success message is associated to each control block. The default success message is: 'Perfect! You told us exactly what we wanted to know!';
+Also a success message is associated to each control block. The default success message is: _'Perfect! You told us exactly what we wanted to know!'_;
 
 Override the default success message in the init statement of a control block like this:
 
@@ -136,7 +136,7 @@ $('#my-control').ariaValidate({
 
 Customising settings for each single control block can be time consuming and error prone. For this reason the plugin offers a way to globally override default settings.
 
-Use following code to override default settings (add before any init statement) .
+Use following code to override default settings (add the code before the init statements).
 
 ```javascript
 //change default classes
@@ -161,8 +161,6 @@ $.fn.ariaValidate.defaultErrorMsgs = {
 //change default success message
 $.fn.ariaValidate.defaultSuccessMsg = 'Correct answer!';
 ```
-
-
 
 ## Validation functions
 
