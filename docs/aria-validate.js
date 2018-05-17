@@ -1,5 +1,4 @@
-/*
-MIT License
+/* MIT License
 
 Copyright (c) 2017 Davide Trisolini
 
@@ -19,8 +18,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+SOFTWARE. */
 
 (function (factory) {
   if (typeof define === 'function' && define.amd) {
@@ -50,9 +48,7 @@ SOFTWARE.
     count = 0,
     win = $(window);
 
-
-
-  //-----------------------------------------
+  // -----------------------------------------
   //Private functions
 
   /*
@@ -62,7 +58,9 @@ SOFTWARE.
    * If no suffix is passed, then do not set it
    */
   function setId(element, idPrefix, idSuffix) {
-    idSuffix = idSuffix !== undefined ? idSuffix : '';
+    idSuffix = idSuffix !== undefined
+      ? idSuffix
+      : '';
 
     if (!element.is('[id]')) {
       element.attr('id', idPrefix + idSuffix);
@@ -143,7 +141,9 @@ SOFTWARE.
       var offset = param.offset || 0,
         date = param.bindToElement.attr(a.dV) || param.bindToElement.val();
 
-      date = date !== '' ? date : param.fallbackDate; // check if element is empty and if empty use fallback date as starting point to calculate offset
+      date = date !== ''
+        ? date
+        : param.fallbackDate; // check if element is empty and if empty use fallback date as starting point to calculate offset
 
       date = convertDateToIso(date, dateFormat, dateSeparator);
       date = new Date(date);
@@ -157,7 +157,6 @@ SOFTWARE.
     var date = param.attr(a.dV) || param.val();
     return convertDateToIso(param, dateFormat, dateSeparator);
   }
-
 
   /*
    * Convert time to ISO format
@@ -177,7 +176,9 @@ SOFTWARE.
       } else {
         if (value[1].length <= 5 || value[1].length >= 4) {
           ampm = value[1].slice(-2).toLowerCase();
-          ampm = ampm === 'am' || ampm === 'pm' ? ampm : false;
+          ampm = ampm === 'am' || ampm === 'pm'
+            ? ampm
+            : false;
           value[1] = value[1].slice(0, 2);
         } else {
           return false;
@@ -208,7 +209,9 @@ SOFTWARE.
   function calculateLength(param) {
     if (param.element) {
       var offset = param.offset || 0;
-      param = param.element.attr(a.dV) !== '' ? param.element.attr(a.dV).length : param.element.val().length;
+      param = param.element.attr(a.dV) !== ''
+        ? param.element.attr(a.dV).length
+        : param.element.val().length;
       return param + offset;
     }
     param = param.attr(a.dV).length || param.val().length
@@ -231,8 +234,7 @@ SOFTWARE.
     return parseFloat(param, 10);
   }
 
-
-  //-----------------------------------------
+  // -----------------------------------------
   // The actual plugin constructor
   function AriaValidate(element, userSettings) {
     var self = this;
@@ -252,18 +254,20 @@ SOFTWARE.
     //VALIDATION
     self.fieldStatus = undefined; //Describes the staus of the field: undefined -> field was never focussed and validated, true -> correct input , 'errorCode' -> incorrect input
     self.isDirty = false; // a field is considered dirty after first interaction, this means on blur or on change for some other fields
-    //self.fieldValue = undefined; //The value of the field
-    //self.adding = undefined; //On each field value update, check if user is adding or removing text from field (last value length is greater or smaller than new value length?) - true -> adding, false -> removing, undefined -> not changed or field value has no length (is radio, checkbox etc...)
+    //self.fieldValue = undefined; The value of the field
+    //self.adding = undefined; On each field value update, check if user is adding or removing text from field (last value length is greater or smaller than new value length?) - true -> adding, false -> removing, undefined -> not changed or field value has no length (is radio, checkbox etc...)
 
     //MESSAGES
     self.errorMsgs = makeSettings($.fn[pluginName].defaultErrorMsgs, self.userSettings.errorMsgs); //computed error messages settings for this field;
-    self.successMsg = self.userSettings.successMsg ? self.userSettings.successMsg : $.fn[pluginName].defaultSuccessMsg; //Success message for this field
+    self.successMsg = self.userSettings.successMsg
+      ? self.userSettings.successMsg
+      : $.fn[pluginName].defaultSuccessMsg; //Success message for this field
 
     //REGISTERED EVENTS
     //keep track of event listeners added to field
     self.eventListeners = [];
 
-    //-----------------------------------
+    // -----------------------------------
     //Initialise field
     self.selectElements(); //get all the needed elements to interact with from dom
     self.initMarkup(); //add needed attributes and check markup
@@ -272,12 +276,11 @@ SOFTWARE.
     self.updateFieldValue(); // get the current field value
   };
 
-
   // Avoid Plugin.prototype conflicts
   $.extend(AriaValidate.prototype, {
-    //-------------------------------------------------------------
+    // -------------------------------------------------------------
     //Initialise field
-    //-------------------------------------------------------------
+    // -------------------------------------------------------------
     selectElements: function () {
       var self = this,
         classes = self.classes,
@@ -295,9 +298,15 @@ SOFTWARE.
 
       self.field = element.find('.' + classes.fieldClass); //length could be > 1 in case of radio
       self.label = element.find('.' + classes.labelClass); //length could be > 1 in case of radio
-      self.alertbox = element.find('.' + classes.alertboxClass).length === 1 ? element.find('.' + classes.alertboxClass) : false;
-      self.successbox = element.find('.' + classes.successboxClass).length === 1 ? element.find('.' + classes.successboxClass) : false;
-      self.fakeField = classes.fieldClassElement !== false ? element.find(classes.fieldClassElement) : false;
+      self.alertbox = element.find('.' + classes.alertboxClass).length === 1
+        ? element.find('.' + classes.alertboxClass)
+        : false;
+      self.successbox = element.find('.' + classes.successboxClass).length === 1
+        ? element.find('.' + classes.successboxClass)
+        : false;
+      self.fakeField = classes.fieldClassElement !== false
+        ? element.find(classes.fieldClassElement)
+        : false;
 
       /*
        * If only one field is present inside of the field group,
@@ -305,7 +314,9 @@ SOFTWARE.
        */
       if (self.field.length === 1) {
         self.fieldTag = self.field.prop('tagName');
-        self.fieldType = self.fieldTag === 'INPUT' ? self.field.attr('type') : false;
+        self.fieldType = self.fieldTag === 'INPUT'
+          ? self.field.attr('type')
+          : false;
         self.fieldName = self.userSettings.fieldName || self.field.attr('name');
       } else if (self.field.length > 1 && self.field.first().attr('type') === 'radio') {
         //Set values for radio button
@@ -329,9 +340,12 @@ SOFTWARE.
       var self = this,
         elementId = setId(self.element, self.classes.controlIdPrefix, count),
         fieldId = '',
-        alertboxId = self.alertbox !== false ? setId(self.alertbox, elementId + '__alertbox') : false,
-        successboxId = self.successbox !== false ? setId(self.successbox, elementId + '__successbox') : false;
-
+        alertboxId = self.alertbox !== false
+          ? setId(self.alertbox, elementId + '__alertbox')
+          : false,
+        successboxId = self.successbox !== false
+          ? setId(self.successbox, elementId + '__successbox')
+          : false;
 
       if (self.fieldType !== 'radio') {
         //Not radio
@@ -357,29 +371,18 @@ SOFTWARE.
         });
       }
 
-
-
       //add accessibility attributes to fieldbox, if the element exists
       if (self.alertbox) {
         self.field.attr(a.aErM, alertboxId);
 
-        self.alertbox
-          .attr(a.r, 'alert')
-          .attr(a.aLi, 'assertive')
-          .attr(a.aRe, 'additions text')
-          .attr(a.aAt, a.t)
-          .attr(a.aHi, a.t);
+        self.alertbox.attr(a.r, 'alert').attr(a.aLi, 'assertive').attr(a.aRe, 'additions text').attr(a.aAt, a.t).attr(a.aHi, a.t);
       }
 
       //add accessibility attributes to successbox, if the element exists
       if (self.successbox) {
         self.field.attr(a.aOw, successboxId);
 
-        self.successbox
-          .attr(a.aLi, 'polite')
-          .attr(a.aRe, 'additions text')
-          .attr(a.aAt, a.t)
-          .attr(a.aHi, a.t);
+        self.successbox.attr(a.aLi, 'polite').attr(a.aRe, 'additions text').attr(a.aAt, a.t).attr(a.aHi, a.t);
       }
 
       //trigger custom event on window for user to listen for
@@ -464,10 +467,14 @@ SOFTWARE.
         self.fieldValue = self.field.prop('checked');
       } else if (self.fieldType === 'radio') {
         //radio
-        self.fieldValue = self.field.filter(':checked').length === 1 ? self.field.filter(':checked').val() : false;
+        self.fieldValue = self.field.filter(':checked').length === 1
+          ? self.field.filter(':checked').val()
+          : false;
       } else {
 
-        var oldLength = self.fieldValue !== undefined ? self.fieldLength : undefined; // current length of field value
+        var oldLength = self.fieldValue !== undefined
+          ? self.fieldLength
+          : undefined; // current length of field value
 
         self.fieldValue = self.field.val() || ''; //new value
         self.fieldLength = self.fieldValue.length; //value length
@@ -496,7 +503,6 @@ SOFTWARE.
 
       //retrive current field value and update self.fieldValue
       self.updateFieldValue();
-
 
       /*
        * Check value of dirty
@@ -542,41 +548,27 @@ SOFTWARE.
         classes = self.classes;
 
       //add error classes to field group and remove valid classes
-      self.element
-        .removeClass(classes.controlValidClass)
-        .addClass(classes.controlErrorClass);
+      self.element.removeClass(classes.controlValidClass).addClass(classes.controlErrorClass);
 
       //add error classes to field and remove valid classes
-      self.field
-        .attr(a.aInv, a.t)
-        .removeClass(classes.fieldValidClass)
-        .addClass(classes.fieldErrorClass);
+      self.field.attr(a.aInv, a.t).removeClass(classes.fieldValidClass).addClass(classes.fieldErrorClass);
 
       //fake field
       if (self.fakeField) {
-        self.fakeField
-          .removeClass(classes.fieldValidClass)
-          .addClass(classes.fieldErrorClass);
+        self.fakeField.removeClass(classes.fieldValidClass).addClass(classes.fieldErrorClass);
       }
 
       //add error classes to label and remove valid classes
-      self.label
-        .removeClass(classes.labelValidClass)
-        .addClass(classes.labelErrorClass);
+      self.label.removeClass(classes.labelValidClass).addClass(classes.labelErrorClass);
 
       //hide successbox and remove the success message
       if (self.successbox) {
-        self.successbox
-          .attr(a.aHi, a.t)
-          .removeClass(classes.successboxVisibleClass);
+        self.successbox.attr(a.aHi, a.t).removeClass(classes.successboxVisibleClass);
       }
 
       //append error message to alertbox and show alert
       if (self.alertbox && self.fieldStatus !== true) {
-        self.alertbox
-          .html(self.errorMsgs[self.fieldStatus])
-          .attr(a.aHi, a.f)
-          .addClass(classes.alertboxVisibleClass);
+        self.alertbox.html(self.errorMsgs[self.fieldStatus]).attr(a.aHi, a.f).addClass(classes.alertboxVisibleClass);
       }
 
       //trigger custom event on window for user to listen for
@@ -587,41 +579,27 @@ SOFTWARE.
         classes = self.classes;
 
       //remove error classes and add valid classes to field group
-      self.element
-        .removeClass(classes.controlErrorClass)
-        .addClass(classes.controlValidClass);
+      self.element.removeClass(classes.controlErrorClass).addClass(classes.controlValidClass);
 
       //remove error classes and add valid classes to field
-      self.field
-        .attr(a.aInv, a.f)
-        .removeClass(classes.fieldErrorClass)
-        .addClass(classes.fieldValidClass);
+      self.field.attr(a.aInv, a.f).removeClass(classes.fieldErrorClass).addClass(classes.fieldValidClass);
 
       //fake field
       if (self.fakeField) {
-        self.fakeField
-          .removeClass(classes.fieldErrorClass)
-          .addClass(classes.fieldValidClass);
+        self.fakeField.removeClass(classes.fieldErrorClass).addClass(classes.fieldValidClass);
       }
 
       //remove error classes and add valid classes to label
-      self.label
-        .removeClass(classes.labelErrorClass)
-        .addClass(classes.labelValidClass);
+      self.label.removeClass(classes.labelErrorClass).addClass(classes.labelValidClass);
 
       //remove error message from alertbox and hide alertbox
       if (self.alertbox) {
-        self.alertbox
-          .attr(a.aHi, a.t)
-          .removeClass(classes.alertboxVisibleClass);
+        self.alertbox.attr(a.aHi, a.t).removeClass(classes.alertboxVisibleClass);
       }
 
       //Append success message to succesbox and show message
       if (self.successbox && self.successMsg !== false) {
-        self.successbox
-          .html(self.successMsg)
-          .attr(a.aHi, a.f)
-          .addClass(classes.successboxVisibleClass);
+        self.successbox.html(self.successMsg).attr(a.aHi, a.f).addClass(classes.successboxVisibleClass);
       }
 
       //trigger custom event on window for user to listen for
@@ -632,40 +610,27 @@ SOFTWARE.
         classes = self.classes;
 
       //remove error and valid classes from element
-      self.element
-        .removeClass(classes.controlErrorClass)
-        .removeClass(classes.controlValidClass);
+      self.element.removeClass(classes.controlErrorClass).removeClass(classes.controlValidClass);
 
       //remove error and valid classes from field
-      self.field
-        .removeAttr(a.aInv)
-        .removeClass(classes.fieldErrorClass)
-        .removeClass(classes.fieldValidClass);
+      self.field.removeAttr(a.aInv).removeClass(classes.fieldErrorClass).removeClass(classes.fieldValidClass);
 
       //fake field
       if (self.fakeField) {
-        self.fakeField
-          .removeClass(classes.fieldErrorClass)
-          .removeClass(classes.fieldValidClass);
+        self.fakeField.removeClass(classes.fieldErrorClass).removeClass(classes.fieldValidClass);
       }
 
       //remove error and valid classes from label
-      self.label
-        .removeClass(classes.labelErrorClass)
-        .removeClass(classes.labelValidClass);
+      self.label.removeClass(classes.labelErrorClass).removeClass(classes.labelValidClass);
 
       //remove error message from alertbox and hide alertbox
       if (self.alertbox) {
-        self.alertbox
-          .attr(a.aHi, a.t)
-          .removeClass(classes.alertboxVisibleClass);
+        self.alertbox.attr(a.aHi, a.t).removeClass(classes.alertboxVisibleClass);
       }
 
       //remove success message from alertbox and hide alertbox
       if (self.successbox && self.successMsg !== false) {
-        self.successbox
-          .attr(a.aHi, a.t)
-          .removeClass(classes.successboxVisibleClass);
+        self.successbox.attr(a.aHi, a.t).removeClass(classes.successboxVisibleClass);
       }
 
       //trigger custom event on window for user to listen for
@@ -681,61 +646,48 @@ SOFTWARE.
       self.resetControl();
 
       //remove attributes
-      self.field
-        .removeAttr(a.aErM)
-        .removeAttr(a.aOw)
-        .removeAttr(a.dV);
+      self.field.removeAttr(a.aErM).removeAttr(a.aOw).removeAttr(a.dV);
 
-      self.alertbox
-        .removeAttr(a.r)
-        .removeAttr(a.aLi)
-        .removeAttr(a.aRe)
-        .removeAttr(a.aAt)
-        .removeAttr(a.aHi);
+      self.alertbox.removeAttr(a.r).removeAttr(a.aLi).removeAttr(a.aRe).removeAttr(a.aAt).removeAttr(a.aHi);
 
       if (self.successbox) {
-        self.successbox
-          .removeAttr(a.aLi)
-          .removeAttr(a.aRe)
-          .removeAttr(a.aAt)
-          .removeAttr(a.aHi);
+        self.successbox.removeAttr(a.aLi).removeAttr(a.aRe).removeAttr(a.aAt).removeAttr(a.aHi);
       }
 
       //Remove jQuery.data
       self.element.removeData('plugin_' + pluginName);
     },
-    //-------------------------------------------------------------
+    // -------------------------------------------------------------
     //Method caller
-    //-------------------------------------------------------------
+    // -------------------------------------------------------------
     methodCaller: function (methodName, methodArg) {
       var self = this;
-
+      //@TODO: test
       switch (methodName) {
-      case 'updateFieldValue':
-        self.updateFieldValue();
-        break;
-      case 'unbindEventListeners':
-        self.unbindEventListeners(methodArg);
-        break;
-      case 'setDirty':
-        self.isDirty = true;
-        break;
-      case 'destroy':
-        self.destroy();
-        break;
-      case 'invalidateControl':
-        self.invalidateControl();
-        break;
-      case 'validateControl':
-        self.validateControl();
-        break;
-      case 'resetControl':
-        self.resetControl();
-        break;
+        case 'updateFieldValue':
+          self.updateFieldValue();
+          break;
+        case 'unbindEventListeners':
+          self.unbindEventListeners(methodArg);
+          break;
+        case 'setDirty':
+          self.isDirty = true;
+          break;
+        case 'destroy':
+          self.destroy();
+          break;
+        case 'invalidateControl':
+          self.invalidateControl();
+          break;
+        case 'validateControl':
+          self.validateControl();
+          break;
+        case 'resetControl':
+          self.resetControl();
+          break;
       }
     }
   });
-
 
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
@@ -769,7 +721,7 @@ SOFTWARE.
     alertboxClass: 'control__feedback_error',
     successboxClass: 'control__feedback_valid',
     alertboxVisibleClass: 'control__feedback_visible',
-    successboxVisibleClass: 'control__feedback_visible',
+    successboxVisibleClass: 'control__feedback_visible'
   };
 
   $.fn[pluginName].defaultRegionSettings = {
@@ -777,8 +729,8 @@ SOFTWARE.
     dateSeparator: '/', // / or - or .
     timeFormat: '24', //'24' or '12'
     timeSeparator: ':',
-    decimalSeparator: ',' // , or .
-  };
+    decimalSeparator: ','
+  }; // , or .
 
   $.fn[pluginName].defaultErrorMsgs = {
     letters: 'Digits are not allowed in this field',
@@ -808,7 +760,7 @@ SOFTWARE.
 
   $.fn[pluginName].defaultSuccessMsg = 'Perfect! You told us exactly what we wanted to know!';
 
-  //------------------------------------------------------
+  // ------------------------------------------------------
   //VALIDATION
   $.fn[pluginName].validateFunctions = {
     /*
@@ -825,19 +777,27 @@ SOFTWARE.
 
     letters: function (fieldValue) {
       //Check if value does not contain any digit (0-9)
-      return /^[\D]*$/.test(fieldValue) ? true : 'letters'; //@TODO test regex
+      return /^[\D]*$/.test(fieldValue)
+        ? true
+        : 'letters'; //@TODO test regex
     },
     onlyLetters: function (fieldValue) {
       //Check if value contains only letters (a-z, A-Z)
-      return /^[a-zA-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏàáâãäåæçèéêëìíîïÐÑÒÓÔÕÖØÙÚÛÜÝÞßðñòóôõöøùúûüýþÿ]*$/.test(fieldValue) ? true : 'onlyLetters'; /*@TODO: test regex*/
+      return /^[a-zA-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏàáâãäåæçèéêëìíîïÐÑÒÓÔÕÖØÙÚÛÜÝÞßðñòóôõöøùúûüýþÿ]*$/.test(fieldValue)
+        ? true
+        : 'onlyLetters';/* @TODO: test regex */
     },
     digits: function (fieldValue) {
       //Check if value contains any letters (a-z, A-Z)
-      return /^[^a-zA-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏàáâãäåæçèéêëìíîïÐÑÒÓÔÕÖØÙÚÛÜÝÞßðñòóôõöøùúûüýþÿ]*$/.test(fieldValue) ? true : 'digits';
+      return /^[^a-zA-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏàáâãäåæçèéêëìíîïÐÑÒÓÔÕÖØÙÚÛÜÝÞßðñòóôõöøùúûüýþÿ]*$/.test(fieldValue)
+        ? true
+        : 'digits';
     },
     onlyDigits: function (fieldValue) {
       //Check if value is digit (0-9)
-      return /^[\d]*$/.test(fieldValue) ? true : 'onlyDigits';
+      return /^[\d]*$/.test(fieldValue)
+        ? true
+        : 'onlyDigits';
     },
     int: function (fieldValue) {
       //check if value is number and int
@@ -847,14 +807,15 @@ SOFTWARE.
 
       fieldValue = parseInt(fieldValue, 10);
 
-      return Number.isInteger(fieldValue) ? true : 'int';
+      return Number.isInteger(fieldValue)
+        ? true
+        : 'int';
     },
     float: function (fieldValue, param, regionSettings) {
 
       if (fieldValue === '') {
         return true;
       }
-
 
       /*
        * Chek format: comma or dot as separator?
@@ -877,11 +838,15 @@ SOFTWARE.
       }
 
       //chech if number is float
-      return !isNaN(fieldValue - parseFloat(fieldValue)) ? true : 'float';
+      return !isNaN(fieldValue - parseFloat(fieldValue))
+        ? true
+        : 'float';
     },
     bool: function (fieldValue) {
       //check if value is true/checked (only for checkbox and radio groups)
-      return fieldValue ? true : 'bool';
+      return fieldValue
+        ? true
+        : 'bool';
     },
     date: function (fieldValue, param, regionSettings) {
       //check if date has ISO date format and is an existing date or 0
@@ -895,7 +860,9 @@ SOFTWARE.
       //if fieldValue is not empty ('') we can proceed and validate it
       if (fieldValue !== '') {
         var value = new Date(fieldValue);
-        return !isNaN(value.getTime()) ? true : 'date';
+        return !isNaN(value.getTime())
+          ? true
+          : 'date';
       }
 
       //if fieldValue is empty return true
@@ -914,7 +881,9 @@ SOFTWARE.
 
       fieldValue = fieldValue.split(':');
 
-      return fieldValue.length === 2 && parseInt(fieldValue[0], 10) < 24 && parseInt(fieldValue[1], 10) < 60 ? true : 'time';
+      return fieldValue.length === 2 && parseInt(fieldValue[0], 10) < 24 && parseInt(fieldValue[1], 10) < 60
+        ? true
+        : 'time';
     },
     minDate: function (fieldValue, param, regionSettings) {
 
@@ -934,11 +903,12 @@ SOFTWARE.
         param = calculateDate(param, regionSettings.dateFormat, regionSettings.dateSeparator);
       }
 
-
       //check if date is after the min date passed (ISO format)
       fieldValue = convertDateToIso(fieldValue, regionSettings.dateFormat, regionSettings.dateSeparator);
 
-      return new Date(fieldValue) >= new Date(param) ? true : 'minDate';
+      return new Date(fieldValue) >= new Date(param)
+        ? true
+        : 'minDate';
     },
     maxDate: function (fieldValue, param, regionSettings) {
       if (fieldValue === '') {
@@ -959,7 +929,9 @@ SOFTWARE.
       //check if date is before the max date passed (ISO format)
       fieldValue = convertDateToIso(fieldValue, regionSettings.dateFormat, regionSettings.dateSeparator);
 
-      return new Date(fieldValue) <= new Date(param) ? true : 'maxDate';
+      return new Date(fieldValue) <= new Date(param)
+        ? true
+        : 'maxDate';
     },
     minTime: function (fieldValue, param, regionSettings) {
       //
@@ -969,11 +941,15 @@ SOFTWARE.
     },
     email: function (fieldValue, param) {
       //chekc if email is valid
-      return /^([\w-\.]+@([\w\-]+\.)+[\w\-]{2,4})?$/.test(fieldValue) ? true : 'email';
+      return /^([\w-\.]+@([\w\-]+\.)+[\w\-]{2,4})?$/.test(fieldValue)
+        ? true
+        : 'email';
     },
     password: function (fieldValue) {
       //check if password is secure
-      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\.\,\;\:\\\-\|\-\/\(\)\{\}\[\]])(?=.{8,100})/.test(fieldValue) ? true : 'password';
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\.\,\;\:\\\-\|\-\/\(\)\{\}\[\]])(?=.{8,100})/.test(fieldValue)
+        ? true
+        : 'password';
     },
     min: function (fieldValue, param) {
       if (fieldValue === '') {
@@ -995,7 +971,11 @@ SOFTWARE.
       }
 
       var value = parseFloat(fieldValue, 10);
-      return value >= param ? true : value === '' ? true : 'min';
+      return value >= param
+        ? true
+        : value === ''
+          ? true
+          : 'min';
     },
     max: function (fieldValue, param) {
       if (fieldValue === '') {
@@ -1016,7 +996,11 @@ SOFTWARE.
       }
 
       var value = parseFloat(fieldValue, 10);
-      return value <= param ? true : value === '' ? true : 'max';
+      return value <= param
+        ? true
+        : value === ''
+          ? true
+          : 'max';
     },
     minLength: function (fieldValue, param) {
       //if param is a function, then retrive minLenght value by calling the function
@@ -1033,7 +1017,11 @@ SOFTWARE.
 
       //match values higher than param or 0
       var valueLength = fieldValue.length;
-      return valueLength >= param ? true : valueLength === 0 ? true : 'minLength';
+      return valueLength >= param
+        ? true
+        : valueLength === 0
+          ? true
+          : 'minLength';
     },
     maxLength: function (fieldValue, param) {
       //if param is a function, then retrive maxLenght value by calling the function
@@ -1050,7 +1038,11 @@ SOFTWARE.
 
       //match values lower than param or 0
       var valueLength = fieldValue.length;
-      return valueLength <= param ? true : valueLength === 0 ? true : 'maxLength';
+      return valueLength <= param
+        ? true
+        : valueLength === 0
+          ? true
+          : 'maxLength';
     },
     required: function (fieldValue, param) {
 
@@ -1062,13 +1054,17 @@ SOFTWARE.
          * true: field is required, false: not required
          */
         if (param()) {
-          return fieldValue.length > 0 ? true : 'required';
+          return fieldValue.length > 0
+            ? true
+            : 'required';
         }
         return true;
 
       }
       //param is not a function (is undefined)
-      return fieldValue.length > 0 ? true : 'required';
+      return fieldValue.length > 0
+        ? true
+        : 'required';
     },
     tokens: function (fieldValue, param) {
 
@@ -1102,7 +1098,9 @@ SOFTWARE.
       }
 
       if (matchValue !== '') {
-        return fieldValue === matchValue ? true : 'match';
+        return fieldValue === matchValue
+          ? true
+          : 'match';
       }
       return true;
     },
@@ -1118,19 +1116,21 @@ SOFTWARE.
         matchValue = param.attr(a.dV) || param.val();
       }
 
-      return fieldValue === matchValue ? true : 'match';
+      return fieldValue === matchValue
+        ? true
+        : 'match';
     },
     customRegex: function (fieldValue, param) {
-      return param.test(fieldValue) ? true : 'customRegex';
+      return param.test(fieldValue)
+        ? true
+        : 'customRegex';
     },
     ajax: function (fieldValue, param) {
-      /*@TODO: test */
-      $.ajax({
-        method: 'POST',
-        url: param,
-        data: fieldValue
-      }).done(function (data) {
-        return data == true ? true : 'ajax';
+      /* @TODO: test */
+      $.ajax({method: 'POST', url: param, data: fieldValue}).done(function (data) {
+        return data == true
+          ? true
+          : 'ajax';
       }).fail(function () {
         //trigger ajaxError on window and pass param (url of the failed request)
         win.trigger(pluginName + '.ajaxError', param);

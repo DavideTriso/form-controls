@@ -137,32 +137,42 @@ select {
   line-height: 1.15;
 }
 
+select::-ms-expand {
+  display: none;
+}
+
 textarea {
   overflow: auto;
 }
 
 .control {
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: stretch;
-      align-items: stretch;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  -ms-flex-pack: start;
-      justify-content: flex-start;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   position: relative;
   width: 100%;
 }
 
 .control__box {
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: stretch;
-      align-items: stretch;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
-  -ms-flex-pack: start;
-      justify-content: flex-start;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   width: 100%;
   position: relative;
 }
@@ -173,9 +183,11 @@ textarea {
   border-radius: 0.2rem;
   border-style: solid;
   border-width: 0.05rem;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
-  -ms-flex: 0 1 100%;
-      flex: 0 1 100%;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 100%;
+          flex: 0 1 100%;
   font-size: 1rem;
   max-width: 100%;
   min-width: auto;
@@ -197,7 +209,8 @@ textarea {
 }
 .control__field:read-only {
   border-width: 0;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .control__textarea {
@@ -206,9 +219,11 @@ textarea {
   border-radius: 0.2rem;
   border-style: solid;
   border-width: 0.05rem;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
-  -ms-flex: 0 1 100%;
-      flex: 0 1 100%;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 100%;
+          flex: 0 1 100%;
   font-size: 1rem;
   max-width: 100%;
   min-width: auto;
@@ -230,7 +245,8 @@ textarea {
 }
 .control__textarea:read-only {
   border-width: 0;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .control__select {
@@ -251,8 +267,9 @@ textarea {
   right: 0;
   top: 0;
   pointer-events: none;
-  -ms-transform: translate(-0.8rem, 60%) rotate(45deg);
-      transform: translate(-0.8rem, 60%) rotate(45deg);
+  -webkit-transform: translate(-0.8rem, 60%) rotate(45deg);
+      -ms-transform: translate(-0.8rem, 60%) rotate(45deg);
+          transform: translate(-0.8rem, 60%) rotate(45deg);
 }
 .control__select > select {
   background-color: #fff;
@@ -260,9 +277,11 @@ textarea {
   border-radius: 0.2rem;
   border-style: solid;
   border-width: 0.05rem;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
-  -ms-flex: 0 1 100%;
-      flex: 0 1 100%;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 100%;
+          flex: 0 1 100%;
   font-size: 1rem;
   max-width: 100%;
   min-width: auto;
@@ -286,10 +305,13 @@ textarea {
   border-style: solid;
   border-width: 0.05rem;
   background-color: transparent;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
-  -ms-flex: 0 0 auto;
-      flex: 0 0 auto;
-  box-sizing: border-box;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   margin-right: 0.3rem;
   margin-top: -0.1rem;
   height: 1rem;
@@ -298,7 +320,8 @@ textarea {
 }
 .control__field_sronly[type="checkbox"]:checked + .control__checkbox {
   background-color: #4b4b4b;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .control__field_sronly[type="checkbox"]:checked + .control__checkbox:after {
   content: "";
@@ -309,21 +332,25 @@ textarea {
   border-width: 0 0.15rem 0.15rem 0;
   height: 0.55rem;
   width: 0.2rem;
-  -ms-transform: translate(0.25rem, 0.05rem) rotate(42deg);
-      transform: translate(0.25rem, 0.05rem) rotate(42deg);
+  -webkit-transform: translate(0.25rem, 0.05rem) rotate(42deg);
+      -ms-transform: translate(0.25rem, 0.05rem) rotate(42deg);
+          transform: translate(0.25rem, 0.05rem) rotate(42deg);
 }
 .control__checkbox:hover, .control__field_sronly[type="checkbox"]:focus + .control__checkbox {
   background-color: #f0f0f0;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
 }
 .control__field_sronly[type="checkbox"]:checked:focus + .control__checkbox, .control__field_sronly[type="checkbox"]:checked + .control__checkbox:hover {
   background-color: #494949;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .control__field_sronly[type="checkbox"]:disabled + .control__checkbox {
   border-color: #a8a8a8;
   background-color: #ededed;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .control__radio {
@@ -333,10 +360,13 @@ textarea {
   border-style: solid;
   border-width: 0.05rem;
   background-color: transparent;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
-  -ms-flex: 0 0 auto;
-      flex: 0 0 auto;
-  box-sizing: border-box;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   margin-right: 0.3rem;
   margin-top: -0.1rem;
   height: 1rem;
@@ -345,7 +375,8 @@ textarea {
 }
 .control__field_sronly[type="radio"]:checked + .control__radio {
   background-color: #4b4b4b;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .control__field_sronly[type="radio"]:checked + .control__radio:after {
   content: "";
@@ -355,21 +386,25 @@ textarea {
   background-color: #fff;
   height: 0.4rem;
   width: 0.4rem;
-  -ms-transform: translate(0.25rem, 0.25rem);
-      transform: translate(0.25rem, 0.25rem);
+  -webkit-transform: translate(0.25rem, 0.25rem);
+      -ms-transform: translate(0.25rem, 0.25rem);
+          transform: translate(0.25rem, 0.25rem);
 }
 .control__radio:hover, .control__field_sronly[type="radio"]:focus + .control__radio {
   background-color: #f0f0f0;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
 }
 .control__field_sronly[type="radio"]:checked:focus + .control__radio, .control__field_sronly[type="radio"]:checked + .control__radio:hover {
   background-color: #494949;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .control__field_sronly[type="radio"]:disabled + .control__radio {
   border-color: #a8a8a8;
   background-color: #ededed;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .control__choice {
@@ -377,23 +412,30 @@ textarea {
   border-radius: 0.2rem;
   border-style: solid;
   border-width: 0.05rem;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
   background-color: #fff;
   font-size: 0.8rem;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex: 0 1 100%;
-      flex: 0 1 100%;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 100%;
+          flex: 0 1 100%;
   padding: 0.75rem 0.5rem;
   color: gray;
+  -webkit-transition: 0.05s all ease-in;
+  -o-transition: 0.05s all ease-in;
   transition: 0.05s all ease-in;
 }
 .control__field_sronly[type="radio"]:focus + .control__choice, .control__field_sronly[type="checkbox"]:focus + .control__choice, .control__choice:hover {
   border-color: #999999;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2) inset;
   color: #000;
-  -ms-transform: scale(1.02, 1.02);
-      transform: scale(1.02, 1.02);
+  -webkit-transform: scale(1.02, 1.02);
+      -ms-transform: scale(1.02, 1.02);
+          transform: scale(1.02, 1.02);
 }
 .control__field_sronly[type="radio"]:focus + .control__choice, .control__field_sronly[type="checkbox"]:focus + .control__choice {
   outline: Highlight solid 0.15rem;
@@ -402,24 +444,29 @@ textarea {
 .control__field_sronly[type="radio"]:checked + .control__choice, .control__field_sronly[type="checkbox"]:checked + .control__choice {
   border-color: #6aa6f1;
   border-width: 0.15rem;
-  box-shadow: 0 0 0.2rem rgba(106, 166, 241, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.2rem rgba(106, 166, 241, 0.5) inset;
+          box-shadow: 0 0 0.2rem rgba(106, 166, 241, 0.5) inset;
   color: #000;
   padding: 0.65rem 0.45rem;
-  -ms-transform: scale(1.02, 1.02);
-      transform: scale(1.02, 1.02);
+  -webkit-transform: scale(1.02, 1.02);
+      -ms-transform: scale(1.02, 1.02);
+          transform: scale(1.02, 1.02);
 }
 .control__field_sronly[type="radio"]:disabled + .control__choice, .control__field_sronly[type="checkbox"]:disabled + .control__choice, .control__field_sronly[type="radio"]:disabled + .control__choice:hover, .control__field_sronly[type="checkbox"]:disabled + .control__choice:hover {
   border-color: #a8a8a8;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   background-color: #ededed;
   color: #868686;
-  -ms-transform: none;
-      transform: none;
+  -webkit-transform: none;
+      -ms-transform: none;
+          transform: none;
 }
 
 .control__label {
-  -ms-flex: 1 1 100%;
-      flex: 1 1 100%;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
   font-family: inherit;
   font-size: 0.8rem;
   color: #000;
@@ -444,8 +491,9 @@ textarea {
 }
 
 .control__addon {
-  -ms-flex: 0 0 auto;
-      flex: 0 0 auto;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
 }
 
 .control__feedbackwrapper {
@@ -461,15 +509,19 @@ textarea {
   border-radius: 0.2rem;
   border-style: solid;
   border-width: 0.05rem;
-  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2);
   font-size: 0.8rem;
   display: block;
   position: absolute;
   opacity: 0;
   top: 0;
   left: 50%;
-  -ms-transform: translate(-50%, -110%);
-      transform: translate(-50%, -110%);
+  -webkit-transform: translate(-50%, -110%);
+      -ms-transform: translate(-50%, -110%);
+          transform: translate(-50%, -110%);
+  -webkit-transition: 0.2s visibility ease-in, 0.2s opacity ease-in;
+  -o-transition: 0.2s visibility ease-in, 0.2s opacity ease-in;
   transition: 0.2s visibility ease-in, 0.2s opacity ease-in;
   margin: 0;
   padding: 0.2rem 0.6rem;
@@ -488,8 +540,9 @@ textarea {
   position: absolute;
   height: 0.6rem;
   width: 0.6rem;
-  -ms-transform: translate(-50%, 55%) rotate(-45deg);
-      transform: translate(-50%, 55%) rotate(-45deg);
+  -webkit-transform: translate(-50%, 55%) rotate(-45deg);
+      -ms-transform: translate(-50%, 55%) rotate(-45deg);
+          transform: translate(-50%, 55%) rotate(-45deg);
   background-color: #6aa6f1;
   border-color: #5c9ef0;
   border-radius: 0;
@@ -512,7 +565,8 @@ textarea {
 
 .control__field_valid {
   border-color: #0ee450;
-  box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
 }
 .control__field_valid:active, .control__field_valid:focus {
   border-color: #0bb43f;
@@ -520,7 +574,8 @@ textarea {
 
 .control__field_error {
   border-color: #e74444;
-  box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
 }
 .control__field_error:active, .control__field_error:focus {
   border-color: #dc1c1c;
@@ -528,7 +583,8 @@ textarea {
 
 .control__field_warning {
   border-color: #f18220;
-  box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
 }
 .control__field_warning:active, .control__field_warning:focus {
   border-color: #d1690d;
@@ -542,7 +598,8 @@ textarea {
 
 .control__textarea_error {
   border-color: #e74444;
-  box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
 }
 .control__textarea_error:active, .control__textarea_error:focus {
   border-color: #dc1c1c;
@@ -550,7 +607,8 @@ textarea {
 
 .control__textarea_valid {
   border-color: #0ee450;
-  box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
 }
 .control__textarea_valid:active, .control__textarea_valid:focus {
   border-color: #0bb43f;
@@ -558,7 +616,8 @@ textarea {
 
 .control__textarea_warning {
   border-color: #f18220;
-  box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
 }
 .control__textarea_warning:active, .control__textarea_warning:focus {
   border-color: #d1690d;
@@ -566,7 +625,8 @@ textarea {
 
 .control__select_error > select {
   border-color: #e74444;
-  box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.5) inset;
 }
 .control__select_error > select:active, .control__select_error > select:focus {
   border-color: #dc1c1c;
@@ -574,7 +634,8 @@ textarea {
 
 .control__select_valid > select {
   border-color: #0ee450;
-  box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.5) inset;
 }
 .control__select_valid > select:active, .control__select_valid > select:focus {
   border-color: #0bb43f;
@@ -582,7 +643,8 @@ textarea {
 
 .control__select_warning > select {
   border-color: #f18220;
-  box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
+  -webkit-box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
+          box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.5) inset;
 }
 .control__select_warning > select:active, .control__select_warning > select:focus {
   border-color: #d1690d;
@@ -595,7 +657,8 @@ textarea {
 
 .control__feedback_valid {
   background-color: #33f26e;
-  box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.2);
+  -webkit-box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.2);
+          box-shadow: 0 0 0.1rem rgba(51, 242, 110, 0.2);
   border-color: #25f164;
   color: #05541e;
 }
@@ -610,7 +673,8 @@ textarea {
 
 .control__feedback_error {
   background-color: #ed7171;
-  box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.2);
+  -webkit-box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.2);
+          box-shadow: 0 0 0.1rem rgba(237, 113, 113, 0.2);
   border-color: #eb6363;
   color: #821010;
 }
@@ -625,7 +689,8 @@ textarea {
 
 .control__feedback_warning {
   background-color: #f49d50;
-  box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.2);
+  -webkit-box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.2);
+          box-shadow: 0 0 0.1rem rgba(244, 157, 80, 0.2);
   border-color: #f39542;
   color: #713907;
 }
@@ -639,19 +704,22 @@ textarea {
 }
 
 .control__feedback_bottom {
-  -ms-transform: translate(-50%, 10%);
-      transform: translate(-50%, 10%);
+  -webkit-transform: translate(-50%, 10%);
+      -ms-transform: translate(-50%, 10%);
+          transform: translate(-50%, 10%);
 }
 .control__feedback_bottom:after {
   top: 0;
-  -ms-transform: translate(-50%, -55%) rotate(135deg);
-      transform: translate(-50%, -55%) rotate(135deg);
+  -webkit-transform: translate(-50%, -55%) rotate(135deg);
+      -ms-transform: translate(-50%, -55%) rotate(135deg);
+          transform: translate(-50%, -55%) rotate(135deg);
 }
 
 .control__feedback_start {
   left: 0;
-  -ms-transform: translate(0, -110%);
-      transform: translate(0, -110%);
+  -webkit-transform: translate(0, -110%);
+      -ms-transform: translate(0, -110%);
+          transform: translate(0, -110%);
 }
 .control__feedback_start:after {
   left: 10%;
@@ -659,21 +727,24 @@ textarea {
 
 .control__feedback_startbottom {
   left: 0;
-  -ms-transform: translate(0, 10%);
-      transform: translate(0, 10%);
+  -webkit-transform: translate(0, 10%);
+      -ms-transform: translate(0, 10%);
+          transform: translate(0, 10%);
 }
 .control__feedback_startbottom:after {
   left: 10%;
   top: 0;
-  -ms-transform: translate(-50%, -55%) rotate(135deg);
-      transform: translate(-50%, -55%) rotate(135deg);
+  -webkit-transform: translate(-50%, -55%) rotate(135deg);
+      -ms-transform: translate(-50%, -55%) rotate(135deg);
+          transform: translate(-50%, -55%) rotate(135deg);
 }
 
 .control__feedback_end {
   left: auto;
   right: 0;
-  -ms-transform: translate(0, -110%);
-      transform: translate(0, -110%);
+  -webkit-transform: translate(0, -110%);
+      -ms-transform: translate(0, -110%);
+          transform: translate(0, -110%);
 }
 .control__feedback_end:after {
   left: auto;
@@ -683,15 +754,17 @@ textarea {
 .control__feedback_endbottom {
   left: auto;
   right: 0;
-  -ms-transform: translate(0, 10%);
-      transform: translate(0, 10%);
+  -webkit-transform: translate(0, 10%);
+      -ms-transform: translate(0, 10%);
+          transform: translate(0, 10%);
 }
 .control__feedback_endbottom:after {
   left: auto;
   right: 10%;
   top: 0;
-  -ms-transform: translate(-50%, -55%) rotate(135deg);
-      transform: translate(-50%, -55%) rotate(135deg);
+  -webkit-transform: translate(-50%, -55%) rotate(135deg);
+      -ms-transform: translate(-50%, -55%) rotate(135deg);
+          transform: translate(-50%, -55%) rotate(135deg);
 }
 
 .control__label_inline {
@@ -699,6 +772,7 @@ textarea {
 }
 
 .control__box_inline {
+  display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
   min-width: 0;
