@@ -418,8 +418,8 @@ textarea {
 }
 
 .control__label {
-  -ms-flex: 0 1 100%;
-      flex: 0 1 100%;
+  -ms-flex: 1 1 100%;
+      flex: 1 1 100%;
   font-family: inherit;
   font-size: 0.8rem;
   color: #000;

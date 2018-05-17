@@ -13,7 +13,7 @@
 }
 
 // FEILD
-//---------------------- 
+//----------------------
 .control__field {
   @include background($control__field--background);
   @include border($control__field--border);
@@ -279,7 +279,7 @@
 // LABEL
 //----------------------
 .control__label {
-  flex: 0 1 100%;
+  flex: 1 1 100%;
   @include font($control__label--font);
   @include text($control__label--text);
   @include padding($control__label--padding);
