@@ -26,3 +26,10 @@ The plugin is also available on **npm**:
 ```
 npm install t-form-controls
 ```
+
+
+## LICENSE
+
+**Aria accordion** is licensed under the terms of the **MIT license**.
+
+See [LICENSE.md](LICENSE.md) for detailed informations.

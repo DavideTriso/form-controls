@@ -779,13 +779,13 @@ SOFTWARE. */
       //Check if value does not contain any digit (0-9)
       return /^[\D]*$/.test(fieldValue)
         ? true
-        : 'letters'; //@TODO test regex
+        : 'letters';
     },
     onlyLetters: function (fieldValue) {
       //Check if value contains only letters (a-z, A-Z)
       return /^[a-zA-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏàáâãäåæçèéêëìíîïÐÑÒÓÔÕÖØÙÚÛÜÝÞßðñòóôõöøùúûüýþÿ]*$/.test(fieldValue)
         ? true
-        : 'onlyLetters';/* @TODO: test regex */
+        : 'onlyLetters';
     },
     digits: function (fieldValue) {
       //Check if value contains any letters (a-z, A-Z)
@@ -1127,8 +1127,12 @@ SOFTWARE. */
     },
     ajax: function (fieldValue, param) {
       /* @TODO: test */
-      $.ajax({method: 'POST', url: param, data: fieldValue}).done(function (data) {
-        return data == true
+      $.ajax({
+        method: 'POST',
+        url: param,
+        data: fieldValue
+      }).done(function (data) {
+        return data === true
           ? true
           : 'ajax';
       }).fail(function () {

@@ -31,7 +31,7 @@ controlErrorClass | control_error | string | The class added by the plugin to a 
 fieldClass | control__field | string | The class used by the plugin to retrieve the control element (input field, select, textarea ...).
 fieldErrorClass | control__field_error | string | The class added by the plugin to a control element when user input is invalid.
 fieldValidClass | control__field_valid | string | The class added by the plugin to a control element when user input is valid.
-fieldClassElement | false | false or string | Selector used to get a specific child element of a control. The field modifier classes will be added also to the selected element.
+fieldClassElement | false | false or string | Selector used to get a specific child element of a control. The field's modifier classes will be added also to the selected element.
 labelClass | control__label | string | The class used by the plugin to retrieve the label
 labelErrorClass | control__label_error | string | The class added by the plugin to a label when user input is invalid.
 labelValidClass | control__label_valid | string | The class added by the plugin to a label  when user input is valid.
@@ -64,7 +64,7 @@ dateFormat | dmy | string | Set the date format to validate dates against. Suppo
 dateSeparator |  '/' | string | Set the character used to separate day, month and year in a date
 decimalSeparator | ',' | string | Set the character used to separate the integer part from the fractional part of a number (float). Commonly `.` or `,`.
 timeFormat | '24' | tokens (`'12'` or `'24'`) | Set the time format; 12-hours clock with am/pm period, or 24-hour clock.
-timeSeparator | ':'  | string | Set the character used to separation hours from minutes in time.
+timeSeparator | ':'  | string | Set the character used to separate hours from minutes in time.
 
 The default region settings can be overridden in the init statement of a control block:
 
@@ -162,9 +162,23 @@ $.fn.ariaValidate.defaultErrorMsgs = {
 $.fn.ariaValidate.defaultSuccessMsg = 'Correct answer!';
 ```
 
-## Validation functions
+## HTML
+
+Examples of the markup necessary to implement a control field are in the file `docs/control-type.html`.
+
+## Validation
+
+The plugin offers a wide range of validation methods. The validation rules for a control are defined in the `behaviour` array.
+It is possbile to bind multiple behaviours on one control. This can be useful in order to fine-tune the user experience and perform differnet types of validation in different moments: for example, it is possible to check if the user is inputting letters in a phone number field while the user is typing, and check for emptiness when the field looses focus.
+
+The **dirty** option can also be user to fine-tune the validation behaviour of a field: if dirty is set to true for a behaviour, the plugin will skip the validation rules defined in the behaviour until the filed is marked as 'dirty'. A control becomes 'dirty' after the user interacts with it for the first time. More specifically, a control is marked as dirty as soon as the first `blur` event occurs on it, except for the following three control types: `<select>`, `<input type="color">`, `<input type="range">` which are marked as 'dirty' after the first `change` event occurs.
+
+## Validation methods:
 
 ### ajax (not tested)
+
+//@TODO
+Not production-ready
 
 ### bool (only for checkbox and radio buttons)
 
@@ -686,3 +700,21 @@ $('#my-control').ariaValidate({
   }],
 });
 ```
+
+
+## Methods
+
+//@TODO
+### updateFieldValue
+
+### unbindEventListeners
+
+### setDirty
+
+### destroy
+
+### invalidateControl
+
+### validateControl
+
+### resetControl
