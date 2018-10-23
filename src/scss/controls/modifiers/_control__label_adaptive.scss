@@ -1,0 +1,12 @@
+.control__label_adaptive {
+    position: absolute;
+    z-index: zIndex(level1);
+    pointer-events: none;
+    padding: 0 $control__label_adaptive--paddingLeftRight;
+    top: 50%;
+    left: 0.1rem;
+    transform: translateY(-50%);
+    @include font($control__label_adaptive--font);
+    @include text($control__label_adaptive--text);
+    transition: $control__label_adaptive--transition;
+}

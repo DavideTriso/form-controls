@@ -10,11 +10,12 @@ HTML, CSS and JS UI-components for **user-friendly** and **accessible** form con
 
 * [Control types (HTML/CSS)](https://davidetriso.github.io/form-controls/control-types.html)
 * [Validation (JS)](https://davidetriso.github.io/form-controls/validation.html)
+* [Adaptive placeholder (scroll to bottom of page)](https://davidetriso.github.io/form-controls/control-types.html)
 
 
 ## Documentation
 * [Validation (JS)](https://github.com/DavideTriso/form-controls/blob/master/documentation/ARIA-VALIDATE.md)
-
+* [Adaptive placeholder (JS)](https://github.com/DavideTriso/form-controls/blob/master/documentation/ADAPTIVE-PLACEHOLDER.md)
 
 
 ## Installation

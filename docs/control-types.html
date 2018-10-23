@@ -1,13 +1,13 @@
 <!doctype html>
 <html>
 
-<head>
-  <meta charset="utf-8" />
-  <title>Test</title>
-  <link rel="stylesheet" href="form-controls.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
+  <head>
+    <meta charset="utf-8" />
+    <title>Test</title>
+    <link rel="stylesheet" href="form-controls.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
       max-width: 400px;
       margin: auto;
       font-family: sans-serif;
@@ -18,255 +18,280 @@
       margin: 3rem 0;
     }
   </style>
-</head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="apative-placeholder.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('.js--control_adptive').adaptivePlaceholder();
+      });
+    </script>
+  </head>
 
-<body>
-  <section class="group">
-    <h2>Field states</h2>
-    <!-- DEFAULT CONTROL -->
-    <div class="control">
-      <label class="control__label" for="#1">
-      Default input field
-    </label>
-      <input type="text" name="#1" id="#1" class="control__field" />
-    </div>
-    <div class="control">
-      <label class="control__label" for="#1">
-      Valid state
-    </label>
-      <input type="text" name="#1" id="#1" class="control__field control__field_valid" />
-    </div>
-    <div class="control">
-      <label class="control__label" for="#1">
-        Warning state
-      </label>
-      <input type="text" name="#1" id="#1" class="control__field control__field_warning" />
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">
-        Error state
-      </label>
-      <input type="text" name="#1" id="#1" class="control__field control__field_error" />
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">
-        Disabled field
-      </label>
-      <input type="text" name="#1" id="#1" class="control__field" disabled/>
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">
-        Readonly field
-      </label>
-      <input type="text" name="#1" id="#1" class="control__field" readonly value="Lorem ipsum" />
-    </div>
-  </section>
-
-  <section class="group">
-    <h2>Feedback styles and positioning</h2>
-
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible">Default feedback, default position</p>
-      </div>
-      <input type="text" name="#1" id="#1" class="control__field" />
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_valid">Valid message: .control__feedback_valid</p>
-      </div>
-      <input type="text" name="#1" id="#1" class="control__field" />
-    </div>
-
-
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_warning">Warning message: .control__feedback_warning</p>
-      </div>
-      <input type="text" name="#1" id="#1" class="control__field" />
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_error">Error message: .control__feedback_error</p>
-      </div>
-      <input type="text" name="#1" id="#1" class="control__field" />
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_start">Align left: .control__feedback_start</p>
-      </div>
-      <input type="text" name="#1" id="#1" class="control__field" />
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_end">Align right: .control__feedback_end</p>
-      </div>
-      <input type="text" name="#1" id="#1" class="control__field" />
-    </div>
-
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <input type="text" name="#1" id="#1" class="control__field" />
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_bottom">Bottom: .control__feedback_bottom</p>
-      </div>
-    </div>
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <input type="text" name="#1" id="#1" class="control__field" />
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_startbottom">Bottom, align left: .control__feedback_startbottom</p>
-      </div>
-    </div>
-    <div class="control">
-      <label class="control__label" for="#1">Field</label>
-      <input type="text" name="#1" id="#1" class="control__field" />
-      <div class="control__feedbackwrapper">
-        <p class="control__feedback control__feedback_visible control__feedback_endbottom">Bottom, align right: .control__feedback_endbottom</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="group">
-    <h2>Addons</h2>
-    <div class="control">
-      <label class="control__label" for="#1">Addon right</label>
-      <div class="control__box">
-        <input type="text" name="#1" id="#1" class="control__field control__field_addonright" />
-        <button type="button" class="control__addon" id="#addonRight">Addon</button>
-      </div>
-    </div>
-    <div class="control">
-      <label class="control__label" for="#1">Addon right (position absolute)</label>
-      <div class="control__box">
+  <body>
+    <section class="group">
+      <h2>Field states</h2>
+      <!-- DEFAULT CONTROL -->
+      <div class="control">
+        <label class="control__label" for="#1">
+          Default input field
+        </label>
         <input type="text" name="#1" id="#1" class="control__field" />
-        <button type="button" class="control__addon control__addon_right" id="#addonRightAbsolute">Addon</button>
       </div>
-    </div>
+      <div class="control">
+        <label class="control__label" for="#1">
+          Valid state
+        </label>
+        <input type="text" name="#1" id="#1" class="control__field control__field_valid" />
+      </div>
+      <div class="control">
+        <label class="control__label" for="#1">
+          Warning state
+        </label>
+        <input type="text" name="#1" id="#1" class="control__field control__field_warning" />
+      </div>
 
-    <div class="control">
-      <label class="control__label" for="#1">Addon left</label>
-      <div class="control__box">
-        <button type="button" class="control__addon" id="#addonLeft">Addon</button>
-        <input type="text" name="#1" id="#1" class="control__field control__field_addonleft" />
+      <div class="control">
+        <label class="control__label" for="#1">
+          Error state
+        </label>
+        <input type="text" name="#1" id="#1" class="control__field control__field_error" />
       </div>
-    </div>
-    <div class="control">
-      <label class="control__label" for="#1">Addon left (position absolute)</label>
-      <div class="control__box">
-        <button type="button" class="control__addon control__addon_left" id="#addonLeftAbsolute">Addon</button>
-        <input type="text" name="#1" id="#1" class="control__field control__field_addonleft" />
-      </div>
-    </div>
 
-    <div class="control">
-      <label class="control__label" for="#1">Addon top and bottom (position absolute)</label>
-      <div class="control__box">
+      <div class="control">
+        <label class="control__label" for="#1">
+          Disabled field
+        </label>
+        <input type="text" name="#1" id="#1" class="control__field" disabled />
+      </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">
+          Readonly field
+        </label>
+        <input type="text" name="#1" id="#1" class="control__field" readonly value="Lorem ipsum" />
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Feedback styles and positioning</h2>
+
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible">Default feedback, default position</p>
+        </div>
         <input type="text" name="#1" id="#1" class="control__field" />
-        <button type="button" class="control__addon control__addon_top" id="#addonTop">Addon top</button>
-        <button type="button" class="control__addon control__addon_bottom" id="#addonBottom">Addon bottom</button>
       </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_valid">Valid message:
+            .control__feedback_valid</p>
+        </div>
+        <input type="text" name="#1" id="#1" class="control__field" />
+      </div>
+
+
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_warning">Warning message:
+            .control__feedback_warning</p>
+        </div>
+        <input type="text" name="#1" id="#1" class="control__field" />
+      </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_error">Error message:
+            .control__feedback_error</p>
+        </div>
+        <input type="text" name="#1" id="#1" class="control__field" />
+      </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_start">Align left:
+            .control__feedback_start</p>
+        </div>
+        <input type="text" name="#1" id="#1" class="control__field" />
+      </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_end">Align right:
+            .control__feedback_end</p>
+        </div>
+        <input type="text" name="#1" id="#1" class="control__field" />
+      </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <input type="text" name="#1" id="#1" class="control__field" />
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_bottom">Bottom:
+            .control__feedback_bottom</p>
+        </div>
+      </div>
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <input type="text" name="#1" id="#1" class="control__field" />
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_startbottom">Bottom, align left:
+            .control__feedback_startbottom</p>
+        </div>
+      </div>
+      <div class="control">
+        <label class="control__label" for="#1">Field</label>
+        <input type="text" name="#1" id="#1" class="control__field" />
+        <div class="control__feedbackwrapper">
+          <p class="control__feedback control__feedback_visible control__feedback_endbottom">Bottom, align right:
+            .control__feedback_endbottom</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Addons</h2>
+      <div class="control">
+        <label class="control__label" for="#1">Addon right</label>
+        <div class="control__box">
+          <input type="text" name="#1" id="#1" class="control__field control__field_addonright" />
+          <button type="button" class="control__addon" id="#addonRight">Addon</button>
+        </div>
+      </div>
+      <div class="control">
+        <label class="control__label" for="#1">Addon right (position absolute)</label>
+        <div class="control__box">
+          <input type="text" name="#1" id="#1" class="control__field" />
+          <button type="button" class="control__addon control__addon_right" id="#addonRightAbsolute">Addon</button>
+        </div>
+      </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">Addon left</label>
+        <div class="control__box">
+          <button type="button" class="control__addon" id="#addonLeft">Addon</button>
+          <input type="text" name="#1" id="#1" class="control__field control__field_addonleft" />
+        </div>
+      </div>
+      <div class="control">
+        <label class="control__label" for="#1">Addon left (position absolute)</label>
+        <div class="control__box">
+          <button type="button" class="control__addon control__addon_left" id="#addonLeftAbsolute">Addon</button>
+          <input type="text" name="#1" id="#1" class="control__field control__field_addonleft" />
+        </div>
+      </div>
+
+      <div class="control">
+        <label class="control__label" for="#1">Addon top and bottom (position absolute)</label>
+        <div class="control__box">
+          <input type="text" name="#1" id="#1" class="control__field" />
+          <button type="button" class="control__addon control__addon_top" id="#addonTop">Addon top</button>
+          <button type="button" class="control__addon control__addon_bottom" id="#addonBottom">Addon bottom</button>
+        </div>
+      </div>
+      <div class="control">
+        <label class="control__label" for="#1">Addon top and bottom right (position absolute)</label>
+        <div class="control__box">
+          <input type="text" name="#1" id="#1" class="control__field" />
+          <button type="button" class="control__addon control__addon_top control__addon_right" id="#addonTop">Addon top</button>
+          <button type="button" class="control__addon control__addon_bottom control__addon_right" id="#addonBottom">Addon
+            bottom</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKBOX -->
+    <div class="control">
+      <div class="control__feedbackwrapper">
+        <p class="control__feedback control__feedback_valid control__feedback_start control__feedback_visible">Success
+          message</p>
+      </div>
+      <label class="control__box control__box_inline">
+        <input type="checkbox" name="#1" id="#1" class="control__field control__field_sronly" />
+        <span class="control__checkbox"></span>
+        <span class="control__label control__label_inline">My checkbox</span>
+      </label>
+    </div>
+
+    <!-- RADIO -->
+    <div class="control">
+      <label class="control__box control__box_inline">
+        <input type="radio" name="#1" id="#1" class="control__field control__field_sronly" />
+        <span class="control__radio"></span>
+        <span class="control__label control__label_inline">My radio</span>
+      </label>
+    </div>
+
+    <!-- CHOICE (clickable area with text, works as a radio) -->
+    <div class="control">
+      <label class="control__box">
+        <input type="radio" name="#radio1" id="#1" class="control__field control__field_sronly" />
+        <span class="control__choice">
+          <span>My choice (radio)</span>
+        </span>
+      </label>
     </div>
     <div class="control">
-      <label class="control__label" for="#1">Addon top and bottom right (position absolute)</label>
-      <div class="control__box">
-        <input type="text" name="#1" id="#1" class="control__field" />
-        <button type="button" class="control__addon control__addon_top control__addon_right" id="#addonTop">Addon top</button>
-        <button type="button" class="control__addon control__addon_bottom control__addon_right" id="#addonBottom">Addon bottom</button>
-      </div>
+      <label class="control__box">
+        <input type="radio" name="#radio1" id="#1" class="control__field control__field_sronly" />
+        <span class="control__choice">
+          <span>My choice (radio)</span>
+        </span>
+      </label>
     </div>
-  </section>
 
-  <!-- CHECKBOX -->
-  <div class="control">
-    <div class="control__feedbackwrapper">
-      <p class="control__feedback control__feedback_valid control__feedback_start control__feedback_visible">Success message</p>
+    <!-- MULTIPLE CHOICE (clickable area with text, works as a radio) -->
+    <div class="control">
+      <label class="control__box">
+        <input type="checkbox" name="#choice1" id="#choice1" class="control__field control__field_sronly" />
+        <span class="control__choice">
+          <span>My choice (checkbox)</span>
+        </span>
+      </label>
     </div>
-    <label class="control__box control__box_inline">
-      <input type="checkbox" name="#1" id="#1" class="control__field control__field_sronly"/>
-      <span class="control__checkbox"></span>
-      <span class="control__label control__label_inline">My checkbox</span>
-    </label>
-  </div>
+    <div class="control">
+      <label class="control__box">
+        <input type="checkbox" name="#choice2" id="#choice2" class="control__field control__field_sronly" />
+        <span class="control__choice">
+          <span>My choice (checkbox)</span>
+        </span>
+      </label>
+    </div>
 
-  <!-- RADIO -->
-  <div class="control">
-    <label class="control__box control__box_inline">
-      <input type="radio" name="#1" id="#1" class="control__field control__field_sronly"/>
-      <span class="control__radio"></span>
-      <span class="control__label control__label_inline">My radio</span>
-    </label>
-  </div>
-
-  <!-- CHOICE (clickable area with text, works as a radio) -->
-  <div class="control">
-    <label class="control__box">
-      <input type="radio" name="#radio1" id="#1" class="control__field control__field_sronly" />
-      <span class="control__choice">
-        <span>My choice (radio)</span>
-      </span>
-    </label>
-  </div>
-  <div class="control">
-    <label class="control__box">
-      <input type="radio" name="#radio1" id="#1" class="control__field control__field_sronly" />
-      <span class="control__choice">
-        <span>My choice (radio)</span>
-      </span>
-    </label>
-  </div>
-
-  <!-- MULTIPLE CHOICE (clickable area with text, works as a radio) -->
-  <div class="control">
-    <label class="control__box">
-      <input type="checkbox" name="#choice1" id="#choice1" class="control__field control__field_sronly" />
-      <span class="control__choice">
-        <span>My choice (checkbox)</span>
-      </span>
-    </label>
-  </div>
-  <div class="control">
-    <label class="control__box">
-      <input type="checkbox" name="#choice2" id="#choice2" class="control__field control__field_sronly" />
-      <span class="control__choice">
-        <span>My choice (checkbox)</span>
-      </span>
-    </label>
-  </div>
-
-  <!--SELECT-->
-  <div class="control control_select">
-    <label class="control__label" for="#1">My select control</label>
-    <div class="control__select">
-      <select id="#1" name="#1">
+    <!--SELECT-->
+    <div class="control control_select">
+      <label class="control__label" for="#1">My select control</label>
+      <div class="control__select">
+        <select id="#1" name="#1">
           <option value="" class="control__option">Choose one option</option>
           <option value="1" class="control__option">Option 1</option>
           <option value="2" class="control__option">Option 2</option>
           <option value="3" class="control__option">Option 3</option>
           <option value="4" class="control__option">Option 4</option>
-      </select>
+        </select>
+      </div>
     </div>
-  </div>
 
-  <!-- TEXTAREA -->
-  <div class="control">
-    <label class="control__label" for="#1">My input field</label>
-    <textarea name="#1" id="#1" class="control__textarea" placeholder="placeholder text here" rows="10">Default text here ...</textarea>
-  </div>
+    <!-- TEXTAREA -->
+    <div class="control">
+      <label class="control__label" for="#1">My input field</label>
+      <textarea name="#1" id="#1" class="control__textarea" placeholder="placeholder text here" rows="10">Default text here ...</textarea>
+    </div>
 
-</body>
+
+    <div class="control js--control_adptive">
+      <label class="control__label control__label_adaptive" for="#1">My adaptive placeholder</label>
+      <div class="control__box">
+        <input type="text" name="#1" id="#1" class="control__field">
+      </div>
+    </div>
+
+  </body>
 
 </html>

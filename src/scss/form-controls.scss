@@ -1,12 +1,10 @@
 //import settings
 @import "form-controls.settings";
-
 //import t-css-framework modules
 @import "../../node_modules/t-css-framework/src/settings/settings.import";
 @import "../../node_modules/t-css-framework/src/functions/functions.import";
 @import "../../node_modules/t-css-framework/src/helpers/helpers.import";
 @import "../../node_modules/t-css-framework/src/reset/forms";
-
 //import control modules
 @import "controls/control.variables";
 @import "controls/control";
@@ -39,6 +37,8 @@
 @import "controls/modifiers/control__feedback_endbottom";
 //label
 @import "controls/modifiers/control__label_inline";
+@import "controls/modifiers/control__label_adaptive";
+@import "controls/modifiers/control__label_active";
 //box
 @import "controls/modifiers/control__box_inline";
 //addon
