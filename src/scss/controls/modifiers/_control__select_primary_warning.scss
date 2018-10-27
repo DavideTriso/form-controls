@@ -1,0 +1,13 @@
+.control_primary {
+    .control__select_warning {
+        >select {
+            @include border($control__select_primary_warning--border);
+            box-shadow: $control__select_primary_warning--box-shadow;
+            @include background($control__select_primary_warning--background);
+            &:active,
+            &:focus {
+                @include border(map-merge($control__select_primary_warning--border, (borderColor: darken($warningColor, 20%))));
+            }
+        }
+    }
+}

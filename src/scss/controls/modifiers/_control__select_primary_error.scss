@@ -1,0 +1,13 @@
+.control_primary {
+    .control__select_error {
+        >select {
+            @include border($control__select_primary_error--border);
+            box-shadow: $control__select_primary_error--box-shadow;
+            @include background($control__select_primary_error--background);
+            &:active,
+            &:focus {
+                @include border(map-merge($control__select_primary_error--border, (borderColor: darken($errorColor, 20%))));
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+.control_primary {
+    .control__field_warning {
+        @include border($control__field_primary_warning--border);
+        box-shadow: $control__field_primary_warning--box-shadow;
+        @include background($control__field_primary_warning--background);
+        &:active,
+        &:focus {
+            @include border(map-merge($control__field_primary_warning--border, (borderColor: darken($warningColor, 20%))));
+        }
+    }
+}

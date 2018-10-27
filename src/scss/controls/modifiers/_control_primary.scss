@@ -1,0 +1,215 @@
+.control_primary {
+    // FEILD
+    //----------------------
+    .control__field {
+        @include background($control__field_primary--background);
+        @include border($control__field_primary--border);
+        box-shadow: $control__field_primary--box-shadow;
+        @include font($control__field_primary--font);
+        @include text($control__field_primary--text);
+        @include sizes($control__field_primary--sizes);
+        @include padding($control__field_primary--padding);
+        &:active,
+        &:focus {
+            @include border($control__field_primaryPfocus--border);
+            @include outline($control__field_primaryPfocus--outline);
+        }
+        &:disabled {
+            @include border($control__field_primaryPdisabled--border);
+            @include background($control__field_primaryPdisabled--background);
+        }
+        &:read-only {
+            @include border($control__field_primaryPreadonly--border);
+            @include background($control__field_primaryPreadonly--background);
+            box-shadow: $control__field_primaryPreadonly--box-shadow;
+        }
+    } // TEXTAREA
+    //----------------------
+    .control__textarea {
+        @include background($control__textarea_primary--background);
+        @include border($control__textarea_primary--border);
+        box-shadow: $control__textarea_primary--box-shadow;
+        @include font($control__textarea_primary--font);
+        @include text($control__textarea_primary--text);
+        @include sizes($control__textarea_primary--sizes);
+        @include padding($control__textarea_primary--padding);
+        &:active,
+        &:focus {
+            @include border($control__textarea_primaryPfocus--border);
+            @include outline($control__textarea_primaryPfocus--outline);
+        }
+        &:disabled {
+            @include border($control__textarea_primaryPdisabled--border);
+            @include background($control__textarea_primaryPdisabled--background);
+        }
+        &:read-only {
+            @include border($control__textarea_primaryPreadonly--border);
+            @include background($control__textarea_primaryPreadonly--background);
+            box-shadow: $control__textarea_primaryPreadonly--box-shadow;
+        }
+    } // SELECT
+    //----------------------
+    .control__select {
+        @include sizes($control__select_primary--sizes);
+        &:after {
+            @include border($control__select_primaryPafter--border);
+            @include sizes($control__select_primaryPafter--sizes);
+            transform: $control__select_primaryPafter--transform;
+        }
+        >select {
+            @include background($control__select_primary--background);
+            @include border($control__select_primary--border);
+            box-shadow: $control__select_primary--box-shadow;
+            @include font($control__select_primary--font);
+            @include text($control__select_primary--text);
+            @include sizes($control__select_primary--sizes);
+            @include padding($control__select_primary--padding);
+            &:active,
+            &:focus {
+                @include border($control__select_primaryPfocus--border);
+                @include outline($control__select_primaryPfocus--outline);
+            }
+            &:disabled {
+                @include border($control__select_primaryPdisabled--border);
+                @include background($control__select_primaryPdisabled--background);
+            }
+        }
+    } // CHECKBOX
+    //----------------------
+    .control__checkbox {
+        @include border($control__checkbox_primary--border);
+        @include background($control__checkbox_primary--background);
+        box-shadow: $control__checkbox_primary--box-shadow;
+        @include margin($control__checkbox_primary--margin);
+        @include sizes($control__checkbox_primary--sizes);
+        .control__field_sronly[type="checkbox"]:checked+& {
+            @include border($control__checkbox_primaryPchecked--border);
+            @include background($control__checkbox_primaryPchecked--background);
+            box-shadow: $control__checkbox_primaryPchecked--box-shadow;
+            &:after {
+                @include border($control__checkbox_primaryPcheckedPafter--border);
+                @include sizes($control__checkbox_primaryPcheckedPafter--sizes);
+                transform: $control__checkbox_primaryPcheckedPafter--transform;
+            }
+        }
+        &:hover,
+        .control__field_sronly[type="checkbox"]:focus+& {
+            @include border($control__checkbox_primaryPfocus--border);
+            @include background($control__checkbox_primaryPfocus--background);
+            box-shadow: $control__checkbox_primaryPfocus--box-shadow;
+        }
+        .control__field_sronly[type="checkbox"]:checked:focus+&,
+        .control__field_sronly[type="checkbox"]:checked+&:hover {
+            @include border($control__checkbox_primaryPcheckedPfocus--border);
+            @include background($control__checkbox_primaryPcheckedPfocus--background);
+            box-shadow: $control__checkbox_primaryPcheckedPfocus--box-shadow;
+        }
+        .control__field_sronly[type="checkbox"]:disabled+& {
+            @include border($control__checkbox_primaryPdisabled--border);
+            @include background($control__checkbox_primaryPdisabled--background);
+            box-shadow: $control__checkbox_primaryPdisabled--box-shadow;
+        }
+    } // RADIO
+    //----------------------
+    .control__radio {
+        @include border($control__radio_primary--border);
+        @include background($control__radio_primary--background);
+        box-shadow: $control__radio_primary--box-shadow;
+        @include margin($control__radio_primary--margin);
+        @include sizes($control__radio_primary--sizes);
+        .control__field_sronly[type="radio"]:checked+& {
+            @include border($control__radio_primaryPchecked--border);
+            @include background($control__radio_primaryPchecked--background);
+            box-shadow: $control__radio_primaryPchecked--box-shadow;
+            &:after {
+                @include border($control__radio_primaryPcheckedPafter--border);
+                @include background($control__radio_primaryPcheckedPafter--background);
+                @include sizes($control__radio_primaryPcheckedPafter--sizes);
+                transform: $control__radio_primaryPcheckedPafter--transform;
+            }
+        }
+        &:hover,
+        .control__field_sronly[type="radio"]:focus+& {
+            @include border($control__radio_primaryPfocus--border);
+            @include background($control__radio_primaryPfocus--background);
+            box-shadow: $control__radio_primaryPfocus--box-shadow;
+        }
+        .control__field_sronly[type="radio"]:checked:focus+&,
+        .control__field_sronly[type="radio"]:checked+&:hover {
+            @include border($control__radio_primaryPcheckedPfocus--border);
+            @include background($control__radio_primaryPcheckedPfocus--background);
+            box-shadow: $control__radio_primaryPcheckedPfocus--box-shadow;
+        }
+        .control__field_sronly[type="radio"]:disabled+& {
+            @include border($control__radio_primaryPdisabled--border);
+            @include background($control__radio_primaryPdisabled--background);
+            box-shadow: $control__radio_primaryPdisabled--box-shadow;
+        }
+    } // CHOICE
+    //----------------------
+    .control__choice {
+        @include border($control__choice_primary--border);
+        box-shadow: $control__choice_primary--box-shadow;
+        @include background($control__choice_primary--background);
+        @include font($control__choice_primary--font);
+        @include padding($control__choice_primary--padding);
+        @include text($control__choice_primary--text);
+        transition: $control__choice_primary--transition;
+        .control__field_sronly[type="radio"]:focus+&,
+        .control__field_sronly[type="checkbox"]:focus+&,
+        &:hover {
+            @include border($control__choice_primaryPhover--border);
+            box-shadow: $control__choice_primaryPhover--box-shadow;
+            @include background($control__choice_primaryPhover--background);
+            @include font($control__choice_primaryPhover--font);
+            @include text($control__choice_primaryPhover--text);
+            @include padding($control__choice_primaryPhover--padding);
+            transform: $control__choice_primaryPhover--transform;
+        }
+        .control__field_sronly[type="radio"]:focus+&,
+        .control__field_sronly[type="checkbox"]:focus+& {
+            @include outline($control__choice_primaryPfocus--outline);
+        }
+        .control__field_sronly[type="radio"]:checked+&,
+        .control__field_sronly[type="checkbox"]:checked+& {
+            @include border($control__choice_primaryPchecked--border);
+            box-shadow: $control__choice_primaryPchecked--box-shadow;
+            @include background($control__choice_primaryPchecked--background);
+            @include font($control__choice_primaryPchecked--font);
+            @include text($control__choice_primaryPchecked--text);
+            @include padding($control__choice_primaryPchecked--padding);
+            transform: $control__choice_primaryPchecked--transform;
+        }
+        .control__field_sronly[type="radio"]:disabled+&,
+        .control__field_sronly[type="checkbox"]:disabled+&,
+        .control__field_sronly[type="radio"]:disabled+&:hover,
+        .control__field_sronly[type="checkbox"]:disabled+&:hover {
+            @include border($control__choice_primaryPdisabled--border);
+            box-shadow: $control__choice_primaryPdisabled--box-shadow;
+            @include background($control__choice_primaryPdisabled--background);
+            @include text($control__choice_primaryPdisabled--text);
+            @include font($control__choice_primaryPdisabled--font);
+            transform: none;
+        }
+    } // LABEL
+    //----------------------
+    .control__label {
+        @include font($control__label_primary--font);
+        @include text($control__label_primary--text);
+        @include padding($control__label_primary--padding);
+    } // LABEL FLAGS
+    //----------------------
+    .control__abbrflag {
+        @include font($control__abbrflag_primary--font);
+        @include text($control__abbrflag_primary--text);
+        @include typography($control__abbrflag_primary--typography);
+    }
+    .control__optionalflag {
+        @include font($control__optionalflag_primary--font);
+        @include text($control__optionalflag_primary--text);
+    }
+    .control__requiredflag {
+        @include font($control__requiredflag_primary--font);
+        @include text($control__requiredflag_primary--text);
+    }
+}

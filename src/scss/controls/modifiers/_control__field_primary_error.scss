@@ -1,0 +1,11 @@
+.control_primary {
+    .control__field_error {
+        @include border($control__field_primary_error--border);
+        box-shadow: $control__field_primary_error--box-shadow;
+        @include background($control__field_primary_error--background);
+        &:active,
+        &:focus {
+            @include border(map-merge($control__field_primary_error--border, (borderColor: darken($errorColor, 20%))));
+        }
+    }
+}

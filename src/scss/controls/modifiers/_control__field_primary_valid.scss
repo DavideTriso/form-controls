@@ -1,0 +1,11 @@
+.control_primary {
+    .control__field_valid {
+        @include border($control__field_primary_valid--border);
+        box-shadow: $control__field_primary_valid--box-shadow;
+        @include background($control__field_primary_valid--background);
+        &:active,
+        &:focus {
+            @include border(map-merge($control__field_primary_valid--border, (borderColor: darken($validColor, 20%))));
+        }
+    }
+}

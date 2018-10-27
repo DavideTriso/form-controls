@@ -1,0 +1,11 @@
+.control_primary {
+    .control__textarea_error {
+        @include border($control__textarea_primary_error--border);
+        box-shadow: $control__textarea_primary_error--box-shadow;
+        @include background($control__textarea_primary_error--background);
+        &:active,
+        &:focus {
+            @include border(map-merge($control__textarea_primary_error--border, (borderColor: darken($errorColor, 20%))));
+        }
+    }
+}

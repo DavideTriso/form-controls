@@ -1,0 +1,11 @@
+.control_primary {
+    .control__label_adaptive {
+        &.control__label_active {
+            top: 0;
+            transform: translateY(-60%) scale($control__label_primary_active--scale);
+            padding: 0 $control__label_primary_active--paddingLeftRight;
+            @include text($control__label_primary_active--text);
+            background-color: $control__label_primary_active--backgroundColor;
+        }
+    }
+}

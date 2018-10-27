@@ -184,8 +184,7 @@ $control__label_adaptive--transition: all 0.2s ease-in-out !default;
 $control__label_active--paddingLeftRight: 0.1rem !default;
 $control__label_active--scale: 0.9 !default;
 $control__label_active--text: () !default;
-$control__label_active--backgroundColorUpperHalf: #fff !default;
-$control__label_active--backgroundColorLowerHalf: #fff !default;
+$control__label_active--backgroundColor: #fff !default;
 //labelflag
 $control__abbrflag--text: ( textDecoration: none, color: darken($errorColor, 30%)) !default;
 $control__abbrflag--typography: ( lineHeight: 0) !default;
@@ -241,3 +240,197 @@ $control__feedback_warning--font: () !default;
 $control__feedback_warning--border: ( borderColor: darken($warningColor, 3%)) !default;
 $control__feedback_warning--background: ( backgroundColor: $warningColor) !default;
 $control__feedback_warning--box-shadow: 0 0 0.1rem rgba($warningColor, 0.2) !default;
+//PRIMARY
+//BLOCK
+$control_primary--padding: () !default;
+//ELEMENTS
+//field
+$control__field_primary--font: () !default;
+$control__field_primary--text: (color: #fff) !default;
+$control__field_primary--padding: () !default;
+$control__field_primary--sizes: ( width: 100%, minWidth: auto, maxWidth: 100%) !default;
+$control__field_primary--border: ( borderColor: $borderColorPrimary, borderRadius: $borderRadiusPrimary, borderWidth: $borderWidthPrimary, borderStyle: solid) !default;
+$control__field_primary--box-shadow: $boxShadowPrimary inset !default;
+$control__field_primary--background: ( backgroundColor: $backgroundColorPrimary) !default;
+$control__field_primaryPfocus--border: ( borderColor: darken($borderColorPrimary, 20%)) !default;
+$control__field_primaryPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
+$control__field_primaryPdisabled--border: ( borderColor: lighten($borderColorPrimary, 10%)) !default;
+$control__field_primaryPdisabled--background: ( backgroundColor: lighten($borderColorPrimary, 15%)) !default;
+//modifiers 
+//valid
+$control__field_primary_valid--border: ( borderColor: darken($validColorPrimary, 10%)) !default;
+$control__field_primary_valid--box-shadow: 0 0 0.1rem rgba($validColorPrimary, 0.5) inset !default;
+$control__field_primary_valid--background: () !default;
+//error
+$control__field_primary_error--border: ( borderColor: darken($errorColorPrimary, 10%)) !default;
+$control__field_primary_error--box-shadow: 0 0 0.1rem rgba($errorColorPrimary, 0.5) inset !default;
+$control__field_primary_error--background: () !default;
+//warning
+$control__field_primary_warning--border: ( borderColor: darken($warningColorPrimary, 10%)) !default;
+$control__field_primary_warning--box-shadow: 0 0 0.1rem rgba($warningColorPrimary, 0.5) inset !default;
+$control__field_primary_warning--background: () !default;
+//readonly
+$control__field_primaryPreadonly--border: ( borderWidth: 0) !default;
+$control__field_primaryPreadonly--box-shadow: none !default;
+$control__field_primaryPreadonly--background: () !default;
+//textarea
+$control__textarea_primary--font: ( fontSize: $fieldFontSizePrimary) !default;
+$control__textarea_primary--text: (color: #fff) !default;
+$control__textarea_primary--padding: ( topBottom: 0.3rem, leftRight: 0.5rem) !default;
+$control__textarea_primary--sizes: ( width: 100%, minWidth: auto, maxWidth: 100%, ) !default;
+$control__textarea_primary--border: ( borderColor: $borderColorPrimary, borderRadius: $borderRadiusPrimary, borderWidth: $borderWidthPrimary, borderStyle: solid) !default;
+$control__textarea_primary--box-shadow: $boxShadowPrimary inset !default;
+$control__textarea_primary--background: ( backgroundColor: $backgroundColorPrimary) !default;
+//focus
+$control__textarea_primaryPfocus--border: ( borderColor: darken($borderColorPrimary, 20%)) !default;
+$control__textarea_primaryPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
+//disabled
+$control__textarea_primaryPdisabled--border: ( borderColor: lighten($borderColorPrimary, 10%)) !default;
+$control__textarea_primaryPdisabled--background: ( backgroundColor: lighten($borderColorPrimary, 15%)) !default;
+//Readonly
+$control__textarea_primaryPreadonly--border: ( borderWidth: 0) !default;
+$control__textarea_primaryPreadonly--background: () !default;
+$control__textarea_primaryPreadonly--box-shadow: none !default;
+//modifiers
+//valid
+$control__textarea_primary_valid--border: ( borderColor: darken($validColorPrimary, 10%)) !default;
+$control__textarea_primary_valid--box-shadow: 0 0 0.1rem rgba($validColorPrimary, 0.5) inset !default;
+$control__textarea_primary_valid--background: () !default;
+//error
+$control__textarea_primary_error--border: ( borderColor: darken($errorColorPrimary, 10%)) !default;
+$control__textarea_primary_error--box-shadow: 0 0 0.1rem rgba($errorColorPrimary, 0.5) inset !default;
+$control__textarea_primary_error--background: () !default;
+//warning
+$control__textarea_primary_warning--border: ( borderColor: darken($warningColorPrimary, 10%)) !default;
+$control__textarea_primary_warning--box-shadow: 0 0 0.1rem rgba($warningColorPrimary, 0.5) inset !default;
+$control__textarea_primary_warning--background: () !default;
+//select
+$control__select_primary--font: ( fontSize: $fieldFontSizePrimary) !default;
+$control__select_primary--text: (color: #fff) !default;
+$control__select_primary--padding: ( topBottom: 0.3rem, leftRight: 0.5rem) !default;
+$control__select_primary--sizes: ( width: 100%, minWidth: auto, maxWidth: 100%, ) !default;
+$control__select_primary--border: ( borderColor: $borderColorPrimary, borderRadius: $borderRadiusPrimary, borderWidth: $borderWidthPrimary, borderStyle: solid) !default;
+$control__select_primary--box-shadow: $boxShadowPrimary inset !default;
+$control__select_primary--background: ( backgroundColor: $backgroundColorPrimary) !default;
+$control__select_primaryPfocus--border: ( borderColor: darken($borderColorPrimary, 20%)) !default;
+$control__select_primaryPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
+$control__select_primaryPdisabled--border: ( borderColor: lighten($borderColorPrimary, 10%)) !default;
+$control__select_primaryPdisabled--background: ( backgroundColor: lighten($borderColorPrimary, 15%)) !default;
+$control__select_primaryPafter--border: ( borderStyle: solid, borderWidth: 0 0.1rem 0.1rem 0, borderColor: #454545) !default;
+$control__select_primaryPafter--sizes: ( width: 0.6rem, height: 0.6rem) !default;
+$control__select_primaryPafter--transform: translate(-0.8rem, 60%) rotate(45deg) !default;
+//modifiers
+//valid
+$control__select_primary_valid--border: ( borderColor: darken($validColorPrimary, 10%)) !default;
+$control__select_primary_valid--box-shadow: 0 0 0.1rem rgba($validColorPrimary, 0.5) inset !default;
+$control__select_primary_valid--background: () !default;
+//error
+$control__select_primary_error--border: ( borderColor: darken($errorColorPrimary, 10%)) !default;
+$control__select_primary_error--box-shadow: 0 0 0.1rem rgba($errorColorPrimary, 0.5) inset !default;
+$control__select_primary_error--background: () !default;
+//warning
+$control__select_primary_warning--border: ( borderColor: darken($warningColorPrimary, 10%)) !default;
+$control__select_primary_warning--box-shadow: 0 0 0.1rem rgba($warningColorPrimary, 0.5) inset !default;
+$control__select_primary_warning--background: () !default;
+//checkbox
+$control__checkbox_primary--sizes: ( width: 1rem, height: 1rem) !default;
+$control__checkbox_primary--border: ( borderStyle: solid, borderRadius: 0.2rem, borderWidth: 0.05rem, borderColor: #4b4b4b) !default;
+$control__checkbox_primary--background: ( backgroundColor: transparent) !default;
+$control__checkbox_primary--margin: ( right: 0.3rem, top: -0.1rem) !default;
+$control__checkbox_primary--box-shadow: $boxShadowPrimary inset !default;
+//focus, hover
+$control__checkbox_primaryPfocus--border: () !default;
+$control__checkbox_primaryPfocus--box-shadow: $boxShadowPrimary inset !default;
+$control__checkbox_primaryPfocus--background: ( backgroundColor: #f0f0f0) !default;
+//checked style
+$control__checkbox_primaryPchecked--background: ( backgroundColor: #4b4b4b) !default;
+$control__checkbox_primaryPchecked--border: () !default;
+$control__checkbox_primaryPchecked--box-shadow: none !default;
+$control__checkbox_primaryPcheckedPafter--sizes: ( height: 0.55rem, width: 0.2rem) !default;
+$control__checkbox_primaryPcheckedPafter--border: ( borderStyle: solid, borderWidth: 0 0.15rem 0.15rem 0, borderColor: #fff) !default;
+$control__checkbox_primaryPcheckedPafter--transform: translate(0.25rem, 0.05rem) rotate(42deg) !default;
+//checked and focus or control__choicePhover
+$control__checkbox_primaryPcheckedPfocus--border: () !default;
+$control__checkbox_primaryPcheckedPfocus--box-shadow: none !default;
+$control__checkbox_primaryPcheckedPfocus--background: ( backgroundColor: #494949) !default;
+//disabled
+$control__checkbox_primaryPdisabled--border: ( borderColor: #a8a8a8) !default;
+$control__checkbox_primaryPdisabled--background: ( backgroundColor: #ededed) !default;
+$control__checkbox_primaryPdisabled--box-shadow: none !default;
+//radio
+$control__radio_primary--sizes: ( width: 1rem, height: 1rem) !default;
+$control__radio_primary--border: ( borderStyle: solid, borderRadius: 50%, borderWidth: 0.05rem, borderColor: #4b4b4b) !default;
+$control__radio_primary--background: ( backgroundColor: transparent) !default;
+$control__radio_primary--margin: ( right: 0.3rem, top: -0.1rem) !default;
+$control__radio_primary--box-shadow: $boxShadowPrimary inset !default;
+//focus, hover
+$control__radio_primaryPfocus--border: () !default;
+$control__radio_primaryPfocus--box-shadow: $boxShadowPrimary inset !default;
+$control__radio_primaryPfocus--background: ( backgroundColor: #f0f0f0) !default;
+//checked style
+$control__radio_primaryPchecked--background: ( backgroundColor: #4b4b4b) !default;
+$control__radio_primaryPchecked--border: () !default;
+$control__radio_primaryPchecked--box-shadow: none !default;
+$control__radio_primaryPcheckedPafter--sizes: ( height: 0.4rem, width: 0.4rem) !default;
+$control__radio_primaryPcheckedPafter--border: ( borderRadius: 50%) !default;
+$control__radio_primaryPcheckedPafter--background: ( backgroundColor: #fff, ) !default;
+$control__radio_primaryPcheckedPafter--transform: translate(0.25rem, 0.25rem) !default;
+//checked and focus
+$control__radio_primaryPcheckedPfocus--border: () !default;
+$control__radio_primaryPcheckedPfocus--box-shadow: none !default;
+$control__radio_primaryPcheckedPfocus--background: ( backgroundColor: #494949) !default;
+//disabled
+$control__radio_primaryPdisabled--border: ( borderColor: #a8a8a8) !default;
+$control__radio_primaryPdisabled--background: ( backgroundColor: #ededed) !default;
+$control__radio_primaryPdisabled--box-shadow: none !default;
+//choice
+$control__choice_primary--padding: ( topBottom: 0.75rem, leftRight: 0.5rem) !default;
+$control__choice_primary--border: ( borderColor: $borderColorPrimary, borderRadius: $borderRadiusPrimary, borderWidth: $borderWidthPrimary, borderStyle: solid) !default;
+$control__choice_primary--background: ( backgroundColor: $backgroundColorPrimary) !default;
+$control__choice_primary--text: ( color: lighten($textColorPrimary, 50%)) !default;
+$control__choice_primary--font: ( fontSize: $labelFontSizePrimary) !default;
+$control__choice_primary--box-shadow: $boxShadowPrimary inset !default;
+$control__choice_primary--transition: 0.05s all ease-in !default;
+//hover and focus
+$control__choice_primaryPhover--transform: scale(1.02, 1.02) !default;
+$control__choice_primaryPhover--padding: () !default;
+$control__choice_primaryPhover--border: ( borderColor: darken($borderColorPrimary, 20%)) !default;
+$control__choice_primaryPhover--background: () !default;
+$control__choice_primaryPhover--text: ( color: $textColorPrimary) !default;
+$control__choice_primaryPhover--font: () !default;
+$control__choice_primaryPhover--box-shadow: $boxShadowPrimary inset !default;
+//focus
+$control__choice_primaryPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
+//checked
+$control__choice_primaryPchecked--padding: ( topBottom: 0.65rem, leftRight: 0.45rem) !default;
+$control__choice_primaryPchecked--border: ( borderColor: $defaultColorPrimary, borderWidth: 0.15rem) !default;
+$control__choice_primaryPchecked--background: () !default;
+$control__choice_primaryPchecked--text: ( color: $textColorPrimary) !default;
+$control__choice_primaryPchecked--font: () !default;
+$control__choice_primaryPchecked--box-shadow: 0 0 0.2rem rgba($defaultColorPrimary, 0.5) inset !default;
+$control__choice_primaryPchecked--transform: scale(1.02, 1.02) !default;
+//disabled
+$control__choice_primaryPdisabled--border: ( borderColor: #a8a8a8) !default;
+$control__choice_primaryPdisabled--box-shadow: none !default;
+$control__choice_primaryPdisabled--background: ( backgroundColor: #ededed) !default;
+$control__choice_primaryPdisabled--text: ( color: #868686) !default;
+$control__choice_primaryPdisabled--font: () !default;
+//label
+$control__label_primary--font: ( fontFamily: inherit, fontSize: $labelFontSizePrimary) !default;
+$control__label_primary--text: ( color: #fff) !default;
+$control__label_primary--padding: ( bottom: 0.25rem) !default;
+//modifiers 
+$control__label_primary_active--paddingLeftRight: 0.1rem !default;
+$control__label_primary_active--scale: 0.9 !default;
+$control__label_primary_active--text: () !default;
+$control__label_primary_active--backgroundColor: rgb(29, 29, 29) !default;
+//labelflag
+$control__abbrflag_primary--text: ( textDecoration: none, color: darken($errorColorPrimary, 30%)) !default;
+$control__abbrflag_primary--typography: ( lineHeight: 0) !default;
+$control__abbrflag_primary--font: ( fontSize: ($fieldFontSizePrimary + 0.2)) !default;
+//optionalflag
+$control__optionalflag_primary--font: ( fontStyle: italic) !default;
+$control__optionalflag_primary--text: ( color: #6e6e6e) !default;
+//requiredflag
+$control__requiredflag_primary--font: ( fontStyle: italic, ) !default;
+$control__requiredflag_primary--text: ( color: #666) !default;

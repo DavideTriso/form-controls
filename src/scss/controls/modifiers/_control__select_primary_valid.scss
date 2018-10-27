@@ -1,0 +1,13 @@
+.control_primary {
+    .control__select_valid {
+        >select {
+            @include border($control__select_primary_valid--border);
+            box-shadow: $control__select_primary_valid--box-shadow;
+            @include background($control__select_primary_valid--background);
+            &:active,
+            &:focus {
+                @include border(map-merge($control__select_primary_valid--border, (borderColor: darken($validColor, 20%))));
+            }
+        }
+    }
+}
