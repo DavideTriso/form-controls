@@ -718,3 +718,21 @@ $('#my-control').ariaValidate({
 ### validateControl
 
 ### resetControl
+
+
+## Hooks
+
+It is possible to call custom functions after the initialisation of the plugin, by passing them in the settings object as follows:
+```javascript
+$('#my-control').ariaValidate({
+  behaviour: [{
+    event: 'blur',
+    tokens: function () {
+      //[...]
+      return tokensArray;
+    }
+  }],
+  hooks: [function(el){ return 'hello world'},function(el){return 'hello world2'}]
+});
+```
+The argument `el` is the `ariaValidate` object.
