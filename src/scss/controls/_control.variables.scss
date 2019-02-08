@@ -9,6 +9,7 @@ $control__field--sizes: ( width: 100%, minWidth: auto, maxWidth: 100%) !default;
 $control__field--border: ( borderColor: $borderColor, borderRadius: $borderRadius, borderWidth: $borderWidth, borderStyle: solid) !default;
 $control__field--box-shadow: $boxShadow inset !default;
 $control__field--background: ( backgroundColor: $backgroundColor) !default;
+$control__field--placeholderColor: #ccc !default;
 $control__fieldPfocus--border: ( borderColor: darken($borderColor, 20%)) !default;
 $control__fieldPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
 $control__fieldPdisabled--border: ( borderColor: lighten($borderColor, 10%)) !default;
@@ -38,6 +39,7 @@ $control__textarea--sizes: ( width: 100%, minWidth: auto, maxWidth: 100%, ) !def
 $control__textarea--border: ( borderColor: $borderColor, borderRadius: $borderRadius, borderWidth: $borderWidth, borderStyle: solid) !default;
 $control__textarea--box-shadow: $boxShadow inset !default;
 $control__textarea--background: ( backgroundColor: $backgroundColor) !default;
+$control__textarea--placeholderColor: #ccc !default;
 //focus
 $control__textareaPfocus--border: ( borderColor: darken($borderColor, 20%)) !default;
 $control__textareaPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
@@ -252,6 +254,7 @@ $control__field_primary--sizes: ( width: 100%, minWidth: auto, maxWidth: 100%) !
 $control__field_primary--border: ( borderColor: $borderColorPrimary, borderRadius: $borderRadiusPrimary, borderWidth: $borderWidthPrimary, borderStyle: solid) !default;
 $control__field_primary--box-shadow: $boxShadowPrimary inset !default;
 $control__field_primary--background: ( backgroundColor: $backgroundColorPrimary) !default;
+$control__field_primary--placeholderColor: #ccc !default;
 $control__field_primaryPfocus--border: ( borderColor: darken($borderColorPrimary, 20%)) !default;
 $control__field_primaryPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
 $control__field_primaryPdisabled--border: ( borderColor: lighten($borderColorPrimary, 10%)) !default;
@@ -281,6 +284,7 @@ $control__textarea_primary--sizes: ( width: 100%, minWidth: auto, maxWidth: 100%
 $control__textarea_primary--border: ( borderColor: $borderColorPrimary, borderRadius: $borderRadiusPrimary, borderWidth: $borderWidthPrimary, borderStyle: solid) !default;
 $control__textarea_primary--box-shadow: $boxShadowPrimary inset !default;
 $control__textarea_primary--background: ( backgroundColor: $backgroundColorPrimary) !default;
+$control__textarea_primary--placeholderColor: #ccc !default;
 //focus
 $control__textarea_primaryPfocus--border: ( borderColor: darken($borderColorPrimary, 20%)) !default;
 $control__textarea_primaryPfocus--outline: ( outline: Highlight solid 0.15rem, outlineOffset: 0.01rem) !default;
