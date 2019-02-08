@@ -9,6 +9,7 @@
         @include text($control__field_primary--text);
         @include sizes($control__field_primary--sizes);
         @include padding($control__field_primary--padding);
+        @include placeholderColor ($control__field_primary--placeholderColor); 
         &:active,
         &:focus {
             @include border($control__field_primaryPfocus--border);
@@ -33,6 +34,7 @@
         @include text($control__textarea_primary--text);
         @include sizes($control__textarea_primary--sizes);
         @include padding($control__textarea_primary--padding);
+        @include placeholderColor ($control__textarea_primary--placeholderColor); 
         &:active,
         &:focus {
             @include border($control__textarea_primaryPfocus--border);
