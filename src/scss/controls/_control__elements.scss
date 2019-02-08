@@ -21,6 +21,7 @@
     @include text($control__field--text);
     @include sizes($control__field--sizes);
     @include padding($control__field--padding);
+    @include placeholderColor ($control__field--placeholderColor); 
     &:active,
     &:focus {
         @include border($control__fieldPfocus--border);
@@ -48,6 +49,7 @@
     @include text($control__textarea--text);
     @include sizes($control__textarea--sizes);
     @include padding($control__textarea--padding);
+    @include placeholderColor ($control__textarea--placeholderColor); 
     &:active,
     &:focus {
         @include border($control__textareaPfocus--border);
