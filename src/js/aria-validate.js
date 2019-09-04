@@ -254,8 +254,7 @@
       //VALIDATION
       self.fieldStatus = undefined; //Describes the staus of the field: undefined -> field was never focussed and validated, true -> correct input , 'errorCode' -> incorrect input
       self.isDirty = false; // a field is considered dirty after first interaction, this means on blur or on change for some other fields
-      //self.fieldValue = undefined; The value of the field
-      //self.adding = undefined; On each field value update, check if user is adding or removing text from field (last value length is greater or smaller than new value length?) - true -> adding, false -> removing, undefined -> not changed or field value has no length (is radio, checkbox etc...)
+      self.fieldValue = undefined; //The value of the field
 
       //MESSAGES
       self.errorMsgs = makeSettings($.fn[pluginName].defaultErrorMsgs, self.userSettings.errorMsgs); //computed error messages settings for this field;
@@ -480,14 +479,7 @@
 
               self.fieldValue = self.field.val() || ''; //new value
               self.fieldLength = self.fieldValue.length; //value length
-
-              //determin if user is adding or removing text
-              if (oldLength < self.fieldValue.length) {
-                  self.adding = true;
-              } else {
-                  self.adding = false;
-              }
-          }
+           }
           /*
            * Save the user input in attribute data-ariavalidate-valueue.
            * Maybe useful for some external plugin
