@@ -1152,6 +1152,9 @@
               win.trigger(pluginName + '.ajaxError', param);
               return 'ajaxError';
           });
+      },
+      dummy: function () {
+          return true;
       }
   };
 }));
